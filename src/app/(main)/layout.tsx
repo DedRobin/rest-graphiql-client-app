@@ -1,9 +1,17 @@
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+import Main from "@/components/Main";
+
 export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <main className="main flex justify-center items-center">{children}</main>
+    <>
+      <Header />
+      <Main>{children}</Main>
+      <Footer />
+    </>
   );
 }

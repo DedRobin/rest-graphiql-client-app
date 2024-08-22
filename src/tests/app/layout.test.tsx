@@ -9,7 +9,7 @@ vi.mock("next/font/google", () => ({
 }));
 
 describe("<RootLayout", () => {
-  test("RootLayout should be defined", () => {
+  test("<RootLayout /> should be in the document", () => {
     render(
       <RootLayout>
         <div>Foo</div>
@@ -17,7 +17,7 @@ describe("<RootLayout", () => {
     );
     expect(screen.getByText(/Foo/i)).toBeInTheDocument();
   });
-  test("RootLayout has className='mock-inter-classname'", () => {
+  test("<RootLayout /> has className='mock-inter-classname'", () => {
     const { container } = render(
       <RootLayout>
         <div>Foo</div>

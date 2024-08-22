@@ -1,5 +1,5 @@
 "use client";
 
 export default function Main() {
-  return <div>Home</div>;
+  return <div className="home text-5xl">Home</div>;
 }

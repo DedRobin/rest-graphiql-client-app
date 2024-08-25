@@ -15,7 +15,9 @@ export default function Home() {
       ) : (
         <div className="home flex flex-col gap-2">
           {user ? (
-            <div className="text-5xl">You are authorized</div>
+            <div className="text-5xl">
+              Welcome, {user.displayName || user.email}
+            </div>
           ) : (
             <>
               <div className="home-welcome text-5xl">Welcome</div>

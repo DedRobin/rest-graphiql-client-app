@@ -28,6 +28,7 @@ export default function Register() {
     mode: "all",
   });
   const [user, loading] = useAuthState(auth);
+
   const router = useRouter();
 
   useEffect(() => {

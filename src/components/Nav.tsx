@@ -1,46 +1,37 @@
-import { logout } from "@/app/actions/auth";
-import { auth } from "@/firebase";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { usePathname } from "next/navigation";
 
 export default function Nav() {
-  const [user] = useAuthState(auth);
-  const router = useRouter();
-
-  const logoutThenRedirect = () => {
-    logout();
-    router.push("/login");
-  };
+  const pathname = usePathname();
 
   return (
-    <nav className="nav flex justify-between">
-      <div className="auth-btn-group flex gap-2">
-        {user ? (
-          <button
-            className="log-out-btn border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
-            type="button"
-            onClick={logoutThenRedirect}
+    <nav className="nav flex">
+      <ul className="nav-links flex items-center gap-2">
+        <li className="nav-link-item">
+          <Link
+            className={`hover:text-lime-500 ${pathname === "/" ? "text-lime-500 underline" : ""}`}
+            href="/"
           >
-            Log out
-          </button>
-        ) : (
-          <>
-            <Link
-              href="/login"
-              className="sign-in text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
-            >
-              Sign in
-            </Link>
-            <Link
-              href="/register"
-              className="sign-up text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
-            >
-              Sign up
-            </Link>
-          </>
-        )}
-      </div>
+            Main
+          </Link>
+        </li>
+        <li className="nav-link-item">
+          <Link
+            className="hover:text-lime-500 pointer-events-none"
+            href="/graphiql"
+          >
+            GraphQL
+          </Link>
+        </li>
+        <li className="nav-link-item">
+          <Link
+            className="hover:text-lime-500 pointer-events-none"
+            href="/restfull"
+          >
+            RESTfull
+          </Link>
+        </li>
+      </ul>
     </nav>
   );
 }

@@ -1,5 +1,6 @@
 import { logout } from "@/app/actions/auth";
 import { auth } from "@/firebase";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -13,20 +14,33 @@ export default function Nav() {
   };
 
   return (
-    <>
-      {user ? (
-        <nav className="nav flex justify-between">
-          <div className="auth-btn-group">
-            <button
-              className="log-out-btn hover:border-lime-400 hover:text-lime-500"
-              type="button"
-              onClick={logoutThenRedirect}
+    <nav className="nav flex justify-between">
+      <div className="auth-btn-group flex gap-2">
+        {user ? (
+          <button
+            className="log-out-btn border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
+            type="button"
+            onClick={logoutThenRedirect}
+          >
+            Log out
+          </button>
+        ) : (
+          <>
+            <Link
+              href="/login"
+              className="sign-in text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
             >
-              Log out
-            </button>
-          </div>
-        </nav>
-      ) : null}
-    </>
+              Sign in
+            </Link>
+            <Link
+              href="/register"
+              className="sign-up text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
+            >
+              Sign up
+            </Link>
+          </>
+        )}
+      </div>
+    </nav>
   );
 }

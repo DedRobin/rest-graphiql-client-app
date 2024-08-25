@@ -52,5 +52,4 @@ export async function resetPassword(email: string) {
 
 export async function logout() {
   signOut(auth);
-  alert("Log out");
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { registerWithEmailAndPassword } from "@/app/actions/auth";
+import Loader from "@/components/UI/Loader";
 import { auth } from "@/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -25,21 +26,21 @@ export default function Register() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) {
-      alert("You are authorized");
-      router.push("/");
-    }
+    if (user) router.push("/");
   }, [user, loading, router]);
 
   return (
     <>
       {loading ? (
-        <div className="animate-pulse text-5xl">Loading</div>
+        <Loader />
       ) : (
         <form
           className="login-form flex flex-col gap-3"
           onSubmit={handleSubmit(registerWithEmailAndPassword)}
         >
+          <h1 className="login-heading text-5xl text-center my-5">
+            Registration
+          </h1>
           <div className="name-field flex gap-3 justify-between">
             <label htmlFor="name">Name</label>
             <input
@@ -71,7 +72,7 @@ export default function Register() {
             className="sign-in-btn border-2 rounded-full hover:border-lime-400 hover:text-lime-500"
             type="submit"
           >
-            Sign in
+            Register
           </button>
         </form>
       )}

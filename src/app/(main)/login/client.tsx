@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
+import Loader from "@/components/UI/Loader";
 
 export default function Login() {
   const {
@@ -19,21 +20,19 @@ export default function Login() {
 
   useEffect(() => {
     if (loading) return;
-    if (user) {
-      alert("You are authorized");
-      router.push("/");
-    }
+    if (user) router.push("/");
   }, [user, loading, router]);
 
   return (
     <>
       {loading ? (
-        <div className="animate-pulse text-5xl">Loading</div>
+        <Loader />
       ) : (
         <form
           className="login-form flex flex-col gap-3"
           onSubmit={handleSubmit(loginWithEmailAndPassword)}
         >
+          <h1 className="login-heading text-5xl text-center my-5">Login</h1>
           <div className="email-field flex gap-3 justify-between">
             <label htmlFor="email">Email</label>
             <input

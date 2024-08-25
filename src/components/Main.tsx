@@ -6,6 +6,8 @@ type TMainProps = {
 
 export default function Main({ children }: TMainProps) {
   return (
-    <main className="main flex justify-center items-center">{children}</main>
+    <main className="main flex justify-center items-center grow">
+      {children}
+    </main>
   );
 }

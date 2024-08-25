@@ -1,7 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import RegisterPage from "@/app/(main)/register/page";
-// import { useAuthState } from "@/tests/mocks/firebase";
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn(),

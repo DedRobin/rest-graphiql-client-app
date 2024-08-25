@@ -6,13 +6,14 @@ import {
   signOut,
 } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
+import { TRegisterForm } from "../(main)/register/client";
 
 export type TLoginForm = {
   email: string;
   password: string;
 };
 
-export async function login(data: TLoginForm) {
+export async function loginWithEmailAndPassword(data: TLoginForm) {
   const { email, password } = data;
   try {
     await signInWithEmailAndPassword(auth, email, password);
@@ -22,11 +23,8 @@ export async function login(data: TLoginForm) {
   }
 }
 
-export async function registerWithEmailAndPassword(
-  name: string,
-  email: string,
-  password: string,
-) {
+export async function registerWithEmailAndPassword(data: TRegisterForm) {
+  const { name, email, password } = data;
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
     const user = res.user;

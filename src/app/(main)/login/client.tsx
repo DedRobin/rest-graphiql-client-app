@@ -5,7 +5,7 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { auth } from "@/firebase";
-import { login, TLoginForm } from "@/app/actions/auth";
+import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
 
 export default function Login() {
   const {
@@ -20,7 +20,7 @@ export default function Login() {
   useEffect(() => {
     if (loading) return;
     if (user) {
-      alert("Log in");
+      alert("You are authorized");
       router.push("/");
     }
   }, [user, loading, router]);
@@ -32,7 +32,7 @@ export default function Login() {
       ) : (
         <form
           className="login-form flex flex-col gap-3"
-          onSubmit={handleSubmit(login)}
+          onSubmit={handleSubmit(loginWithEmailAndPassword)}
         >
           <div className="email-field flex gap-3 justify-between">
             <label htmlFor="email">Email</label>

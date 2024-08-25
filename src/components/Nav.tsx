@@ -17,7 +17,7 @@ export default function Nav() {
         </li>
         <li className="nav-link-item">
           <Link
-            className="hover:text-lime-500 pointer-events-none"
+            className={`hover:text-lime-500 ${pathname === "/graphiql" ? "text-lime-500 underline" : ""}`}
             href="/graphiql"
           >
             GraphQL
@@ -25,7 +25,7 @@ export default function Nav() {
         </li>
         <li className="nav-link-item">
           <Link
-            className="hover:text-lime-500 pointer-events-none"
+            className={`hover:text-lime-500 ${pathname === "/restfull" ? "text-lime-500 underline" : ""}`}
             href="/restfull"
           >
             RESTfull

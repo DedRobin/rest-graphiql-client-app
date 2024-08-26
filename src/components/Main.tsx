@@ -1,10 +1,6 @@
-import { ReactNode } from "react";
+import { PropsWithChildren } from "react";
 
-type TMainProps = {
-  children: ReactNode;
-};
-
-export default function Main({ children }: TMainProps) {
+export function Main({ children }: PropsWithChildren) {
   return (
     <main className="main flex justify-center items-center grow">
       {children}

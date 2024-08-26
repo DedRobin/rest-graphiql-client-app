@@ -1,14 +1,14 @@
 "use client";
 
 import { registerWithEmailAndPassword } from "@/app/actions/auth";
-import Loader from "@/components/UI/Loader";
-import { auth } from "@/firebase";
+import { auth } from "@/services/firebase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import registrationSchema from "./schema";
+import { Loader } from "@/components/UI/Loader";
 
 export type TRegisterForm = {
   name: string;
@@ -27,18 +27,18 @@ export default function Register() {
     resolver: yupResolver(registrationSchema),
     mode: "all",
   });
-  const [user, loading] = useAuthState(auth);
+  const [user, isLoading] = useAuthState(auth);
 
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return;
+    if (isLoading) return;
     if (user) router.push("/");
-  }, [user, loading, router]);
+  }, [user, isLoading, router]);
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <form

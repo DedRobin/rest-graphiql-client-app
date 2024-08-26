@@ -4,9 +4,9 @@ import { useForm } from "react-hook-form";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/firebase";
+import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
-import Loader from "@/components/UI/Loader";
+import { Loader } from "@/components/UI/Loader";
 
 export default function Login() {
   const {
@@ -15,17 +15,17 @@ export default function Login() {
     // watch,
     // formState: { errors },
   } = useForm<TLoginForm>();
-  const [user, loading] = useAuthState(auth);
+  const [user, isLoading] = useAuthState(auth);
   const router = useRouter();
 
   useEffect(() => {
-    if (loading) return;
+    if (isLoading) return;
     if (user) router.push("/");
-  }, [user, loading, router]);
+  }, [user, isLoading, router]);
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <form

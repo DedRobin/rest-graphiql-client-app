@@ -1,16 +1,17 @@
 import { logout } from "@/app/actions/auth";
-import { auth } from "@/firebase";
+import { Route } from "@/app/routes";
+import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export default function AuthBtnGroup() {
+export function AuthBtnGroup() {
   const [user] = useAuthState(auth);
   const router = useRouter();
 
   const logoutThenRedirect = () => {
     logout();
-    router.push("/login");
+    router.push(Route.Login);
   };
 
   return (
@@ -26,13 +27,13 @@ export default function AuthBtnGroup() {
       ) : (
         <>
           <Link
-            href="/login"
+            href={Route.Login}
             className="sign-in text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
           >
             Sign in
           </Link>
           <Link
-            href="/register"
+            href={Route.Registration}
             className="sign-up text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
           >
             Sign up

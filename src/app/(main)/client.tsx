@@ -1,16 +1,17 @@
 "use client";
 
-import Loader from "@/components/UI/Loader";
-import { auth } from "@/firebase";
+import { Loader } from "@/components/UI/Loader";
+import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Route } from "../routes";
 
 export default function Home() {
-  const [user, loading] = useAuthState(auth);
+  const [user, isLoading] = useAuthState(auth);
 
   return (
     <>
-      {loading ? (
+      {isLoading ? (
         <Loader />
       ) : (
         <div className="home flex flex-col gap-2">
@@ -22,13 +23,13 @@ export default function Home() {
             <>
               <div className="home-welcome text-5xl">Welcome</div>
               <Link
-                href="/login"
+                href={Route.Login}
                 className="sign-in text-center border-2 rounded-full hover:border-lime-400 hover:text-lime-500"
               >
                 Sign in
               </Link>
               <Link
-                href="/register"
+                href={Route.Registration}
                 className="sign-up text-center border-2 rounded-full hover:border-lime-400 hover:text-lime-500"
               >
                 Sign up

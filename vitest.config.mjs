@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "jsdom",
-    setupFiles: ["./src/tests/setup.ts"],
+    setupFiles: ["./src/__tests__/setup.ts"],
     coverage: {
       include: ["src/**"],
     },

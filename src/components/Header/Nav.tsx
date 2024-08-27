@@ -37,6 +37,14 @@ export function Nav() {
                 RESTfull
               </Link>
             </li>
+            <li className="nav-link-item">
+              <Link
+                className={`hover:text-lime-500 ${pathname === Route.History ? "text-lime-500 underline" : ""}`}
+                href={Route.History}
+              >
+                History
+              </Link>
+            </li>
           </>
         ) : null}
       </ul>

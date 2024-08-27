@@ -11,5 +11,5 @@ export function useLocalStorage(key: LocalStorage) {
     }
   }, [key]);
 
-  return data;
+  return [data, setData];
 }

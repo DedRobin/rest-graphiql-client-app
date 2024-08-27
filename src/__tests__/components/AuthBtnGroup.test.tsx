@@ -1,6 +1,6 @@
 import { describe, expect, test, vi } from "vitest";
 import { fireEvent, render, screen } from "@testing-library/react";
-import AuthBtnGroup from "@/components/AuthBtnGroup";
+import { AuthBtnGroup } from "@/components/Header/AuthBtnGroup";
 
 vi.mock("next/navigation", () => ({
   useRouter: vi.fn().mockImplementation(() => ({

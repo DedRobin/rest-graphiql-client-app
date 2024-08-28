@@ -11,13 +11,16 @@ export function usePlayground() {
     PLAYGROUND_DEFAULTS.endpoint,
   );
 
+  const [query, setQuery] = useState<string>(PLAYGROUND_DEFAULTS.query);
+  const [response, setResponse] = useState<string | undefined>(undefined);
+
   const [schema, setSchema] = useState<GraphQLSchema | undefined>();
 
   async function getSchema() {
     setSchema(undefined);
     const requestHeaders = createHeadersOfRequest("");
-    const query = getIntrospectionQuery();
-    const requestBody = createBodyOfRequest("", query);
+    const introspectionQuery = getIntrospectionQuery();
+    const requestBody = createBodyOfRequest("", introspectionQuery);
 
     const schemaData = await makeRequest(
       endpoint,
@@ -25,10 +28,31 @@ export function usePlayground() {
       requestBody,
       "POST",
     );
-
     const clientSchema = buildClientSchema(schemaData.data);
     setSchema(clientSchema);
   }
 
-  return { endpoint, setEndpoint, schema, getSchema };
+  async function executeQuery() {
+    const requestHeaders = createHeadersOfRequest("");
+    const requestBody = createBodyOfRequest("", query);
+
+    const responseData = await makeRequest(
+      endpoint,
+      requestHeaders,
+      requestBody,
+      "POST",
+    );
+    setResponse(JSON.stringify(responseData));
+  }
+
+  return {
+    endpoint,
+    setEndpoint,
+    schema,
+    getSchema,
+    query,
+    setQuery,
+    executeQuery,
+    response,
+  };
 }

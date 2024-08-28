@@ -42,3 +42,5 @@ export const mockHistoryData = [
     },
   },
 ];
+
+export type TMockHistoryData = typeof mockHistoryData;

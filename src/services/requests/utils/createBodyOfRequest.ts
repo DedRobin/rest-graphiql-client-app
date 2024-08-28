@@ -1,4 +1,4 @@
-export function createBodyOfRequest(variables: string, query: string) {
+export function createBodyOfRequest(query: string, variables?: string) {
   if (!variables) {
     return JSON.stringify({ query });
   }

@@ -1,48 +1,69 @@
-import { useState } from "react";
-import { PLAYGROUND_DEFAULTS } from "@/constantes/playgroundDefaults";
+import { useReducer, useState } from "react";
 import { GraphQLSchema } from "graphql/type";
 import { buildClientSchema, getIntrospectionQuery } from "graphql/utilities";
 import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersOfRequest";
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";
+import {
+  initialPlaygroundState,
+  PlaygroundActions,
+  playgroundReducer,
+} from "@/components/Playground/playgroundReducer";
 
 export function usePlayground() {
-  const [endpoint, setEndpoint] = useState<string>(
-    PLAYGROUND_DEFAULTS.endpoint,
+  const [state, dispatch] = useReducer(
+    playgroundReducer,
+    initialPlaygroundState,
   );
-
-  const [query, setQuery] = useState<string>(PLAYGROUND_DEFAULTS.query);
-  const [response, setResponse] = useState<string | undefined>(undefined);
+  const { endpoint, query, headers, variables, response } = state;
 
   const [schema, setSchema] = useState<GraphQLSchema | undefined>();
 
   async function getSchema() {
     setSchema(undefined);
-    const requestHeaders = createHeadersOfRequest("");
+    const headersOfRequest = createHeadersOfRequest();
     const introspectionQuery = getIntrospectionQuery();
-    const requestBody = createBodyOfRequest("", introspectionQuery);
+    const bodyOfRequest = createBodyOfRequest(introspectionQuery);
 
-    const schemaData = await makeRequest(
+    const { data } = await makeRequest(
       endpoint,
-      requestHeaders,
-      requestBody,
+      headersOfRequest,
+      bodyOfRequest,
       "POST",
     );
-    const clientSchema = buildClientSchema(schemaData.data);
+    const clientSchema = buildClientSchema(data);
     setSchema(clientSchema);
   }
 
   async function executeQuery() {
-    const requestHeaders = createHeadersOfRequest("");
-    const requestBody = createBodyOfRequest("", query);
+    const headersOfRequest = createHeadersOfRequest(headers);
+    const bodyOfRequest = createBodyOfRequest(query, variables);
 
     const responseData = await makeRequest(
       endpoint,
-      requestHeaders,
-      requestBody,
+      headersOfRequest,
+      bodyOfRequest,
       "POST",
     );
-    setResponse(JSON.stringify(responseData));
+
+    dispatch({
+      type: PlaygroundActions.SET_RESPONSE,
+      payload: JSON.stringify(responseData),
+    });
+  }
+
+  function setQuery(query: string) {
+    dispatch({
+      type: PlaygroundActions.SET_QUERY,
+      payload: query,
+    });
+  }
+
+  function setEndpoint(endpoint: string) {
+    dispatch({
+      type: PlaygroundActions.SET_ENDPOINT,
+      payload: endpoint,
+    });
   }
 
   return {
@@ -54,5 +75,7 @@ export function usePlayground() {
     setQuery,
     executeQuery,
     response,
+    headers,
+    variables,
   };
 }

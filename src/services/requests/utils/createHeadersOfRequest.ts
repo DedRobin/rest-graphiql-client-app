@@ -1,6 +1,6 @@
 import { HEADERS_DEFAULT } from "@/constantes/requestHeadersDefault";
 
-export function createHeadersOfRequest(headers: string) {
+export function createHeadersOfRequest(headers?: string) {
   if (!headers) {
     return HEADERS_DEFAULT;
   }

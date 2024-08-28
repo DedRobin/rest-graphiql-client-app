@@ -38,7 +38,7 @@ export function Playground() {
           value={query}
           onChange={(event) => setQuery(event.target.value)}
         />
-        <textarea rows={8} placeholder="Response" value={response} />
+        <textarea rows={8} placeholder="Response" defaultValue={response} />
       </div>
       {schema && <SchemaViewer schema={schema} />}
     </div>

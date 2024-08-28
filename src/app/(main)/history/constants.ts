@@ -1,3 +1,3 @@
-export enum LocalStorage {
-  Requests = "rest-graphiql-client-app/requests",
+export enum LSKey {
+  HistoryData = "rest-graphiql-client-app/requests",
 }

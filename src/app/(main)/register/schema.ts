@@ -4,7 +4,7 @@ const registrationSchema = yup
   .object({
     name: yup
       .string()
-      .matches(/^[A-Z].*/, "First letter must be uppercase")
+      .matches(/^[A-Z]|[А-ЯЁ].+/, "First letter must be uppercase")
       .required("Field is required"),
     email: yup
       .string()
@@ -18,8 +18,8 @@ const registrationSchema = yup
       .string()
       .min(8, "Must be at least 8 characters")
       .matches(/[0-9]/, "Must contain one number")
-      .matches(/[A-Z]/, "Must contain one uppercase letter")
-      .matches(/[a-z]/, "Must contain one lowercase letter")
+      .matches(/[A-Z]|[А-ЯЁ]/, "Must contain one uppercase letter")
+      .matches(/[a-z]|[а-яё]/, "Must contain one lowercase letter")
       .matches(
         /[!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]/,
         "Must contain one special characters",

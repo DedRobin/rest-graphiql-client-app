@@ -2,36 +2,84 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
 body {
-  display: flex;
-  flex-direction: column;
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  @apply bg-black text-lightGray;
+  min-height: 100vh;
   width: 100vw;
-  height: 100vh;
+  margin: 0;
+  padding-top: 48px;
+  padding-bottom: 48px; 
 }
+
+header,
+footer {
+  @apply fixed left-0 w-full h-12 px-12 z-10;
+}
+
+header {
+  @apply top-0 flex items-center bg-darkGray text-green;
+}
+
+footer {
+  @apply bottom-0 flex items-center bg-black text-lightGray;
+}
+
+/* main {
+  @apply grid grid-cols-8 gap-6 p-12 min-h-screen;
+} */
 
 @layer utilities {
   .text-balance {
     text-wrap: balance;
   }
 }
+
+@layer base {
+  h1 {
+    @apply text-h1 font-h1 leading-h1 tracking-h1 text-green;
+  }
+
+  h2 {
+    @apply text-h2 font-h2 leading-h2 tracking-h2 text-green;
+  }
+
+  h3 {
+    @apply text-h3 font-h3 leading-h3 tracking-h3 text-green;
+  }
+
+  h4 {
+    @apply text-h4 font-h4 leading-h4 tracking-h4 text-green;
+  }
+
+  h5 {
+    @apply text-h5 font-h5 leading-h5 tracking-h5;
+  }
+
+  h6 {
+    @apply text-h6 font-h6 leading-h6 tracking-h6 text-green;
+  }
+
+  span {
+    @apply text-span font-span leading-span tracking-span  text-mediumGray;
+  }
+}
+
+/* Custom styles for links */
+a {
+  @apply text-green no-underline;
+}
+
+a::before {
+  content: none;
+}
+
+a:hover {
+  @apply text-lightGray;
+}
+
+@layer components {
+  .flex-container {
+    @apply flex flex-col gap-4 px-8 py-6 max-w-lg mx-auto;
+  }
+}
+

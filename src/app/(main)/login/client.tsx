@@ -4,16 +4,21 @@ import { useForm } from "react-hook-form";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
-import { Loader } from "@/components/UI/Loader";
+// import { Loader } from "@/components/UI/Loader";
+import { EmailInput } from "@/components/UI/Inputs/EmailInput/EmailInput";
+import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInput";
+import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
+import Skeleton from "@/components/UI/Skeleton/Skeleton";
 
 export default function Login() {
   const {
     register,
     handleSubmit,
-    // watch,
-    // formState: { errors },
+    watch,
+    formState: { errors },
   } = useForm<TLoginForm>();
   const [user, isLoading] = useAuthState(auth);
   const router = useRouter();
@@ -23,41 +28,70 @@ export default function Login() {
     if (user) router.push("/");
   }, [user, isLoading, router]);
 
+  const email = watch("email") || "";
+  const password = watch("password") || "";
+  const isButtonDisabled = email === "" || password === "";
+
   return (
     <>
       {isLoading ? (
-        <Loader />
+        <Skeleton />
       ) : (
-        <form
-          className="login-form flex flex-col gap-3"
-          onSubmit={handleSubmit(loginWithEmailAndPassword)}
-        >
-          <h1 className="login-heading text-5xl text-center my-5">Login</h1>
-          <div className="email-field flex gap-3 justify-between">
-            <label htmlFor="email">Email</label>
-            <input
-              className="email-input text-black"
-              id="email"
-              type="email"
-              {...register("email")}
-            />
-          </div>
-          <div className="password-field flex gap-3 justify-between">
-            <label htmlFor="password">Password</label>
-            <input
-              className="password-input text-black"
-              id="password"
-              type="password"
-              {...register("password")}
-            />
-          </div>
-          <button
-            className="sign-in-btn border-2 rounded-full hover:border-lime-400 hover:text-lime-500"
-            type="submit"
+        <>
+          <form
+            className="flex-container col-span-8 sm:col-span-8 md:col-span-6 lg:col-span-4"
+            onSubmit={handleSubmit(loginWithEmailAndPassword)}
           >
-            Sign in
-          </button>
-        </form>
+            <h2>Please Sign In</h2>
+            <span className="-mt-2">
+              Sign in to your account to continue working with APIs and graphs.
+              Experience the simplicity and power of our unified tool in one
+              interface.
+            </span>
+            <EmailInput
+              label="Email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={register("email").onChange}
+              error={errors?.email?.message}
+              register={register("email")}
+            />
+            <PasswordInput
+              label="Password"
+              placeholder="Enter your password"
+              value={password}
+              error={errors?.password?.message}
+              disabled={false}
+              register={register("password")}
+            />
+            <div className="flex justify-between items-center mt-4">
+              <LargeButton disabled={isButtonDisabled} disabledText="Login">
+                Sign in
+              </LargeButton>
+              <div className="opacity-60">
+                <span>
+                  Don&apos;t have an account?&nbsp;
+                  <Link href="/registration">Register now</Link>
+                </span>
+              </div>
+            </div>
+          </form>
+          <div className="hidden md:hidden lg:block lg:col-start-5 lg:col-span-3 bg-cover bg-center bg-[url('/luke-jones-38Tm9xZPxIw-unsplash%201.webp')] h-full"></div>
+          <div className="button-container lg:col-span-1 lg:col-start-8 md:col-start-7 md:col-span-2 hidden sm:flex flex-col gap-4 items-end">
+            <Link
+              href="/login"
+              className="text-h6 font-h6 leading-h6 tracking-h6"
+            >
+              Login
+            </Link>
+            <Link
+              href="/registration"
+              className="text-h6 font-h6 leading-h6 tracking-h6"
+            >
+              Register
+            </Link>
+          </div>
+        </>
       )}
     </>
   );

@@ -1,0 +1,7 @@
+.history {
+  @apply flex flex-col gap-3 mx-40;
+}
+
+.button {
+  @apply text-2xl m-10 border-2 rounded p-2 hover:text-lime-500 hover:border-lime-400 self-center;
+}

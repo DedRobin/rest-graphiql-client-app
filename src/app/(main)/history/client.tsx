@@ -6,7 +6,7 @@ import { HistoryData } from "@/components/History/Data";
 import { HistoryFallback } from "@/components/History/Fallback";
 import { mockHistoryData } from "./__mocks__/mockHistoryData";
 import { Loader } from "@/components/UI/Loader";
-import styles from "./Style.module.css";
+import styles from "./style.module.css";
 
 export default function History() {
   const [historyData, setHistoryData] = useLocalStorage(LSKey.HistoryData);

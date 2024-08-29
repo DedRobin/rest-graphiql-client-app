@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Route } from "../routes";
 
-export default function Home() {
+export function Home() {
   const [user, isLoading] = useAuthState(auth);
 
   return (

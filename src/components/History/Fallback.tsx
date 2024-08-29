@@ -10,7 +10,7 @@ export function HistoryFallback() {
         <p>{"Try those options:"}</p>
       </div>
 
-      <div className="history-link flex justify-around text-3xl m-10 *:border-2 *:rounded *:p-2 hover:*:text-lime-500 hover:*:border-lime-400">
+      <div className="history-link flex justify-around gap-3 text-3xl m-10 *:border-2 *:rounded *:p-2 hover:*:text-lime-500 hover:*:border-lime-400">
         <Link className="history-link-rest" href={Route.RESTfull}>
           REST Client
         </Link>

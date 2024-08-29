@@ -1,8 +1,8 @@
-import { TMockHistoryData } from "@/app/(main)/history/__mocks__/mockHistoryData";
+import { TMockHistoryItem } from "@/app/(main)/history/__mocks__/mockHistoryData";
 import { LSKey } from "@/app/(main)/history/constants";
 import { useEffect, useState } from "react";
 
-type TLocalStorageState = TMockHistoryData | undefined | null;
+type TLocalStorageState = TMockHistoryItem[] | undefined | null;
 
 export function useLocalStorage(
   key: LSKey,

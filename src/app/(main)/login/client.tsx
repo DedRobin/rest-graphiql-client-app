@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
 import { Loader } from "@/components/UI/Loader";
+import { Route } from "@/app/routes";
 
 export default function Login() {
   const {
@@ -20,7 +21,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoading) return;
-    if (user) router.push("/");
+    if (user) router.push(Route.Main);
   }, [user, isLoading, router]);
 
   return (

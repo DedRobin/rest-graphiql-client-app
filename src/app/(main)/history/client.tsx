@@ -2,7 +2,7 @@
 
 import { LSKey } from "./constants";
 import { useLocalStorage } from "@/hooks/localStorageHook";
-import { HistoryData } from "@/components/History/Data";
+import { HistoryData } from "@/components/History/DataList";
 import { HistoryFallback } from "@/components/History/Fallback";
 import { mockHistoryData } from "./__mocks__/mockHistoryData";
 import { Loader } from "@/components/UI/Loader";

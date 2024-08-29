@@ -1,27 +1,38 @@
-import { mockHistoryData } from "@/app/(main)/history/__mocks__/mockRequests";
+import { TMockHistoryData } from "@/app/(main)/history/__mocks__/mockHistoryData";
+import { Route } from "@/app/routes";
+import Link from "next/link";
 
 export function HistoryData({
   historyData,
 }: {
-  historyData: typeof mockHistoryData;
+  historyData: TMockHistoryData;
 }) {
   return (
-    <div className="history-requests flex justify-center flex-wrap gap-3">
-      {historyData.map((request, index) => (
-        <div key={index} className="request">
-          {Object.entries(request).map(([field, value], index) => (
+    <>
+      <h1 className="text-5xl">History Requests</h1>
+      <div className="history-requests flex flex-col justify-center gap-3 hover:*:text-lime-500 hover:*:border-lime-500">
+        {historyData.map((request, index) => (
+          <Link
+            href={
+              ["GET", "POST"].includes(request.method)
+                ? Route.RESTfull
+                : Route.GraphiQL
+            }
+            key={index}
+            className="request"
+          >
             <div
               key={index}
               className="request-row grid grid-cols-4 *:border-2"
             >
-              <div className="request-field">{field}</div>
-              <div className="request-value col-span-3">
-                {JSON.stringify(value)}
+              <div className="request-method">{request.method}</div>
+              <div className="request-url col-span-3">
+                {JSON.stringify(request.url)}
               </div>
             </div>
-          ))}
-        </div>
-      ))}
-    </div>
+          </Link>
+        ))}
+      </div>
+    </>
   );
 }

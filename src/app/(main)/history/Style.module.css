@@ -1,5 +1,5 @@
 .history {
-  @apply flex flex-col gap-3 mx-40;
+  @apply flex flex-col items-center gap-3 mx-40;
 }
 
 .button {

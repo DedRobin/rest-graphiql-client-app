@@ -81,5 +81,21 @@ a:hover {
   .flex-container {
     @apply flex flex-col gap-4 px-8 py-6 max-w-lg mx-auto;
   }
+
+  @media (max-width: 640px) {
+    .flex-container {
+      @apply px-4 py-6;
+    }
+    body {
+      font-size: 12px;
+    }
+  }
+
+  @media (min-width: 640px) {
+    .flex-container {
+      @apply px-8 py-6;
+    }
+  }
 }
+
 

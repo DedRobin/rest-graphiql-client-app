@@ -3,6 +3,7 @@ import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { Logo } from "../UI/logo/Logo";
 
 export function Nav() {
   const [user] = useAuthState(auth);
@@ -12,11 +13,8 @@ export function Nav() {
     <nav className="nav flex">
       <ul className="nav-links flex items-center gap-2">
         <li className="nav-link-item">
-          <Link
-            className={`hover:text-lime-500 ${pathname === Route.Main ? "text-lime-500 underline" : ""}`}
-            href={Route.Main}
-          >
-            Main
+          <Link href={Route.Main}>
+            <Logo />
           </Link>
         </li>
         {user ? (

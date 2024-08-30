@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
@@ -11,7 +11,8 @@ import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
 import { EmailInput } from "@/components/UI/Inputs/EmailInput/EmailInput";
 import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInput";
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
-import Skeleton from "@/components/UI/Skeleton/Skeleton";
+import LoginSkeleton from "@/components/UI/Skeletons/LoginSkeleton";
+import { Route } from "@/app/routes";
 
 export default function Login() {
   const {
@@ -22,6 +23,7 @@ export default function Login() {
   } = useForm<TLoginForm>();
   const [user, isLoading] = useAuthState(auth);
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (isLoading) return;
@@ -32,19 +34,21 @@ export default function Login() {
   const password = watch("password") || "";
   const isButtonDisabled = email === "" || password === "";
 
+  const isActive = (route: string) => pathname === route;
+
   return (
     <>
       {isLoading ? (
-        <Skeleton />
+        <LoginSkeleton />
       ) : (
         <>
           <form
             className="flex-container col-span-8 sm:col-span-8 md:col-span-6 lg:col-span-4"
             onSubmit={handleSubmit(loginWithEmailAndPassword)}
           >
-            <h2>Please Sign In</h2>
+            <h2>Please Login</h2>
             <span className="-mt-2">
-              Sign in to your account to continue working with APIs and graphs.
+              Login in to your account to continue working with APIs and graphs.
               Experience the simplicity and power of our unified tool in one
               interface.
             </span>
@@ -71,7 +75,7 @@ export default function Login() {
               <div className="opacity-60">
                 <span>
                   Don&apos;t have an account?&nbsp;
-                  <Link href="/registration">Register now</Link>
+                  <Link href={Route.Registration}>Register now</Link>
                 </span>
               </div>
             </div>
@@ -79,14 +83,18 @@ export default function Login() {
           <div className="hidden md:hidden lg:block lg:col-start-5 lg:col-span-3 bg-cover bg-center bg-[url('/luke-jones-38Tm9xZPxIw-unsplash%201.webp')] h-full"></div>
           <div className="button-container lg:col-span-1 lg:col-start-8 md:col-start-7 md:col-span-2 hidden sm:flex flex-col gap-4 items-end">
             <Link
-              href="/login"
-              className="text-h6 font-h6 leading-h6 tracking-h6"
+              href={Route.Login}
+              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
+                isActive(Route.Login) ? "text-lightGray" : ""
+              }`}
             >
               Login
             </Link>
             <Link
-              href="/registration"
-              className="text-h6 font-h6 leading-h6 tracking-h6"
+              href={Route.Registration}
+              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
+                isActive(Route.Registration) ? "text-lightGray" : ""
+              }`}
             >
               Register
             </Link>

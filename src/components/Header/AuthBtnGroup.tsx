@@ -4,21 +4,25 @@ import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { usePathname } from "next/navigation";
 
 export function AuthBtnGroup() {
   const [user] = useAuthState(auth);
   const router = useRouter();
+  const pathname = usePathname();
 
   const logoutThenRedirect = () => {
     logout();
     router.push(Route.Login);
   };
 
+  const isActive = (route: string) => pathname === route;
+
   return (
-    <div className="auth-btn-group flex gap-2">
+    <div className="auth-btn-group flex gap-6">
       {user ? (
         <button
-          className="log-out-btn border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
+          className="h5 text-h5 font-h5 leading-h5 tracking-h5 text-center"
           type="button"
           onClick={logoutThenRedirect}
         >
@@ -28,15 +32,19 @@ export function AuthBtnGroup() {
         <>
           <Link
             href={Route.Login}
-            className="sign-in text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
+            className={`h5 text-h5 font-h5 leading-h5 tracking-h5 text-center ${
+              isActive(Route.Login) ? "text-lightGray" : ""
+            }`}
           >
-            Sign in
+            Login
           </Link>
           <Link
             href={Route.Registration}
-            className="sign-up text-center border-2 rounded p-2 hover:border-lime-400 hover:text-lime-500"
+            className={`h5 text-h5 font-h5 leading-h5 tracking-h5 text-center ${
+              isActive(Route.Registration) ? "text-lightGray" : ""
+            }`}
           >
-            Sign up
+            Register
           </Link>
         </>
       )}

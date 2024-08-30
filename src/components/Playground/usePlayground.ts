@@ -5,17 +5,24 @@ import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersO
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";
 import {
-  initialPlaygroundState,
   PlaygroundActions,
   playgroundReducer,
+  PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
+import { PLAYGROUND_DEFAULTS } from "@/constantes/playgroundDefaults";
+
+const initialPlaygroundState: PlaygroundState = {
+  ...PLAYGROUND_DEFAULTS,
+  response: "",
+  headers: "",
+};
 
 export function usePlayground() {
   const [state, dispatch] = useReducer(
     playgroundReducer,
     initialPlaygroundState,
   );
-  const { endpoint, query, headers, variables, response } = state;
+  const { endpoint, query, headers, variables } = state;
 
   const [schema, setSchema] = useState<GraphQLSchema | undefined>();
 
@@ -42,6 +49,7 @@ export function usePlayground() {
     const responseData = await makeRequest(
       endpoint,
       headersOfRequest,
+
       bodyOfRequest,
       "POST",
     );
@@ -67,15 +75,11 @@ export function usePlayground() {
   }
 
   return {
-    endpoint,
-    setEndpoint,
+    ...state,
     schema,
+    setEndpoint,
     getSchema,
-    query,
     setQuery,
     executeQuery,
-    response,
-    headers,
-    variables,
   };
 }

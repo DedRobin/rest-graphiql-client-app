@@ -1,18 +1,10 @@
-import { PLAYGROUND_DEFAULTS } from "@/constantes/playgroundDefaults";
-
-interface PlaygroundState {
+export interface PlaygroundState {
   endpoint: string;
   query: string;
   variables: string;
   headers: string;
   response: string;
 }
-
-export const initialPlaygroundState: PlaygroundState = {
-  ...PLAYGROUND_DEFAULTS,
-  response: "",
-  headers: "",
-};
 
 export enum PlaygroundActions {
   SET_ENDPOINT,

@@ -1,11 +1,11 @@
 "use client";
 
 import { useLocalStorage } from "@/hooks/localStorageHook";
-import { HistoryFallback } from "@/components/History/Fallback";
+import { HistoryFallback } from "@/components/HistoryData/Fallback";
 import { mockHistoryData } from "./__mocks__/mockHistoryData";
 import { Loader } from "@/components/UI/Loader";
-import { HistoryData } from "@/components/History/DataList";
 import { LSKey } from "@/constants/localStorageKeys";
+import { HistoryData } from "@/components/HistoryData/HistoryData";
 
 export default function History() {
   const [historyData, setHistoryData] = useLocalStorage(LSKey.HistoryData);

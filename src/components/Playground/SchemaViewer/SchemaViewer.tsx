@@ -1,4 +1,4 @@
-import { GraphQLSchema } from "graphql/type";
+import { GraphQLSchema } from "graphql";
 import { useState } from "react";
 import { TypeToDisplay } from "@/components/Playground/SchemaViewer/types";
 import { QueriesTab } from "@/components/Playground/SchemaViewer/QueriesTab";

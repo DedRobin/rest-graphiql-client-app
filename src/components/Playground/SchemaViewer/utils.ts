@@ -3,7 +3,6 @@ import { TypeToDisplay } from "@/components/Playground/SchemaViewer/types";
 
 export function getPureType(typeToDisplay: TypeToDisplay) {
   let currentType = typeToDisplay.type;
-  console.log("getPureType");
   while (true) {
     const typeWithoutNonNull = isNonNullType(currentType)
       ? currentType.ofType

@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import { GraphQLSchema } from "graphql/type";
-import { buildClientSchema, getIntrospectionQuery } from "graphql/utilities";
+import { buildClientSchema, getIntrospectionQuery } from "graphql";
 import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersOfRequest";
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";

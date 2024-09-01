@@ -8,12 +8,19 @@ import { Logo } from "../UI/logo/Logo";
 import Link from "next/link";
 import { Route } from "@/app/routes";
 import { BurgerMenu } from "./BurgerMenu";
+import { ToggleSwitch } from "../UI/buttons/ToggleSwitch/ToggleSwitch";
 
 export function Header() {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
+  const [toggleChecked, setToggleChecked] = useState(true);
 
   const toggleBurgerMenu = () => {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);
+  };
+
+  const handleToggle = (checked: boolean) => {
+    setToggleChecked(checked);
+    console.log("Toggle is now:", checked);
   };
 
   return (
@@ -22,8 +29,9 @@ export function Header() {
         <Logo />
       </Link>
 
-      <div className="hidden sm:flex items-center gap-4 w-full">
+      <div className="hidden sm:flex items-center gap-4 w-full ml-4">
         <Nav />
+        <ToggleSwitch isChecked={toggleChecked} onToggle={handleToggle} />
         <AuthBtnGroup />
       </div>
 
@@ -32,7 +40,7 @@ export function Header() {
         toggleBurgerMenu={toggleBurgerMenu}
       />
 
-      <BurgerMenu isOpen={isBurgerMenuOpen} />
+      <BurgerMenu isOpen={isBurgerMenuOpen} onToggle={handleToggle} />
     </header>
   );
 }

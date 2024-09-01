@@ -34,7 +34,7 @@ export function AuthBtnGroup() {
 
   return (
     <nav className="auth-btn-group flex gap-6 self-end">
-      <ul className="auth-links flex gap-6">
+      <ul className="auth-links flex gap-4">
         {user ? (
           <li className="auth-link-item">
             <Link

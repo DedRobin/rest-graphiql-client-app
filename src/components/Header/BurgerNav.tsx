@@ -25,7 +25,7 @@ export function BurgerNav() {
 
   return (
     <nav className="burger-nav flex flex-col w-full justify-center">
-      <ul className="burger-nav-links flex flex-col gap-2 pb-4">
+      <ul className="burger-nav-links flex flex-col gap-2 py-4">
         {user && (
           <>
             {renderNavLink(Route.GraphiQL, "GraphQL")}

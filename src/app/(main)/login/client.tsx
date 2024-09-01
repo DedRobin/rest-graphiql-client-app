@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
@@ -13,6 +13,7 @@ import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInpu
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import LoginSkeleton from "@/components/UI/Skeletons/LoginSkeleton";
 import { Route } from "@/app/routes";
+import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 
 export default function Login() {
   const {
@@ -23,7 +24,6 @@ export default function Login() {
   } = useForm<TLoginForm>();
   const [user, isLoading] = useAuthState(auth);
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     if (isLoading) return;
@@ -33,8 +33,6 @@ export default function Login() {
   const email = watch("email") || "";
   const password = watch("password") || "";
   const isButtonDisabled = email === "" || password === "";
-
-  const isActive = (route: string) => pathname === route;
 
   return (
     <>
@@ -82,22 +80,7 @@ export default function Login() {
           </form>
           <div className="hidden md:hidden lg:block lg:col-start-5 lg:col-span-3 bg-cover bg-center bg-[url('/luke-jones-38Tm9xZPxIw-unsplash%201.webp')] h-full"></div>
           <div className="button-container lg:col-span-1 lg:col-start-8 md:col-start-7 md:col-span-2 hidden sm:flex flex-col gap-4 items-end">
-            <Link
-              href={Route.Login}
-              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-                isActive(Route.Login) ? "text-lightGray" : ""
-              }`}
-            >
-              Login
-            </Link>
-            <Link
-              href={Route.Registration}
-              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-                isActive(Route.Registration) ? "text-lightGray" : ""
-              }`}
-            >
-              Register
-            </Link>
+            <UnauthenticatedSidebarNavigation />
           </div>
         </>
       )}

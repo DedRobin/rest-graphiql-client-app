@@ -14,8 +14,8 @@ import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInpu
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import { Route } from "@/app/routes";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
+import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 
 export type TRegisterForm = {
   name: string;
@@ -36,7 +36,6 @@ export default function Register() {
   });
   const [user, isLoading] = useAuthState(auth);
   const router = useRouter();
-  const pathname = usePathname();
 
   useEffect(() => {
     if (isLoading) return;
@@ -49,8 +48,6 @@ export default function Register() {
   const confirmPassword = watch("confirmPassword") || "";
   const isButtonDisabled =
     email === "" || password === "" || confirmPassword === "";
-
-  const isActive = (route: string) => pathname === route;
 
   return (
     <>
@@ -119,22 +116,7 @@ export default function Register() {
           </form>
           <div className="hidden md:hidden lg:block lg:col-start-5 lg:col-span-3 bg-cover bg-center bg-[url('/Rectangle.webp')] h-full"></div>
           <div className="button-container lg:col-span-1 lg:col-start-8 md:col-start-7 md:col-span-2 hidden sm:flex flex-col gap-4 items-end">
-            <Link
-              href={Route.Login}
-              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-                isActive(Route.Login) ? "text-lightGray" : ""
-              }`}
-            >
-              Login
-            </Link>
-            <Link
-              href={Route.Registration}
-              className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-                isActive(Route.Registration) ? "text-lightGray" : ""
-              }`}
-            >
-              Register
-            </Link>
+            <UnauthenticatedSidebarNavigation />
           </div>
         </>
       )}

@@ -82,7 +82,7 @@ a:hover {
     @apply flex flex-col gap-4 px-8 py-6 max-w-lg mx-auto;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 1024px) {
     .flex-container {
       @apply px-4 py-6;
     }
@@ -91,7 +91,7 @@ a:hover {
     }
   }
 
-  @media (min-width: 640px) {
+  @media (min-width: 1024px) {
     .flex-container {
       @apply px-8 py-6;
     }

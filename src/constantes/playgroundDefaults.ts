@@ -1,5 +1,5 @@
 export const PLAYGROUND_DEFAULTS = {
-  endpoint: "https://rickandmortyapi.com/graphql",
+  endpoint: encodeURI("https://rickandmortyapi.com/graphql"),
   query: `query ($filter: FilterCharacter) {
   characters(filter: $filter) {
     results {
@@ -13,4 +13,5 @@ export const PLAYGROUND_DEFAULTS = {
        "name":   "black"
        }
       }`,
+  headers: "",
 } as const;

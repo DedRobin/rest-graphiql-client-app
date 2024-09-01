@@ -4,10 +4,9 @@ export async function makeRequest(
   body: string,
   method: "POST" | "GET",
 ) {
-  const response = await fetch(endpoint, {
+  return fetch(endpoint, {
     method,
     headers,
     body,
   });
-  return response.json();
 }

@@ -1,20 +1,28 @@
-import { useReducer, useState } from "react";
-import { GraphQLSchema } from "graphql/type";
+import { useReducer } from "react";
 import { buildClientSchema, getIntrospectionQuery } from "graphql";
 import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersOfRequest";
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";
 import {
-  PlaygroundActions,
+  PlaygroundActionTypes,
   playgroundReducer,
   PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
 import { PLAYGROUND_DEFAULTS } from "@/constantes/playgroundDefaults";
 
+interface Message {
+  message: string;
+}
+
+function hasMessage(obj: unknown): obj is Message {
+  return (obj as Message)?.message !== undefined;
+}
+
 const initialPlaygroundState: PlaygroundState = {
   ...PLAYGROUND_DEFAULTS,
-  response: "",
-  headers: "",
+  isLoading: false,
+  response: { status: undefined, body: "", error: "" },
+  schema: undefined,
 };
 
 export function usePlayground() {
@@ -24,59 +32,93 @@ export function usePlayground() {
   );
   const { endpoint, query, headers, variables } = state;
 
-  const [schema, setSchema] = useState<GraphQLSchema | undefined>();
+  function handleError(title: string, error: unknown, status?: number) {
+    const errorMessage = hasMessage(error)
+      ? error.message
+      : JSON.stringify(error, null, 2);
+
+    dispatch({
+      type: PlaygroundActionTypes.SET_RESPONSE,
+      payload: {
+        body: "",
+        status,
+        error: `${title}: ${status ? `Status: ${status}` : ""}  \n\n ${errorMessage}`,
+      },
+    });
+  }
 
   async function getSchema() {
-    setSchema(undefined);
+    dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
+    dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
     const headersOfRequest = createHeadersOfRequest();
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createBodyOfRequest(introspectionQuery);
 
-    const { data } = await makeRequest(
-      endpoint,
-      headersOfRequest,
-      bodyOfRequest,
-      "POST",
-    );
-    const clientSchema = buildClientSchema(data);
-    setSchema(clientSchema);
+    try {
+      const response = await makeRequest(
+        endpoint,
+        headersOfRequest,
+        bodyOfRequest,
+        "POST",
+      );
+      const { data } = await response.json();
+      const clientSchema = buildClientSchema(data);
+      dispatch({
+        type: PlaygroundActionTypes.SET_SCHEMA,
+        payload: clientSchema,
+      });
+    } catch (error) {
+      console.log(error);
+      handleError("HTTP Error", error);
+    }
   }
 
   async function executeQuery() {
     const headersOfRequest = createHeadersOfRequest(headers);
     const bodyOfRequest = createBodyOfRequest(query, variables);
+    try {
+      const response = await makeRequest(
+        endpoint,
+        headersOfRequest,
+        bodyOfRequest,
+        "POST",
+      );
 
-    const responseData = await makeRequest(
-      endpoint,
-      headersOfRequest,
+      const responseData = await response.json();
 
-      bodyOfRequest,
-      "POST",
-    );
-
-    dispatch({
-      type: PlaygroundActions.SET_RESPONSE,
-      payload: JSON.stringify(responseData),
-    });
+      if (responseData.errors) {
+        handleError("GraphQL Error!", responseData, response.status);
+      } else {
+        dispatch({
+          type: PlaygroundActionTypes.SET_RESPONSE,
+          payload: {
+            body: JSON.stringify(responseData, null, 2),
+            status: response.status,
+            error: "",
+          },
+        });
+      }
+    } catch (error) {
+      handleError("HTTP Error", error);
+    }
   }
 
   function setQuery(query: string) {
     dispatch({
-      type: PlaygroundActions.SET_QUERY,
+      type: PlaygroundActionTypes.SET_QUERY,
       payload: query,
     });
   }
 
   function setEndpoint(endpoint: string) {
     dispatch({
-      type: PlaygroundActions.SET_ENDPOINT,
+      type: PlaygroundActionTypes.SET_ENDPOINT,
       payload: endpoint,
     });
   }
 
   return {
     ...state,
-    schema,
     setEndpoint,
     getSchema,
     setQuery,

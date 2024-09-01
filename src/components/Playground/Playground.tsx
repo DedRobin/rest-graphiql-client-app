@@ -31,8 +31,8 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         <input
           type="text"
           placeholder="Endpoint"
-          defaultValue={endpoint}
-          onBlur={(event) => setNewSetting("endpoint", event.target.value)}
+          value={endpoint}
+          onChange={(event) => setNewSetting("endpoint", event.target.value)}
         />
       </div>
       <div>

@@ -8,7 +8,13 @@ import {
   playgroundReducer,
   PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
-import { PLAYGROUND_DEFAULTS } from "@/constants/playgroundDefaults";
+
+export interface PlaygroundSettings {
+  endpoint: string;
+  query: string;
+  variables: string;
+  headers: string;
+}
 
 interface Message {
   message: string;
@@ -19,18 +25,18 @@ function hasMessage(obj: unknown): obj is Message {
 }
 
 const initialPlaygroundState: PlaygroundState = {
-  ...PLAYGROUND_DEFAULTS,
   isLoading: false,
   response: { status: undefined, body: "", error: "" },
   schema: undefined,
 };
 
-export function usePlayground() {
+export function usePlayground(settings: PlaygroundSettings) {
+  const { endpoint, headers, variables, query } = settings;
+
   const [state, dispatch] = useReducer(
     playgroundReducer,
     initialPlaygroundState,
   );
-  const { endpoint, query, headers, variables } = state;
 
   function handleError(title: string, error: unknown, status?: number) {
     const errorMessage = hasMessage(error)
@@ -103,21 +109,24 @@ export function usePlayground() {
   }
 
   function setQuery(query: string) {
-    dispatch({
-      type: PlaygroundActionTypes.SET_QUERY,
-      payload: query,
-    });
+    // dispatch({
+    //   type: PlaygroundActionTypes.SET_QUERY,
+    //   payload: query,
+    // });
+    console.log("setQuery", query);
   }
 
   function setEndpoint(endpoint: string) {
-    dispatch({
-      type: PlaygroundActionTypes.SET_ENDPOINT,
-      payload: endpoint,
-    });
+    // dispatch({
+    //   type: PlaygroundActionTypes.SET_ENDPOINT,
+    //   payload: endpoint,
+    // });
+    console.log("setEndpoint", endpoint);
   }
 
   return {
     ...state,
+    ...settings,
     setEndpoint,
     getSchema,
     setQuery,

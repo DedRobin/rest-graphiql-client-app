@@ -1,8 +1,11 @@
 import { TempButton } from "@/components/UI/TempButton";
-import { usePlayground } from "@/components/Playground/usePlayground";
+import {
+  PlaygroundSettings,
+  usePlayground,
+} from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
 
-export function Playground() {
+export function Playground({ settings }: { settings: PlaygroundSettings }) {
   const {
     endpoint,
     setEndpoint,
@@ -12,7 +15,7 @@ export function Playground() {
     setQuery,
     executeQuery,
     response,
-  } = usePlayground();
+  } = usePlayground(settings);
 
   return (
     <div>

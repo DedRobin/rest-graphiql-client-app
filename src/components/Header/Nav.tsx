@@ -27,7 +27,7 @@ export function Nav() {
       <ul className="nav-links flex flex-row gap-12">
         {user && (
           <>
-            {renderNavLink(Route.GraphiQL, "GraphQL")}
+            {renderNavLink(Route.GraphQL, "GraphQL")}
             {renderNavLink(Route.RESTfull, "RESTfull")}
             {renderNavLink(Route.History, "History")}
           </>

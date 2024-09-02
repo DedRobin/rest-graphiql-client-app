@@ -1,10 +1,6 @@
-import * as dotenv from "dotenv";
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
-dotenv.config();
 
 export const serverConfig = {
   cookieName: process.env.AUTH_COOKIE_NAME!,
@@ -22,7 +18,7 @@ export const serverConfig = {
   serviceAccount: {
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
     clientEmail: process.env.ADMIN_CLIENT_EMAIL!,
-    privateKey: (process.env.ADMIN_PRIVATE_KEY as string).replace(/\\n/g, "\n"),
+    privateKey: process.env.ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
   },
 };
 

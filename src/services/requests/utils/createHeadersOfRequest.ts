@@ -1,4 +1,4 @@
-import { HEADERS_DEFAULT } from "@/constantes/requestHeadersDefault";
+import { HEADERS_DEFAULT } from "@/constants/requestHeadersDefault";
 
 export function createHeadersOfRequest(headers?: string) {
   if (!headers) {

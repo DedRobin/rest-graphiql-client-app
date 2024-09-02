@@ -8,7 +8,7 @@ import {
   playgroundReducer,
   PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
-import { PLAYGROUND_DEFAULTS } from "@/constantes/playgroundDefaults";
+import { PLAYGROUND_DEFAULTS } from "@/constants/playgroundDefaults";
 
 interface Message {
   message: string;
@@ -68,7 +68,6 @@ export function usePlayground() {
         payload: clientSchema,
       });
     } catch (error) {
-      console.log(error);
       handleError("HTTP Error", error);
     }
   }

@@ -4,14 +4,14 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuthState } from "react-firebase-hooks/auth";
 
-export function Nav() {
+export function BurgerNav() {
   const [user] = useAuthState(auth);
   const pathname = usePathname();
 
   const isActive = (route: string) => pathname === route;
 
   const renderNavLink = (route: string, label: string) => (
-    <li className="nav-link-item">
+    <li className="burger-nav-link-item">
       <Link
         href={route}
         className={`h5 text-h5 font-h5 leading-h5 tracking-h5 text-center transition-colors duration-300 ${
@@ -24,8 +24,8 @@ export function Nav() {
   );
 
   return (
-    <nav className="nav flex items-center gap-4 w-full justify-center">
-      <ul className="nav-links flex flex-row gap-12">
+    <nav className="burger-nav flex flex-col w-full justify-center">
+      <ul className="burger-nav-links flex flex-col gap-2 py-4">
         {user && (
           <>
             {renderNavLink(Route.GraphiQL, "GraphQL")}

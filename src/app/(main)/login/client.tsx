@@ -5,7 +5,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
 // import { Loader } from "@/components/UI/Loader";
 import { EmailInput } from "@/components/UI/Inputs/EmailInput/EmailInput";
@@ -14,6 +13,7 @@ import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import LoginSkeleton from "@/components/UI/Skeletons/LoginSkeleton";
 import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
+import { auth } from "@/services/firebase";
 
 export default function Login() {
   const {
@@ -34,6 +34,11 @@ export default function Login() {
   const password = watch("password") || "";
   const isButtonDisabled = email === "" || password === "";
 
+  const login = async (data: TLoginForm) => {
+    const resp = await loginWithEmailAndPassword(data);
+    if (resp && resp.status === 200) router.push(Route.Main);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -42,7 +47,7 @@ export default function Login() {
         <>
           <form
             className="flex-container col-span-8 sm:col-span-8 md:col-span-6 lg:col-span-4"
-            onSubmit={handleSubmit(loginWithEmailAndPassword)}
+            onSubmit={handleSubmit(login)}
           >
             <h2>Please Login</h2>
             <span className="-mt-2">

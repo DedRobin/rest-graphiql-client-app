@@ -16,7 +16,12 @@ export type TLoginForm = {
 export async function loginWithEmailAndPassword(data: TLoginForm) {
   const { email, password } = data;
   try {
-    await signInWithEmailAndPassword(auth, email, password);
+    const credential = await signInWithEmailAndPassword(auth, email, password);
+    const idToken = await credential.user.getIdToken();
+    const response = await fetch("/api/login", {
+      headers: { Authorization: `Bearer ${idToken}` },
+    });
+    return response;
   } catch (err) {
     console.error(err);
     alert((err as Error).message);
@@ -52,4 +57,5 @@ export async function resetPassword(email: string) {
 
 export async function logout() {
   signOut(auth);
+  await fetch("/api/logout");
 }

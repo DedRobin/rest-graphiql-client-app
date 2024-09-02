@@ -1,7 +1,6 @@
-import GraphiQL from "./client";
-
 import { parseSlug } from "@/utils/urlUtils";
 import { redirect } from "next/navigation";
+import GraphiQL from "@/app/(main)/GRAPHQL/client";
 
 export default function GraphiQLPage({
   params: { slug },

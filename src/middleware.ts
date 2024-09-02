@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
-import { authMiddleware } from "next-firebase-auth-edge";
+import { authMiddleware, redirectToLogin } from "next-firebase-auth-edge";
 import { clientConfig, serverConfig } from "./services/firebase";
+import { Route } from "./app/routes";
 
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {
@@ -11,6 +12,14 @@ export async function middleware(request: NextRequest) {
     cookieSignatureKeys: serverConfig.cookieSignatureKeys,
     cookieSerializeOptions: serverConfig.cookieSerializeOptions,
     serviceAccount: serverConfig.serviceAccount,
+    handleInvalidToken: async (reason) => {
+      console.info("Missing or malformed credentials", { reason });
+
+      return redirectToLogin(request, {
+        path: Route.Login,
+        publicPaths: [Route.Login, Route.Registration, Route.Main],
+      });
+    },
   });
 }
 

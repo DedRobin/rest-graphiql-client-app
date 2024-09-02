@@ -4,10 +4,10 @@ import { useForm } from "react-hook-form";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { auth } from "@/services/firebase";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
 import { Loader } from "@/components/UI/Loader";
 import { Route } from "@/app/routes";
+import { auth } from "@/services/firebase";
 
 export default function Login() {
   const {
@@ -24,6 +24,11 @@ export default function Login() {
     if (user) router.push(Route.Main);
   }, [user, isLoading, router]);
 
+  const login = async (data: TLoginForm) => {
+    const resp = await loginWithEmailAndPassword(data);
+    if (resp && resp.status === 200) router.push(Route.Main);
+  };
+
   return (
     <>
       {isLoading ? (
@@ -31,7 +36,7 @@ export default function Login() {
       ) : (
         <form
           className="login-form flex flex-col gap-3"
-          onSubmit={handleSubmit(loginWithEmailAndPassword)}
+          onSubmit={handleSubmit(login)}
         >
           <h1 className="login-heading text-5xl text-center my-5">Login</h1>
           <div className="email-field flex gap-3 justify-between">

@@ -1,32 +1,13 @@
 import GraphiQL from "./client";
-import { decode } from "js-base64";
-import { PlaygroundSettings } from "@/components/Playground/usePlayground";
+
+import { parseSlug } from "@/utils/urlUtils";
+import { redirect } from "next/navigation";
 
 export default function GraphiQLPage({
-  params,
-  searchParams,
+  params: { slug },
 }: {
   params: { slug: string[] };
-  searchParams: URLSearchParams;
 }) {
-  const { slug } = params;
-
-  const [endpoint, body] = slug.map((item) => {
-    const padding = "=".repeat((4 - (item.length % 4)) % 4);
-    return decode(item + padding);
-  });
-
-  const bodyObj = JSON.parse(body);
-
-  const query = bodyObj.query;
-
-  const variables = JSON.stringify(bodyObj.variables);
-
-  console.log("searchParams", searchParams);
-
-  const headers = "";
-
-  const settings: PlaygroundSettings = { endpoint, query, headers, variables };
-
+  const settings = parseSlug(slug, redirect);
   return <GraphiQL settings={settings} />;
 }

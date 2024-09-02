@@ -8,20 +8,18 @@ import {
   playgroundReducer,
   PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
+import { hasMessageField } from "@/utils/hasMessageField";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Route } from "@/app/routes";
+import {
+  createParamsTailURL,
+  encodePlaygroundSettings,
+} from "@/utils/urlUtils";
 
 export interface PlaygroundSettings {
   endpoint: string;
   query: string;
   variables: string;
-  headers: string;
-}
-
-interface Message {
-  message: string;
-}
-
-function hasMessage(obj: unknown): obj is Message {
-  return (obj as Message)?.message !== undefined;
 }
 
 const initialPlaygroundState: PlaygroundState = {
@@ -31,15 +29,16 @@ const initialPlaygroundState: PlaygroundState = {
 };
 
 export function usePlayground(settings: PlaygroundSettings) {
-  const { endpoint, headers, variables, query } = settings;
-
+  const { push } = useRouter();
   const [state, dispatch] = useReducer(
     playgroundReducer,
     initialPlaygroundState,
   );
+  const headers = useSearchParams();
+  const { endpoint, variables, query } = settings;
 
   function handleError(title: string, error: unknown, status?: number) {
-    const errorMessage = hasMessage(error)
+    const errorMessage = hasMessageField(error)
       ? error.message
       : JSON.stringify(error, null, 2);
 
@@ -79,7 +78,7 @@ export function usePlayground(settings: PlaygroundSettings) {
   }
 
   async function executeQuery() {
-    const headersOfRequest = createHeadersOfRequest(headers);
+    const headersOfRequest = createHeadersOfRequest();
     const bodyOfRequest = createBodyOfRequest(query, variables);
     try {
       const response = await makeRequest(
@@ -108,28 +107,28 @@ export function usePlayground(settings: PlaygroundSettings) {
     }
   }
 
-  function setQuery(query: string) {
-    // dispatch({
-    //   type: PlaygroundActionTypes.SET_QUERY,
-    //   payload: query,
-    // });
-    console.log("setQuery", query);
+  function setNewSetting(settingName: keyof PlaygroundSettings, value: string) {
+    if (settings[settingName] === value) {
+      return;
+    }
+    const newSettings = { ...settings, [settingName]: value };
+
+    const newURL = `${Route.GraphQL}/${encodePlaygroundSettings(newSettings)}${createParamsTailURL(headers)}`;
+    push(newURL);
   }
 
-  function setEndpoint(endpoint: string) {
-    // dispatch({
-    //   type: PlaygroundActionTypes.SET_ENDPOINT,
-    //   payload: endpoint,
-    // });
-    console.log("setEndpoint", endpoint);
+  function updateHeaders(newHeaders: URLSearchParams) {
+    const newURL = `${Route.GraphQL}/${encodePlaygroundSettings(settings)}${createParamsTailURL(newHeaders)}`;
+    push(newURL);
   }
 
   return {
     ...state,
     ...settings,
-    setEndpoint,
+    headers,
+    updateHeaders,
     getSchema,
-    setQuery,
     executeQuery,
+    setNewSetting,
   };
 }

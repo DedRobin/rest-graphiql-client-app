@@ -12,7 +12,7 @@ export const pixelifySans = Pixelify_Sans({
   weight: ["600"],
 });
 
-export default function Home() {
+export function Home() {
   const [user, isLoading] = useAuthState(auth);
 
   return (

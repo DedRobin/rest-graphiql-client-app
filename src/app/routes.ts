@@ -4,6 +4,7 @@ enum Route {
   Registration = "/register",
   GraphiQL = "/graphiql",
   RESTfull = "/restfull",
+  History = "/history",
 }
 
 export { Route };

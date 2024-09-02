@@ -27,7 +27,7 @@ export default function Login() {
 
   useEffect(() => {
     if (isLoading) return;
-    if (user) router.push("/");
+    if (user) router.push(Route.Main);
   }, [user, isLoading, router]);
 
   const email = watch("email") || "";

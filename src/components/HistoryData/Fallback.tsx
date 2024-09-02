@@ -14,7 +14,7 @@ export function HistoryFallback() {
         <Link className="history-link-rest" href={Route.RESTfull}>
           REST Client
         </Link>
-        <Link className="history-link-graphql" href={Route.GraphiQL}>
+        <Link className="history-link-graphql" href={Route.GraphQL}>
           GraphQL Client
         </Link>
       </div>

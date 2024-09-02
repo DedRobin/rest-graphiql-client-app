@@ -6,7 +6,7 @@ export function DataItem({ item }: { item: TMockHistoryItem }) {
   return (
     <Link
       href={
-        ["GET", "POST"].includes(item.method) ? Route.RESTfull : Route.GraphiQL
+        ["GET", "POST"].includes(item.method) ? Route.RESTfull : Route.GraphQL
       }
       className="request"
     >

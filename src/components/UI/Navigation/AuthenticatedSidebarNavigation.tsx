@@ -28,9 +28,9 @@ export default function AuthenticatedSidebarNavigation() {
         RESTful
       </Link>
       <Link
-        href={Route.GraphiQL}
+        href={Route.GraphQL}
         className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-          isActive(Route.GraphiQL) ? "text-lightGray" : ""
+          isActive(Route.GraphQL) ? "text-lightGray" : ""
         }`}
       >
         GraphiQL

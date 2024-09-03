@@ -32,7 +32,10 @@ export default function Login() {
 
   const login = async (data: TLoginForm) => {
     const resp = await loginWithEmailAndPassword(data);
-    if (resp && resp.status === 200) router.refresh();
+    if (resp && resp.status === 200) {
+      router.push(Route.Main);
+      router.refresh();
+    }
   };
 
   return (

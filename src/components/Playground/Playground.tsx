@@ -1,18 +1,22 @@
 import { TempButton } from "@/components/UI/TempButton";
-import { usePlayground } from "@/components/Playground/usePlayground";
+import {
+  PlaygroundSettings,
+  usePlayground,
+} from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
 
-export function Playground() {
+export function Playground({ settings }: { settings: PlaygroundSettings }) {
   const {
     endpoint,
-    setEndpoint,
     schema,
     getSchema,
     query,
-    setQuery,
     executeQuery,
     response,
-  } = usePlayground();
+    variables,
+    setNewSetting,
+    headers,
+  } = usePlayground(settings);
 
   return (
     <div>
@@ -27,21 +31,32 @@ export function Playground() {
         <input
           type="text"
           placeholder="Endpoint"
-          value={endpoint}
-          onChange={(event) => setEndpoint(event.target.value)}
+          defaultValue={endpoint}
+          onBlur={(event) => setNewSetting("endpoint", event.target.value)}
         />
       </div>
       <div>
         <textarea
           rows={8}
           placeholder="Query"
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
+          defaultValue={query}
+          onBlur={(event) => setNewSetting("query", event.target.value)}
+        />
+        <textarea
+          rows={8}
+          placeholder="Variables"
+          defaultValue={variables}
+          onBlur={(event) => setNewSetting("variables", event.target.value)}
         />
         <textarea
           rows={8}
           placeholder="Response"
           defaultValue={response.body || response.error}
+        />
+        <textarea
+          rows={8}
+          placeholder="Headers"
+          defaultValue={headers.toString()}
         />
       </div>
       {schema && <SchemaViewer schema={schema} />}

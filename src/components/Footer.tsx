@@ -1,4 +1,3 @@
-// import { Route } from "@/app/routes";
 import Link from "next/link";
 
 export function Footer() {
@@ -18,10 +17,10 @@ export function Footer() {
           GBRJo
         </Link>
         <Link
-          href={"https://github.com/Zhybuliou"}
+          href={"https://github.com/TvaExperts/"}
           className="text-span font-span leading-span tracking-span  text-mediumGray"
         >
-          Zhybuliou
+          TvaExperts
         </Link>
       </div>
       <span>2024</span>

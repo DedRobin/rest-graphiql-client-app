@@ -2,7 +2,7 @@ enum Route {
   Main = "/",
   Login = "/login",
   Registration = "/register",
-  GraphiQL = "/graphiql",
+  GraphQL = "/GRAPHQL",
   RESTfull = "/restfull",
   History = "/history",
 }

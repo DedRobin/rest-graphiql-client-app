@@ -13,7 +13,7 @@ export function AuthBtnGroup() {
   const logoutThenRedirect = async (event: React.MouseEvent) => {
     event.preventDefault();
     await logout();
-    router.push(Route.Login);
+    router.refresh();
   };
 
   const isActive = (route: string) => pathname === route;

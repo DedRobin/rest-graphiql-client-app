@@ -24,7 +24,6 @@ export function AuthBtnGroup() {
         className={`h5 text-h5 font-h5 leading-h5 tracking-h5 text-center transition-colors duration-300 ${
           isActive(route) ? "text-lightGray" : ""
         }`}
-        onClick={route === Route.Login ? logoutThenRedirect : undefined}
       >
         {label}
       </Link>

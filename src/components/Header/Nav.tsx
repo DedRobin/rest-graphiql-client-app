@@ -29,7 +29,7 @@ export function Nav() {
           <>
             {renderNavLink(Route.GraphiQL, "GraphQL")}
             {renderNavLink(Route.RESTfull, "RESTfull")}
-            {renderNavLink(Route.RESTfull, "History")}
+            {renderNavLink(Route.History, "History")}
           </>
         )}
       </ul>

@@ -27,7 +27,9 @@ export function parseSlug(
     try {
       const bodyObj = JSON.parse(body);
       query = bodyObj.query ? bodyObj.query : "";
-      variables = bodyObj.variables ? JSON.stringify(bodyObj.variables) : "";
+      variables = bodyObj.variables
+        ? JSON.stringify(bodyObj.variables, null, 2)
+        : "";
     } catch {
       redirect(`${Route.GraphQL}/${encodeBase64(endpoint)}`);
     }
@@ -38,7 +40,7 @@ export function parseSlug(
   return settings;
 }
 
-export function encodePlaygroundSettings(settings: PlaygroundSettings): string {
+function encodePlaygroundSettings(settings: PlaygroundSettings): string {
   const { endpoint, variables, query } = settings;
 
   const encodedEndpoint = encodeBase64(endpoint);
@@ -49,7 +51,7 @@ export function encodePlaygroundSettings(settings: PlaygroundSettings): string {
   return `${encodedEndpoint}/${encodedBody}`;
 }
 
-export function createParamsTailURL(searchParams: URLSearchParams): string {
+function createParamsTailURL(searchParams: URLSearchParams): string {
   if (!searchParams || searchParams.size === 0) {
     return "";
   }

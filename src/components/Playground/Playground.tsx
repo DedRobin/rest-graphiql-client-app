@@ -42,13 +42,8 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         <input
           type="text"
           placeholder="Endpoint"
-<<<<<<< HEAD
-          value={endpoint}
-          onChange={(event) => setNewSetting("endpoint", event.target.value)}
-=======
           defaultValue={endpoint}
           onBlur={(event) => setNewSetting("endpoint", event.target.value)}
->>>>>>> aac3af6 (feat: add a parameter update. added basic headers)
         />
       </div>
       <div>

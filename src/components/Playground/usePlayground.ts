@@ -15,11 +15,7 @@ import {
 } from "@/components/Playground/playgroundReducer";
 import { hasMessageField } from "@/utils/hasMessageField";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Route } from "@/app/routes";
-import {
-  createParamsTailURL,
-  encodePlaygroundSettings,
-} from "@/utils/urlUtils";
+import { createPlaygroundURL } from "@/utils/urlUtils";
 
 export interface PlaygroundSettings {
   endpoint: string;
@@ -118,18 +114,34 @@ export function usePlayground(settings: PlaygroundSettings) {
     }
     const newSettings = { ...settings, [settingName]: value };
 
-    const newURL = `${Route.GraphQL}/${encodePlaygroundSettings(newSettings)}${createParamsTailURL(headers)}`;
-    push(newURL);
+    push(createPlaygroundURL(newSettings, headers));
   }
 
   function updateHeaders(newHeaders: URLSearchParams) {
-    const newURL = `${Route.GraphQL}/${encodePlaygroundSettings(settings)}${createParamsTailURL(newHeaders)}`;
-    push(newURL);
+    push(createPlaygroundURL(settings, newHeaders));
   }
 
   function prettify() {
-    const ast = parse(query);
-    setNewSetting("query", print(ast));
+    const prettifiedQuery = print(parse(query));
+
+    let prettifiedVariables;
+
+    try {
+      prettifiedVariables = JSON.stringify(JSON.parse(variables), null, 2);
+    } catch {
+      prettifiedVariables = variables;
+    }
+
+    if (prettifiedQuery === query && prettifiedVariables === variables) {
+      return;
+    }
+
+    const settingsWithPrettify: PlaygroundSettings = {
+      query: prettifiedQuery,
+      variables: prettifiedVariables,
+      endpoint,
+    };
+    push(createPlaygroundURL(settingsWithPrettify, headers));
   }
 
   return {

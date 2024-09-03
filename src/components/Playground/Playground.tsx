@@ -4,8 +4,10 @@ import {
   usePlayground,
 } from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
-import { ResponseEditor } from "@/components/Editors/ResponseEditor";
-import { QueryEditor } from "@/components/Editors/QueryEditor";
+import { graphql } from "cm6-graphql";
+import { EditableEditor } from "@/components/Editors/EditableEditor";
+import React from "react";
+import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 
 export function Playground({ settings }: { settings: PlaygroundSettings }) {
   const {
@@ -21,6 +23,9 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
     isLoading,
     prettify,
   } = usePlayground(settings);
+
+  const responseValue =
+    (isLoading && "Loading...") || response.error || response.body || "No data";
 
   return (
     <div>
@@ -47,34 +52,19 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         />
       </div>
       <div>
-        <textarea
-          rows={8}
-          placeholder="Query"
-          defaultValue={query}
-          onBlur={(event) => setNewSetting("query", event.target.value)}
+        {/*VariablesEditor*/}
+        <EditableEditor
+          value={variables}
+          setValueOnBlur={(newValue) => setNewSetting("variables", newValue)}
         />
-        <textarea
-          rows={8}
-          placeholder="Variables"
-          defaultValue={variables}
-          onBlur={(event) => setNewSetting("variables", event.target.value)}
+        {/*QueryEditor*/}
+        <EditableEditor
+          value={query}
+          setValueOnBlur={(newValue) => setNewSetting("query", newValue)}
+          extensions={schema ? graphql(schema) : undefined}
         />
-
-        <textarea
-          rows={8}
-          placeholder="Response"
-          defaultValue={response.body || response.error}
-        />
-        <ResponseEditor
-          error={response.error}
-          value={response.body}
-          isLoading={isLoading}
-        />
-        <QueryEditor
-          schema={schema}
-          query={query}
-          setQuery={(newQuery) => setNewSetting("query", newQuery)}
-        />
+        {/*Response*/}
+        <ReadOnlyEditor value={responseValue} />
         <textarea
           rows={8}
           placeholder="Headers"

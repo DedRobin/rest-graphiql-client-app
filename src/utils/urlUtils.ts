@@ -55,3 +55,10 @@ export function createParamsTailURL(searchParams: URLSearchParams): string {
   }
   return `?${searchParams.toString()}`;
 }
+
+export function createPlaygroundURL(
+  settings: PlaygroundSettings,
+  headers: URLSearchParams,
+) {
+  return `${Route.GraphQL}/${encodePlaygroundSettings(settings)}${createParamsTailURL(headers)}`;
+}

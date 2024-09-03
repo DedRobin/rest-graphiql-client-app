@@ -39,6 +39,7 @@ export async function registerWithEmailAndPassword(data: TRegisterForm) {
       authProvider: "local",
       email,
     });
+    return !!user;
   } catch (err) {
     console.error(err);
     alert((err as Error).message);

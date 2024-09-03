@@ -1,12 +1,11 @@
 import { logout } from "@/app/actions/auth";
+import { useAuth } from "@/app/contex";
 import { Route } from "@/app/routes";
-import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export function AuthBtnGroup() {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 

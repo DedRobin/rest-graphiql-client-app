@@ -1,11 +1,10 @@
+import { useAuth } from "@/app/contex";
 import { Route } from "@/app/routes";
-import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export function Nav() {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const pathname = usePathname();
 
   const isActive = (route: string) => pathname === route;

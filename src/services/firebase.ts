@@ -18,7 +18,10 @@ export const serverConfig = {
   serviceAccount: {
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
     clientEmail: process.env.ADMIN_CLIENT_EMAIL!,
-    privateKey: process.env.ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+    privateKey: (function () {
+      const adminPrivateKey = process.env.ADMIN_PRIVATE_KEY;
+      return adminPrivateKey ? adminPrivateKey.replace(/\\n/g, "\n") : "";
+    })(),
   },
 };
 

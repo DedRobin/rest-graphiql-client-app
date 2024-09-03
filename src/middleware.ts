@@ -6,7 +6,10 @@ import {
 } from "next-firebase-auth-edge";
 import { clientConfig, serverConfig } from "./services/firebase";
 import { Route } from "./app/routes";
+
 const PUBLIC_PATHS = [Route.Login, Route.Registration];
+const PUBLIC_PATHS_PLUS_MAIN = [Route.Login, Route.Registration, Route.Main];
+
 export async function middleware(request: NextRequest) {
   return authMiddleware(request, {
     loginPath: "/api/login",
@@ -32,7 +35,7 @@ export async function middleware(request: NextRequest) {
 
       return redirectToLogin(request, {
         path: Route.Login,
-        publicPaths: PUBLIC_PATHS.concat([Route.Main]),
+        publicPaths: PUBLIC_PATHS_PLUS_MAIN,
       });
     },
   });

@@ -11,7 +11,7 @@ export function AuthBtnGroup() {
 
   const logoutThenRedirect = () => {
     logout();
-    router.push(Route.Login);
+    router.refresh();
   };
 
   return (

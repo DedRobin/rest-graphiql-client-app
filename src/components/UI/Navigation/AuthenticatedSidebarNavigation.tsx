@@ -36,9 +36,9 @@ export default function AuthenticatedSidebarNavigation() {
         GraphiQL
       </Link>
       <Link
-        href={Route.GraphiQL}
+        href={Route.History}
         className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-          isActive(Route.GraphiQL) ? "text-lightGray" : ""
+          isActive(Route.History) ? "text-lightGray" : ""
         }`}
       >
         History

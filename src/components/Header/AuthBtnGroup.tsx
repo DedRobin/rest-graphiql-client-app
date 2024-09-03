@@ -1,19 +1,18 @@
 import { logout } from "@/app/actions/auth";
+import { useAuth } from "@/app/contex";
 import { Route } from "@/app/routes";
-import { auth } from "@/services/firebase";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { useAuthState } from "react-firebase-hooks/auth";
 
 export function AuthBtnGroup() {
-  const [user] = useAuthState(auth);
+  const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   const logoutThenRedirect = async (event: React.MouseEvent) => {
     event.preventDefault();
     await logout();
-    router.push(Route.Login);
+    router.refresh();
   };
 
   const isActive = (route: string) => pathname === route;
@@ -25,7 +24,6 @@ export function AuthBtnGroup() {
         className={`h5 text-h5 font-h5 leading-h5 tracking-h5 text-center transition-colors duration-300 ${
           isActive(route) ? "text-lightGray" : ""
         }`}
-        onClick={route === Route.Login ? logoutThenRedirect : undefined}
       >
         {label}
       </Link>

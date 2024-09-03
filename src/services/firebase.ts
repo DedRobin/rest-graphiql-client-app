@@ -1,13 +1,32 @@
-import * as dotenv from "dotenv";
-
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, inMemoryPersistence, setPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-dotenv.config();
+export const serverConfig = {
+  cookieName: process.env.AUTH_COOKIE_NAME!,
+  cookieSignatureKeys: [
+    process.env.AUTH_COOKIE_SIGNATURE_KEY_CURRENT!,
+    process.env.AUTH_COOKIE_SIGNATURE_KEY_PREVIOUS!,
+  ],
+  cookieSerializeOptions: {
+    path: "/",
+    httpOnly: true,
+    secure: process.env.USE_SECURE_COOKIES === "true",
+    sameSite: "lax" as const,
+    maxAge: 12 * 60 * 60 * 24,
+  },
+  serviceAccount: {
+    projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
+    clientEmail: process.env.ADMIN_CLIENT_EMAIL!,
+    privateKey: (function () {
+      const adminPrivateKey = process.env.ADMIN_PRIVATE_KEY;
+      return adminPrivateKey ? adminPrivateKey.replace(/\\n/g, "\n") : "";
+    })(),
+  },
+};
 
-const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+export const clientConfig = {
+  apiKey: process.env.NEXT_PUBLIC_API_KEY!,
   authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
@@ -15,6 +34,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
-export const app = initializeApp(firebaseConfig);
+export const app = initializeApp(clientConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+
+setPersistence(auth, inMemoryPersistence);

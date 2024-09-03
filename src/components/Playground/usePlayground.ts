@@ -1,5 +1,10 @@
 import { useReducer } from "react";
-import { buildClientSchema, getIntrospectionQuery } from "graphql";
+import {
+  buildClientSchema,
+  getIntrospectionQuery,
+  parse,
+  print,
+} from "graphql";
 import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersOfRequest";
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";
@@ -122,6 +127,11 @@ export function usePlayground(settings: PlaygroundSettings) {
     push(newURL);
   }
 
+  function prettify() {
+    const ast = parse(query);
+    setNewSetting("query", print(ast));
+  }
+
   return {
     ...state,
     ...settings,
@@ -130,5 +140,6 @@ export function usePlayground(settings: PlaygroundSettings) {
     getSchema,
     executeQuery,
     setNewSetting,
+    prettify,
   };
 }

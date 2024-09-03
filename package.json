@@ -16,7 +16,10 @@
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@reduxjs/toolkit": "^2.2.7",
+    "@uiw/codemirror-theme-console": "^4.23.0",
+    "@uiw/react-codemirror": "^4.23.0",
     "autoprefixer": "^10.4.20",
+    "cm6-graphql": "^0.1.1",
     "dotenv": "^16.4.5",
     "firebase": "^10.13.0",
     "graphql": "^16.9.0",

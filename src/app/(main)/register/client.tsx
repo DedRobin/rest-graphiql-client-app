@@ -2,7 +2,7 @@
 
 import { registerWithEmailAndPassword } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import registrationSchema from "./schema";
@@ -36,6 +36,9 @@ export default function Register() {
   const { user } = useAuth();
   const router = useRouter();
 
+  const [error, setError] = useState<string | null>(null);
+  if (error) throw new Error(error);
+
   useEffect(() => {
     if (user) router.push(Route.Login);
   }, [user, errors, router]);
@@ -49,12 +52,11 @@ export default function Register() {
 
   const registerUser = async (data: TRegisterForm) => {
     const { isRegistered, error } = await registerWithEmailAndPassword(data);
-    if (error)
-      toast("Something went wrong during registration!", { type: "error" });
+    if (error) setError(error.message);
     else if (isRegistered) {
       toast("The user has been successfully registered!", { type: "success" });
       router.push(Route.Login);
-    } else toast("Something went wrong!", { type: "error" });
+    }
   };
 
   return (

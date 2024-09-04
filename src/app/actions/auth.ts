@@ -31,21 +31,28 @@ export async function loginWithEmailAndPassword(data: TLoginForm) {
 }
 
 export async function registerWithEmailAndPassword(data: TRegisterForm) {
+  let isRegistered: boolean | null = null;
+  let error: Error | null = null;
   const { name, email, password } = data;
   try {
-    const res = await createUserWithEmailAndPassword(auth, email, password);
-    const user = res.user;
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+    const user = userCredential.user;
     await addDoc(collection(db, "users"), {
       uid: user.uid,
       name,
       authProvider: "local",
       email,
     });
-    return !!user;
+    isRegistered = !!user;
   } catch (err) {
+    error = err as Error;
     console.error(err);
-    alert((err as Error).message);
   }
+  return { isRegistered, error };
 }
 
 export async function resetPassword(email: string) {

@@ -14,18 +14,20 @@ export type TLoginForm = {
 };
 
 export async function loginWithEmailAndPassword(data: TLoginForm) {
+  let response: Response | null = null;
+  let error: Error | null = null;
   const { email, password } = data;
   try {
     const credential = await signInWithEmailAndPassword(auth, email, password);
     const idToken = await credential.user.getIdToken();
-    const response = await fetch("/api/login", {
+    response = await fetch("/api/login", {
       headers: { Authorization: `Bearer ${idToken}` },
     });
-    return response;
   } catch (err) {
+    error = err as Error;
     console.error(err);
-    alert((err as Error).message);
   }
+  return { response, error };
 }
 
 export async function registerWithEmailAndPassword(data: TRegisterForm) {

@@ -11,6 +11,7 @@ import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const {
@@ -31,10 +32,14 @@ export default function Login() {
   const isButtonDisabled = email === "" || password === "";
 
   const login = async (data: TLoginForm) => {
-    const resp = await loginWithEmailAndPassword(data);
-    if (resp && resp.status === 200) {
+    const { response, error } = await loginWithEmailAndPassword(data);
+    if (error) toast("Invalid login or password", { type: "error" });
+    else if (response && response.status === 200) {
+      toast("The login was completed successfully", { type: "success" });
       router.push(Route.Main);
       router.refresh();
+    } else {
+      toast("Something went wrong!", { type: "error" });
     }
   };
 

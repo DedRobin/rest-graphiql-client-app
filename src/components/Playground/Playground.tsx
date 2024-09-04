@@ -4,6 +4,10 @@ import {
   usePlayground,
 } from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
+import { graphql } from "cm6-graphql";
+import { EditableEditor } from "@/components/Editors/EditableEditor";
+import React from "react";
+import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 
 export function Playground({ settings }: { settings: PlaygroundSettings }) {
   const {
@@ -16,12 +20,19 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
     variables,
     setNewSetting,
     headers,
+    isLoading,
+    prettify,
   } = usePlayground(settings);
+
+  const responseValue =
+    (isLoading && "Loading...") || response.error || response.body || "No data";
 
   return (
     <div>
       <div className={"flex gap-2"}>
-        <TempButton title="Prettify">Prettify</TempButton>
+        <TempButton title="Prettify" onClick={prettify}>
+          Prettify
+        </TempButton>
         <TempButton title="Execute" onClick={executeQuery}>
           Execute
         </TempButton>
@@ -36,23 +47,19 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         />
       </div>
       <div>
-        <textarea
-          rows={8}
-          placeholder="Query"
-          defaultValue={query}
-          onBlur={(event) => setNewSetting("query", event.target.value)}
+        {/*VariablesEditor*/}
+        <EditableEditor
+          value={variables}
+          setValueOnBlur={(newValue) => setNewSetting("variables", newValue)}
         />
-        <textarea
-          rows={8}
-          placeholder="Variables"
-          defaultValue={variables}
-          onBlur={(event) => setNewSetting("variables", event.target.value)}
+        {/*QueryEditor*/}
+        <EditableEditor
+          value={query}
+          setValueOnBlur={(newValue) => setNewSetting("query", newValue)}
+          extensions={schema ? graphql(schema) : undefined}
         />
-        <textarea
-          rows={8}
-          placeholder="Response"
-          defaultValue={response.body || response.error}
-        />
+        {/*Response*/}
+        <ReadOnlyEditor value={responseValue} />
         <textarea
           rows={8}
           placeholder="Headers"

@@ -28,7 +28,6 @@ export default function ToastProvider({ children }: ToastProviderProps) {
         position="bottom-right"
         theme="dark"
         progressStyle={{ backgroundColor: "#F3F3F3" }}
-        autoClose={300000}
       />
     </>
   );

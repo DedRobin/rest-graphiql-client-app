@@ -10,7 +10,7 @@ import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInpu
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "@/app/contex";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 
 export default function Login() {
   const {

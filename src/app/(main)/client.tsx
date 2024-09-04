@@ -3,7 +3,7 @@
 import { Pixelify_Sans } from "next/font/google";
 import AuthenticatedSidebarNavigation from "@/components/UI/Navigation/AuthenticatedSidebarNavigation";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "../contex";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 
 export const pixelifySans = Pixelify_Sans({
   subsets: ["latin"],
@@ -16,6 +16,7 @@ export function Home() {
   return (
     <div className="home grid grid-cols-8 grid-rows-[1fr,auto] gap-6 col-span-8 bg-[url('/main-img.webp')] bg-cover bg-no-repeat bg-center h-full w-full">
       {/* Блок заголовка */}
+
       <div className="col-span-8 sm:col-start-2 sm:col-span-6 2xl:col-start-3 2xl:col-span-4 flex flex-col justify-end items-end h-full">
         <h1 className="text-left w-full">Rest/</h1>
         <h1 className={`${pixelifySans.className} text-right w-full`}>

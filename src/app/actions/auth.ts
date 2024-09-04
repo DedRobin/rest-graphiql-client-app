@@ -1,4 +1,3 @@
-import { auth, db } from "@/services/firebase";
 import {
   createUserWithEmailAndPassword,
   sendPasswordResetEmail,
@@ -7,6 +6,7 @@ import {
 } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { TRegisterForm } from "../(main)/register/client";
+import { auth, db } from "@/services/next-firebase-auth-edge/config";
 
 export type TLoginForm = {
   email: string;

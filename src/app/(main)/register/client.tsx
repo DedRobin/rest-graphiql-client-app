@@ -14,6 +14,7 @@ import Link from "next/link";
 import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import { toast } from "react-toastify";
 
 export type TRegisterForm = {
   name: string;
@@ -37,7 +38,7 @@ export default function Register() {
 
   useEffect(() => {
     if (user) router.push(Route.Login);
-  }, [user, router]);
+  }, [user, errors, router]);
 
   const name = watch("name") || "";
   const email = watch("email") || "";
@@ -47,8 +48,13 @@ export default function Register() {
     email === "" || password === "" || confirmPassword === "";
 
   const registerUser = async (data: TRegisterForm) => {
-    const isRegistered = await registerWithEmailAndPassword(data);
-    if (isRegistered) router.push(Route.Login);
+    const { isRegistered, error } = await registerWithEmailAndPassword(data);
+    if (error)
+      toast("Something went wrong during registration!", { type: "error" });
+    else if (isRegistered) {
+      toast("The user has been successfully registered!", { type: "success" });
+      router.push(Route.Login);
+    } else toast("Something went wrong!", { type: "error" });
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
@@ -23,6 +23,9 @@ export default function Login() {
   const { user } = useAuth();
   const router = useRouter();
 
+  const [error, setError] = useState<string | null>(null);
+  if (error) throw new Error(error);
+
   useEffect(() => {
     if (user) router.push(Route.Main);
   }, [user, router]);
@@ -33,13 +36,11 @@ export default function Login() {
 
   const login = async (data: TLoginForm) => {
     const { response, error } = await loginWithEmailAndPassword(data);
-    if (error) toast("Invalid login or password", { type: "error" });
+    if (error) setError(error.message);
     else if (response && response.status === 200) {
-      toast("The login was completed successfully", { type: "success" });
+      toast.success("The login was completed successfully");
       router.push(Route.Main);
       router.refresh();
-    } else {
-      toast("Something went wrong!", { type: "error" });
     }
   };
 

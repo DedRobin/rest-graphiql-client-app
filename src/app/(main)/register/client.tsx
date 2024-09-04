@@ -13,7 +13,7 @@ import { Route } from "@/app/routes";
 import Link from "next/link";
 import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "@/app/contex";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 
 export type TRegisterForm = {
   name: string;

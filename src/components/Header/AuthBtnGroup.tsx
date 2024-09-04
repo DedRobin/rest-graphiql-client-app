@@ -1,6 +1,6 @@
 import { logout } from "@/app/actions/auth";
-import { useAuth } from "@/app/contex";
 import { Route } from "@/app/routes";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 

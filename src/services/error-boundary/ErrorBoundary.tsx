@@ -1,6 +1,6 @@
 "use client";
 
-import { Component, ErrorInfo, ReactNode } from "react";
+import { Component, ReactNode } from "react";
 import { toast } from "react-toastify";
 import { errorMessageList } from "./constants";
 
@@ -18,15 +18,11 @@ export class ExpectedErrorBoundary extends Component<
 > {
   constructor(props: ErrorBoundaryProps) {
     super(props);
-    this.state = { hasError: false };
   }
 
-  static getDerivedStateFromError() {
-    return { hasError: true };
-  }
+  static getDerivedStateFromError() {}
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Error caught by Expected Error Boundary:", error, errorInfo);
+  componentDidCatch(error: Error) {
     const userFrendlyMessage = errorMessageList[error.message] ?? error.message;
     toast.error(userFrendlyMessage);
   }

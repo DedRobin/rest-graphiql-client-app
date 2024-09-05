@@ -59,7 +59,7 @@ export function usePlayground() {
 
     const settingsWithoutBody: PlaygroundSettings = {
       query: "",
-      endpoint: "",
+      endpoint,
       variables: "",
       headers,
     };

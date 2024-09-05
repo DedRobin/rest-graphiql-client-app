@@ -1,23 +1,16 @@
 import { GraphQLSchema } from "graphql/type";
 import { Reducer } from "react";
-
-interface ResponseData {
-  status: number | undefined;
-  body: string;
-  error: string;
-}
-
-export interface PlaygroundState {
-  response: ResponseData;
-  schema: GraphQLSchema | undefined;
-  isLoading: boolean;
-}
+import {
+  PlaygroundSettings,
+  PlaygroundState,
+  ResponseData,
+} from "@/components/Playground/types";
 
 export enum PlaygroundActionTypes {
   SET_SCHEMA,
   SET_RESPONSE,
   SET_IS_LOADING,
-  PRETTIFY,
+  SET_SETTINGS,
 }
 
 export type PlaygroundAction =
@@ -27,7 +20,7 @@ export type PlaygroundAction =
       payload: GraphQLSchema | undefined;
     }
   | { type: PlaygroundActionTypes.SET_IS_LOADING; payload: boolean }
-  | { type: PlaygroundActionTypes.PRETTIFY };
+  | { type: PlaygroundActionTypes.SET_SETTINGS; payload: PlaygroundSettings };
 
 export const playgroundReducer: Reducer<PlaygroundState, PlaygroundAction> = (
   state,
@@ -39,6 +32,12 @@ export const playgroundReducer: Reducer<PlaygroundState, PlaygroundAction> = (
         ...state,
         schema: action.payload,
         isLoading: false,
+      };
+    }
+    case PlaygroundActionTypes.SET_SETTINGS: {
+      return {
+        ...state,
+        settings: action.payload,
       };
     }
     case PlaygroundActionTypes.SET_IS_LOADING: {
@@ -53,9 +52,6 @@ export const playgroundReducer: Reducer<PlaygroundState, PlaygroundAction> = (
         response: action.payload,
         isLoading: false,
       };
-    }
-    case PlaygroundActionTypes.PRETTIFY: {
-      return state;
     }
     default:
       return state;

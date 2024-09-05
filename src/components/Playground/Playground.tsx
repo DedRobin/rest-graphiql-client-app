@@ -1,31 +1,28 @@
 import { TempButton } from "@/components/UI/TempButton";
-import {
-  PlaygroundSettings,
-  usePlayground,
-} from "@/components/Playground/usePlayground";
+import { usePlayground } from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
 import { graphql } from "cm6-graphql";
 import { EditableEditor } from "@/components/Editors/EditableEditor";
 import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 
-export function Playground({ settings }: { settings: PlaygroundSettings }) {
+export function Playground() {
   const {
-    endpoint,
+    settings,
     schema,
     getSchema,
-    query,
     executeQuery,
     response,
-    variables,
     setNewSetting,
-    headers,
     isLoading,
     prettify,
-  } = usePlayground(settings);
+  } = usePlayground();
+
+  const { headers, variables, endpoint, query } = settings;
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
+  // когда запрашиваем схему эдитор начинает прыгать  - пока видимо так оставим. после как авто подгрузку сделаем  - тут что поменяем, скорее не будет загрузка влиять на содержание респонс едитора
 
   return (
     <div>
@@ -60,6 +57,7 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         />
         {/*Response*/}
         <ReadOnlyEditor value={responseValue} />
+        {/*Headers*/}
         <textarea
           rows={8}
           placeholder="Headers"

@@ -11,6 +11,7 @@ import ToastProvider from "@/services/react-toastify/provider";
 import { AuthProvider } from "@/services/next-firebase-auth-edge/provider";
 import { toUser } from "@/services/next-firebase-auth-edge/utils";
 import { ExpectedErrorBoundary } from "@/services/error-boundary/ErrorBoundary";
+import { LocaleProvider } from "@/services/local/contex";
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
@@ -40,11 +41,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={spaceMono.className}>
-        <ToastProvider>
-          <ExpectedErrorBoundary>
-            <AuthProvider user={user}>{children}</AuthProvider>
-          </ExpectedErrorBoundary>
-        </ToastProvider>
+        <ExpectedErrorBoundary>
+          <LocaleProvider>
+            <ToastProvider>
+              <AuthProvider user={user}>{children}</AuthProvider>
+            </ToastProvider>
+          </LocaleProvider>
+        </ExpectedErrorBoundary>
       </body>
     </html>
   );

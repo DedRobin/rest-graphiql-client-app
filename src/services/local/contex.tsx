@@ -1,3 +1,5 @@
+"use client";
+
 import { LSKey } from "@/constants/localStorageKeys";
 import { useLocalStorage } from "@/hooks/localStorageHook";
 import { createContext, PropsWithChildren, useContext } from "react";

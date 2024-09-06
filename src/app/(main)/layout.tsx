@@ -11,6 +11,7 @@ export default function MainLayout({
     <>
       <Header />
       <Main>{children}</Main>
+
       <Footer />
     </>
   );

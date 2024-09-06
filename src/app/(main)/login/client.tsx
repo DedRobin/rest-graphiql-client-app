@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
@@ -10,7 +10,8 @@ import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInpu
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "@/app/contex";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const {
@@ -22,6 +23,9 @@ export default function Login() {
   const { user } = useAuth();
   const router = useRouter();
 
+  const [error, setError] = useState<string | null>(null);
+  if (error) throw new Error(error);
+
   useEffect(() => {
     if (user) router.push(Route.Main);
   }, [user, router]);
@@ -31,8 +35,10 @@ export default function Login() {
   const isButtonDisabled = email === "" || password === "";
 
   const login = async (data: TLoginForm) => {
-    const resp = await loginWithEmailAndPassword(data);
-    if (resp && resp.status === 200) {
+    const { response, error } = await loginWithEmailAndPassword(data);
+    if (error) setError(error.message);
+    else if (response && response.status === 200) {
+      toast.success("The login was completed successfully");
       router.push(Route.Main);
       router.refresh();
     }

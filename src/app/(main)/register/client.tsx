@@ -2,7 +2,7 @@
 
 import { registerWithEmailAndPassword } from "@/app/actions/auth";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import registrationSchema from "./schema";
@@ -13,7 +13,8 @@ import { Route } from "@/app/routes";
 import Link from "next/link";
 import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "@/app/contex";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import { toast } from "react-toastify";
 
 export type TRegisterForm = {
   name: string;
@@ -35,9 +36,12 @@ export default function Register() {
   const { user } = useAuth();
   const router = useRouter();
 
+  const [error, setError] = useState<string | null>(null);
+  if (error) throw new Error(error);
+
   useEffect(() => {
     if (user) router.push(Route.Login);
-  }, [user, router]);
+  }, [user, errors, router]);
 
   const name = watch("name") || "";
   const email = watch("email") || "";
@@ -47,8 +51,12 @@ export default function Register() {
     email === "" || password === "" || confirmPassword === "";
 
   const registerUser = async (data: TRegisterForm) => {
-    const isRegistered = await registerWithEmailAndPassword(data);
-    if (isRegistered) router.push(Route.Login);
+    const { isRegistered, error } = await registerWithEmailAndPassword(data);
+    if (error) setError(error.message);
+    else if (isRegistered) {
+      toast("The user has been successfully registered!", { type: "success" });
+      router.push(Route.Login);
+    }
   };
 
   return (

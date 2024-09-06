@@ -1,5 +1,5 @@
-import { useAuth } from "@/app/contex";
 import { Route } from "@/app/routes";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 

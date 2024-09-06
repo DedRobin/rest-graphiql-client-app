@@ -3,9 +3,14 @@ import { Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cookies } from "next/headers";
 import { getTokens } from "next-firebase-auth-edge";
-import { clientConfig, serverConfig } from "@/services/firebase";
-import { toUser } from "./services";
-import { AuthProvider } from "./clientAuthProvider";
+import {
+  clientConfig,
+  serverConfig,
+} from "@/services/next-firebase-auth-edge/config";
+import ToastProvider from "@/services/react-toastify/provider";
+import { AuthProvider } from "@/services/next-firebase-auth-edge/provider";
+import { toUser } from "@/services/next-firebase-auth-edge/utils";
+import { ExpectedErrorBoundary } from "@/services/error-boundary/ErrorBoundary";
 
 const spaceMono = Space_Mono({
   subsets: ["latin"],
@@ -35,7 +40,11 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={spaceMono.className}>
-        <AuthProvider user={user}>{children}</AuthProvider>
+        <ToastProvider>
+          <ExpectedErrorBoundary>
+            <AuthProvider user={user}>{children}</AuthProvider>
+          </ExpectedErrorBoundary>
+        </ToastProvider>
       </body>
     </html>
   );

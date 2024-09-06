@@ -1,10 +1,9 @@
-import { TMockHistoryItem } from "@/app/(main)/history/__mocks__/mockHistoryData";
 import { DataItem } from "./DataItem";
 
 export function HistoryData({
   historyData,
 }: {
-  historyData: TMockHistoryItem[];
+  historyData: { [key: string]: string }[];
 }) {
   return (
     <>

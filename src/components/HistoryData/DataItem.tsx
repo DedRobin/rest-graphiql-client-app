@@ -1,8 +1,7 @@
-import { TMockHistoryItem } from "@/app/(main)/history/__mocks__/mockHistoryData";
 import { Route } from "@/app/routes";
 import Link from "next/link";
 
-export function DataItem({ item }: { item: TMockHistoryItem }) {
+export function DataItem({ item }: { item: { [key: string]: string } }) {
   return (
     <Link
       href={

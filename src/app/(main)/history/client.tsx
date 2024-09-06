@@ -8,14 +8,14 @@ import { LSKey } from "@/constants/localStorageKeys";
 import { HistoryData } from "@/components/HistoryData/HistoryData";
 
 export default function History() {
-  const [historyData, setHistoryData] = useLocalStorage<typeof mockHistoryData>(
+  const { value: historyData, setValue: setHistoryData } = useLocalStorage(
     LSKey.HistoryData,
   );
 
   return (
     <div className="flex flex-col items-center gap-3 mx-40">
       {historyData ? (
-        <HistoryData historyData={mockHistoryData} />
+        <HistoryData historyData={JSON.parse(historyData)} />
       ) : historyData === null ? (
         <Loader />
       ) : (
@@ -27,8 +27,8 @@ export default function History() {
         className="text-2xl m-10 border-2 rounded p-2 hover:text-lime-500 hover:border-lime-400 self-center"
         onClick={() =>
           !historyData
-            ? setHistoryData(mockHistoryData)
-            : setHistoryData(undefined)
+            ? setHistoryData(JSON.stringify(mockHistoryData))
+            : setHistoryData("")
         }
       >
         {!historyData ? "Add data" : "Clear"}

@@ -9,14 +9,15 @@ import Link from "next/link";
 import { Route } from "@/app/routes";
 import { BurgerMenu } from "./BurgerMenu";
 import { ToggleSwitch } from "../UI/buttons/ToggleSwitch/ToggleSwitch";
-import { TLanguage } from "@/services/local/contex";
 import { useLocalStorage } from "@/hooks/localStorageHook";
 import { LSKey } from "@/constants/localStorageKeys";
 
 export function Header() {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
-  const [toggleChecked, setToggleChecked] = useState(true);
-  const [, setLanguage] = useLocalStorage<TLanguage>(LSKey.Language);
+  const { value: language, setValue: setLanguage } = useLocalStorage(
+    LSKey.Language,
+  );
+  const [toggleChecked, setToggleChecked] = useState(language === "ru");
 
   const toggleBurgerMenu = () => {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);

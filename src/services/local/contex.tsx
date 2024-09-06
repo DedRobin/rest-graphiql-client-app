@@ -3,16 +3,17 @@
 import { LSKey } from "@/constants/localStorageKeys";
 import { useLocalStorage } from "@/hooks/localStorageHook";
 import { createContext, PropsWithChildren, useContext } from "react";
+import { isTLanguage } from "./utils";
 
 export type TLanguage = "en" | "ru";
 
-const LocaleContext = createContext<TLanguage | null>(null);
+const LocaleContext = createContext<TLanguage>("en");
 
 export function LocaleProvider({ children }: PropsWithChildren) {
-  const [language] = useLocalStorage<TLanguage>(LSKey.Language);
+  const { value: language } = useLocalStorage(LSKey.Language);
 
   return (
-    <LocaleContext.Provider value={language || "en"}>
+    <LocaleContext.Provider value={isTLanguage(language) ? language : "en"}>
       {children}
     </LocaleContext.Provider>
   );

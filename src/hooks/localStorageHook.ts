@@ -1,13 +1,10 @@
-import { TMockHistoryItem } from "@/app/(main)/history/__mocks__/mockHistoryData";
 import { LSKey } from "@/constants/localStorageKeys";
 import { useEffect, useState } from "react";
 
-type TLocalStorageState = TMockHistoryItem[] | undefined | null;
-
-export function useLocalStorage(
+export function useLocalStorage<T>(
   key: LSKey,
-): [TLocalStorageState, typeof setLocalStorageValue] {
-  const [data, setData] = useState<TLocalStorageState>(null);
+): [T | undefined | null, typeof setLocalStorageValue] {
+  const [data, setData] = useState<T | undefined | null>(null);
 
   useEffect(() => {
     const storedData = localStorage.getItem(key);
@@ -18,7 +15,7 @@ export function useLocalStorage(
     }
   }, [key]);
 
-  const setLocalStorageValue = (value: TLocalStorageState) => {
+  const setLocalStorageValue = (value: T | undefined | null) => {
     localStorage.setItem(key, JSON.stringify(value));
     setData(value);
   };

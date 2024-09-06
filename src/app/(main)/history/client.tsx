@@ -8,7 +8,9 @@ import { LSKey } from "@/constants/localStorageKeys";
 import { HistoryData } from "@/components/HistoryData/HistoryData";
 
 export default function History() {
-  const [historyData, setHistoryData] = useLocalStorage(LSKey.HistoryData);
+  const [historyData, setHistoryData] = useLocalStorage<typeof mockHistoryData>(
+    LSKey.HistoryData,
+  );
 
   return (
     <div className="flex flex-col items-center gap-3 mx-40">

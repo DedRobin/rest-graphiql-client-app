@@ -11,32 +11,85 @@ import { makeRequest } from "@/services/requests/makeRequest";
 import {
   PlaygroundActionTypes,
   playgroundReducer,
-  PlaygroundState,
 } from "@/components/Playground/playgroundReducer";
 import { hasMessageField } from "@/utils/hasMessageField";
-import { useRouter, useSearchParams } from "next/navigation";
-import { createPlaygroundURL } from "@/utils/urlUtils";
+import { usePathname, useSearchParams } from "next/navigation";
+import {
+  createPlaygroundURL,
+  decodeBase64,
+  updateUrlInBrowser,
+} from "@/utils/urlUtils";
+import {
+  PlaygroundSettings,
+  PlaygroundState,
+} from "@/components/Playground/types";
 
-export interface PlaygroundSettings {
-  endpoint: string;
-  query: string;
-  variables: string;
-}
+export function usePlayground() {
+  const slug = usePathname().split("/");
+  const headers = useSearchParams();
 
-const initialPlaygroundState: PlaygroundState = {
-  isLoading: false,
-  response: { status: undefined, body: "", error: "" },
-  schema: undefined,
-};
+  const settings = parseGraphQLSlug(slug, headers);
 
-export function usePlayground(settings: PlaygroundSettings) {
-  const { push } = useRouter();
+  const initialPlaygroundState: PlaygroundState = {
+    settings,
+    isLoading: false,
+    response: { status: undefined, body: "", error: "" },
+    schema: undefined,
+  };
+
   const [state, dispatch] = useReducer(
     playgroundReducer,
     initialPlaygroundState,
   );
-  const headers = useSearchParams();
+
   const { endpoint, variables, query } = settings;
+
+  function parseGraphQLSlug(
+    slug: string[],
+    headers: URLSearchParams,
+  ): PlaygroundSettings {
+    const [, , endpoint, body] = slug.map(decodeBase64);
+
+    const emptySettings: PlaygroundSettings = {
+      query: "",
+      endpoint: "",
+      variables: "",
+      headers,
+    };
+
+    const settingsWithoutBody: PlaygroundSettings = {
+      query: "",
+      endpoint,
+      variables: "",
+      headers,
+    };
+
+    if (!endpoint) {
+      return emptySettings;
+    }
+
+    if (!body) {
+      return settingsWithoutBody;
+    }
+
+    let query = "";
+    let variables = "";
+
+    try {
+      const bodyObj = JSON.parse(body);
+      query = bodyObj.query ? bodyObj.query : "";
+      variables = bodyObj.variables
+        ? JSON.stringify(bodyObj.variables, null, 2)
+        : "";
+    } catch {
+      updateUrlInBrowser(createPlaygroundURL(settingsWithoutBody));
+      console.log(
+        "Проброс ошибки что в ссылке был плохой объект и мы его удалили",
+      );
+    }
+
+    return { query, endpoint, variables, headers };
+  }
 
   function handleError(title: string, error: unknown, status?: number) {
     const errorMessage = hasMessageField(error)
@@ -79,6 +132,7 @@ export function usePlayground(settings: PlaygroundSettings) {
   }
 
   async function executeQuery() {
+    dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
     const headersOfRequest = createHeadersOfRequest();
     const bodyOfRequest = createBodyOfRequest(query, variables);
     try {
@@ -108,17 +162,19 @@ export function usePlayground(settings: PlaygroundSettings) {
     }
   }
 
-  function setNewSetting(settingName: keyof PlaygroundSettings, value: string) {
+  function setNewSetting(
+    settingName: keyof PlaygroundSettings,
+    value: string | URLSearchParams,
+  ) {
     if (settings[settingName] === value) {
       return;
     }
     const newSettings = { ...settings, [settingName]: value };
-
-    push(createPlaygroundURL(newSettings, headers));
-  }
-
-  function updateHeaders(newHeaders: URLSearchParams) {
-    push(createPlaygroundURL(settings, newHeaders));
+    dispatch({
+      type: PlaygroundActionTypes.SET_SETTINGS,
+      payload: newSettings,
+    });
+    updateUrlInBrowser(createPlaygroundURL(newSettings));
   }
 
   function prettify() {
@@ -136,19 +192,21 @@ export function usePlayground(settings: PlaygroundSettings) {
       return;
     }
 
-    const settingsWithPrettify: PlaygroundSettings = {
+    const prettifiedSettings: PlaygroundSettings = {
       query: prettifiedQuery,
       variables: prettifiedVariables,
       endpoint,
+      headers,
     };
-    push(createPlaygroundURL(settingsWithPrettify, headers));
+    dispatch({
+      type: PlaygroundActionTypes.SET_SETTINGS,
+      payload: prettifiedSettings,
+    });
+    updateUrlInBrowser(createPlaygroundURL(prettifiedSettings));
   }
 
   return {
     ...state,
-    ...settings,
-    headers,
-    updateHeaders,
     getSchema,
     executeQuery,
     setNewSetting,

@@ -1,11 +1,15 @@
+import { TLanguage } from "@/services/locale/contex";
 import React, { useState } from "react";
+import localeData from "@/services/locale/lang.json";
 
 interface ToggleSwitchProps {
+  language: TLanguage;
   isChecked?: boolean;
   onToggle?: (checked: boolean) => void;
 }
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
+  language,
   isChecked = false,
   onToggle,
 }) => {
@@ -22,7 +26,9 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   return (
     <div className="flex items-center gap-2 mr-2">
       {/* Left label */}
-      <h5 className="text-mediumGray">Eng</h5>
+      <h5 className="text-mediumGray">
+        {localeData.langToogle.onEng[language]}
+      </h5>
 
       {/* Toggle button */}
       <button

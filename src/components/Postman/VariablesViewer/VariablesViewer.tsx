@@ -11,52 +11,48 @@ export function VariablesViewer({
 }) {
   const entries = Object.entries(variables);
 
-  function tryChangedOnBlur(
-    key: string,
-    updatingField: "key" | "value",
-    newValue: string,
-  ) {
+  function changeValueOnBlur(dateKey: string, newValue: string) {
     const newVars = { ...variables };
-
-    if (updatingField === "key") {
-      if (!newValue || variables.hasOwnProperty(newValue)) {
-        return false;
-      }
-      const variableValue = newVars[key];
-      delete newVars[key];
-      newVars[newValue] = variableValue;
-    } else {
-      newVars[key] = newValue;
-    }
+    newVars[dateKey] = newValue;
     setVariables(newVars);
-    return true;
   }
 
-  function tryAddNewVariable(key: string, value: string) {
-    if (!key || variables.hasOwnProperty(key)) {
-      return false;
-    }
-
+  function changeKeyOnBlur(dateKey: string, newDataKey: string) {
     const newVars = { ...variables };
-    newVars[key] = value;
+    const variableValue = newVars[dateKey];
+    delete newVars[dateKey];
+    newVars[newDataKey] = variableValue;
     setVariables(newVars);
-    return true;
+  }
+
+  function addNewVariable(dateKey: string, value: string) {
+    const newVars = { ...variables };
+    newVars[dateKey] = value;
+    setVariables(newVars);
+  }
+
+  function deleteVariable(dateKey: string) {
+    const newVars = { ...variables };
+    delete newVars[dateKey];
+    setVariables(newVars);
   }
 
   return (
-    <div className={"w-[800px]"}>
+    <div className={"w-[800px] "}>
       {entries.map((variable) => {
-        const [key, value] = variable;
+        const [dateKey, value] = variable;
         return (
           <VariableKeyValue
-            key={key}
-            keyName={key}
+            key={dateKey}
+            dateKey={dateKey}
             value={value}
-            tryChangedOnBlur={tryChangedOnBlur}
+            deleteVariable={deleteVariable}
+            changeKeyOnBlur={changeKeyOnBlur}
+            changeValueOnBlur={changeValueOnBlur}
           />
         );
       })}
-      <VariableBuilder tryAddNewVariable={tryAddNewVariable} />
+      <VariableBuilder addNewVariable={addNewVariable} />
     </div>
   );
 }

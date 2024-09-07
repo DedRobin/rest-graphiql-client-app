@@ -9,7 +9,7 @@ export function VariablesViewer({
   variables: Record<string, string>;
   setVariables: Dispatch<SetStateAction<Record<string, string>>>;
 }) {
-  const entries = Object.entries(variables);
+  const entries = Object.entries(variables).sort();
 
   function changeValueOnBlur(dateKey: string, newValue: string) {
     const newVars = { ...variables };

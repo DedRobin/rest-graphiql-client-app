@@ -34,11 +34,12 @@ export function Postman() {
         />
       </div>
       <div>
-        <p>Headers</p>
-        <ParamsEditor params={headers} setParams={setHeaders} />
-
-        <p>Variables</p>
-        <ParamsEditor params={variables} setParams={setVariables} />
+        <ParamsEditor params={headers} setParams={setHeaders} title="Headers" />
+        <ParamsEditor
+          params={variables}
+          setParams={setVariables}
+          title="Variables"
+        />
         {/*Response*/}
         <ReadOnlyEditor value={responseValue} />
       </div>

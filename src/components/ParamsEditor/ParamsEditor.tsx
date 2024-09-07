@@ -1,54 +1,47 @@
 import { Dispatch, SetStateAction } from "react";
 import { ParamKeyValue } from "@/components/ParamsEditor/ParamKeyValue";
 import { ParamBuilder } from "@/components/ParamsEditor/ParamBuilder";
+import { Param } from "@/components/Postman/types";
 
 export function ParamsEditor({
   params,
   setParams,
+  title,
 }: {
-  params: Record<string, string>;
-  setParams: Dispatch<SetStateAction<Record<string, string>>>;
+  params: Param[];
+  setParams: Dispatch<SetStateAction<Param[]>>;
+  title: string;
 }) {
-  const entries = Object.entries(params).sort();
-
-  function changeValueOnBlur(dateKey: string, newValue: string) {
-    const newVars = { ...params };
-    newVars[dateKey] = newValue;
-    setParams(newVars);
-  }
-
-  function changeKeyOnBlur(dateKey: string, newDataKey: string) {
-    const newVars = { ...params };
-    const variableValue = newVars[dateKey];
-    delete newVars[dateKey];
-    newVars[newDataKey] = variableValue;
-    setParams(newVars);
-  }
-
-  function addNewParam(dateKey: string, value: string) {
-    const newParams = { ...params };
-    newParams[dateKey] = value;
+  function changeParamOnBlur(updatedParam: Param) {
+    const newParams = params.map((param) => {
+      if (param.id === updatedParam.id) {
+        return updatedParam;
+      }
+      return param;
+    });
     setParams(newParams);
   }
 
-  function deleteParam(dateKey: string) {
-    const newParams = { ...params };
-    delete newParams[dateKey];
+  function addNewParam(param: Param) {
+    const newParams = [...params, param];
+    setParams(newParams);
+  }
+
+  function deleteParam(id: number) {
+    const newParams = params.filter((p) => p.id !== id);
     setParams(newParams);
   }
 
   return (
     <div className={"w-[800px] "}>
-      {entries.map((param) => {
-        const [dateKey, value] = param;
+      <p>{title}</p>
+      {params.map((param) => {
         return (
           <ParamKeyValue
-            key={dateKey}
-            dateKey={dateKey}
-            value={value}
+            param={param}
+            key={param.id}
             deleteParam={deleteParam}
-            changeKeyOnBlur={changeKeyOnBlur}
-            changeValueOnBlur={changeValueOnBlur}
+            changeParamOnBlur={changeParamOnBlur}
           />
         );
       })}

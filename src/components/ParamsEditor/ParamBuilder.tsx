@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { createDateKey } from "@/utils/paramsUtils";
+import { Param } from "@/components/Postman/types";
 
 export function ParamBuilder({
   addNewParam,
 }: {
-  addNewParam: (dateKey: string, value: string) => void;
+  addNewParam: (param: Param) => void;
 }) {
   const [localKey, setLocalKey] = useState("");
   const [localValue, setLocalValue] = useState("");
@@ -13,9 +13,9 @@ export function ParamBuilder({
     if (!localKey && !localValue) {
       return;
     }
-    const date = new Date().valueOf().toString();
-    const dateKey = createDateKey(date, localKey);
-    addNewParam(dateKey, localValue);
+    const id = new Date().valueOf();
+    const newParam = { id, key: localKey, value: localValue };
+    addNewParam(newParam);
     setLocalKey("");
     setLocalValue("");
   }

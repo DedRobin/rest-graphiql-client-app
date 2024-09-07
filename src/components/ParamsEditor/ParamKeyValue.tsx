@@ -1,37 +1,34 @@
 import React, { useState } from "react";
-import { createDateKey, parseDateKey } from "@/utils/paramsUtils";
+import { Param } from "@/components/Postman/types";
 
 export function ParamKeyValue({
-  dateKey,
-  value,
-  changeValueOnBlur,
-  changeKeyOnBlur,
+  param,
+  changeParamOnBlur,
   deleteParam,
 }: {
-  dateKey: string;
-  value: string;
-  changeKeyOnBlur: (dateKey: string, newDateKey: string) => void;
-  changeValueOnBlur: (dateKey: string, newValue: string) => void;
-  deleteParam: (dateKey: string) => void;
+  param: Param;
+  changeParamOnBlur: (param: Param) => void;
+  deleteParam: (id: number) => void;
 }) {
-  const [date, key] = parseDateKey(dateKey);
+  const { value, key, id } = param;
 
   const [localKey, setLocalKey] = useState(key);
   const [localValue, setLocalValue] = useState(value);
 
   function onBlurKey(newKey: string) {
-    const newDateKey = createDateKey(date, newKey);
-    if (dateKey === newDateKey) {
+    if (key === newKey) {
       return;
     }
-    changeKeyOnBlur(dateKey, newDateKey);
+    const newParam = { id, value, key: newKey };
+    changeParamOnBlur(newParam);
   }
 
   function onBlurValue(newValue: string) {
     if (value === newValue) {
       return;
     }
-    changeValueOnBlur(dateKey, newValue);
+    const newParam = { id, value: newValue, key };
+    changeParamOnBlur(newParam);
   }
 
   return (
@@ -50,7 +47,7 @@ export function ParamKeyValue({
         onBlur={(event) => onBlurValue(event.target.value)}
         onChange={(event) => setLocalValue(event.target.value)}
       />
-      <button type="button" onClick={() => deleteParam(dateKey)}>
+      <button type="button" onClick={() => deleteParam(id)}>
         Delete
       </button>
     </div>

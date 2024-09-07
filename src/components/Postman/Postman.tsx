@@ -15,6 +15,8 @@ export function Postman() {
     setVariables,
     headers,
     setHeaders,
+    searchParams,
+    setSearchParams,
   } = usePostman();
 
   const responseValue =
@@ -22,11 +24,12 @@ export function Postman() {
 
   return (
     <div>
-      <div className={"flex gap-2"}>
+      <div className={"flex gap-2 w-[800px]"}>
         <TempButton title="Execute" onClick={executeQuery}>
           Execute
         </TempButton>
         <input
+          className="bg-gray-800 w-[800px]"
           type="text"
           placeholder="Endpoint"
           defaultValue={endpoint}
@@ -35,6 +38,11 @@ export function Postman() {
       </div>
       <div>
         <ParamsEditor params={headers} setParams={setHeaders} title="Headers" />
+        <ParamsEditor
+          params={searchParams}
+          setParams={setSearchParams}
+          title="Search Params"
+        />
         <ParamsEditor
           params={variables}
           setParams={setVariables}

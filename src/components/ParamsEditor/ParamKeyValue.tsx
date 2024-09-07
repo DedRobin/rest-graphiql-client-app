@@ -1,21 +1,18 @@
 import React, { useState } from "react";
-import {
-  createDateKey,
-  parseDateKey,
-} from "@/components/Postman/VariablesViewer/utils";
+import { createDateKey, parseDateKey } from "@/utils/paramsUtils";
 
-export function VariableKeyValue({
+export function ParamKeyValue({
   dateKey,
   value,
   changeValueOnBlur,
   changeKeyOnBlur,
-  deleteVariable,
+  deleteParam,
 }: {
   dateKey: string;
   value: string;
   changeKeyOnBlur: (dateKey: string, newDateKey: string) => void;
   changeValueOnBlur: (dateKey: string, newValue: string) => void;
-  deleteVariable: (dateKey: string) => void;
+  deleteParam: (dateKey: string) => void;
 }) {
   const [date, key] = parseDateKey(dateKey);
 
@@ -53,7 +50,7 @@ export function VariableKeyValue({
         onBlur={(event) => onBlurValue(event.target.value)}
         onChange={(event) => setLocalValue(event.target.value)}
       />
-      <button type="button" onClick={() => deleteVariable(dateKey)}>
+      <button type="button" onClick={() => deleteParam(dateKey)}>
         Delete
       </button>
     </div>

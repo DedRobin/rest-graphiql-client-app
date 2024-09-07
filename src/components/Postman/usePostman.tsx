@@ -4,14 +4,14 @@ import { makeRequest } from "@/services/requests/makeRequest";
 
 interface RestfullSettings {
   endpoint: string;
-  headers: Record<string, string>;
+  // headers: Record<string, string>;
   postBody: string | undefined;
   method: "GET" | "POST";
 }
 
 const initSettings: RestfullSettings = {
   endpoint: "https://dummyjson.com/products",
-  headers: {},
+  // headers: {},
   postBody: undefined,
   method: "GET",
 };
@@ -22,13 +22,14 @@ export function usePostman() {
   const [settings, setSettings] = useState<RestfullSettings>(initSettings);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [variables, setVariables] = useState<Record<string, string>>({});
+  const [headers, setHeaders] = useState<Record<string, string>>({});
   const [response, setResponse] = useState<ResponseData>({
     status: undefined,
     body: "",
     error: "",
   });
 
-  const { endpoint, headers, method, postBody } = settings;
+  const { endpoint, method, postBody } = settings;
 
   async function executeQuery() {
     setIsLoading(true);
@@ -64,6 +65,8 @@ export function usePostman() {
     ...settings,
     isLoading,
     variables,
+    headers,
     setVariables,
+    setHeaders,
   };
 }

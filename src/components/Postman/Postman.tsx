@@ -2,7 +2,7 @@ import { TempButton } from "@/components/UI/TempButton";
 import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 import { usePostman } from "@/components/Postman/usePostman";
-import { VariablesViewer } from "@/components/Postman/VariablesViewer/VariablesViewer";
+import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 
 export function Postman() {
   const {
@@ -13,6 +13,8 @@ export function Postman() {
     isLoading,
     variables,
     setVariables,
+    headers,
+    setHeaders,
   } = usePostman();
 
   const responseValue =
@@ -32,7 +34,11 @@ export function Postman() {
         />
       </div>
       <div>
-        <VariablesViewer variables={variables} setVariables={setVariables} />
+        <p>Headers</p>
+        <ParamsEditor params={headers} setParams={setHeaders} />
+
+        <p>Variables</p>
+        <ParamsEditor params={variables} setParams={setVariables} />
         {/*Response*/}
         <ReadOnlyEditor value={responseValue} />
       </div>

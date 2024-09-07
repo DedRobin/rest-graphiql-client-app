@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import { createDateKey } from "@/components/Postman/VariablesViewer/utils";
+import { createDateKey } from "@/utils/paramsUtils";
 
-export function VariableBuilder({
-  addNewVariable,
+export function ParamBuilder({
+  addNewParam,
 }: {
-  addNewVariable: (dateKey: string, value: string) => void;
+  addNewParam: (dateKey: string, value: string) => void;
 }) {
   const [localKey, setLocalKey] = useState("");
   const [localValue, setLocalValue] = useState("");
 
-  function handleAddNewVariable() {
+  function handleAddNewParam() {
     if (!localKey && !localValue) {
       return;
     }
     const date = new Date().valueOf().toString();
-    addNewVariable(createDateKey(date, localKey), localValue);
+    const dateKey = createDateKey(date, localKey);
+    addNewParam(dateKey, localValue);
     setLocalKey("");
     setLocalValue("");
   }
@@ -33,7 +34,7 @@ export function VariableBuilder({
         value={localValue}
         onChange={(event) => setLocalValue(event.target.value)}
       />
-      <button type="button" onClick={handleAddNewVariable}>
+      <button type="button" onClick={handleAddNewParam}>
         Add
       </button>
     </div>

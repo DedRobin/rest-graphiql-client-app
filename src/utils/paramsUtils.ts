@@ -21,3 +21,14 @@ export function createSearchParamsURLFormParams(params: Param[]) {
 
   return `?${tail}`;
 }
+
+export function createParamsFromSearchParamsUrl(url: string): Param[] {
+  if (!url) {
+    return [];
+  }
+  const id = new Date().valueOf();
+  return url.split("&").map((paramString, index) => {
+    const [key, value] = paramString.split("=");
+    return { key, value, id: id + index };
+  });
+}

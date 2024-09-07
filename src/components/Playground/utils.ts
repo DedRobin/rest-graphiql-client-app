@@ -1,17 +1,7 @@
-import { decode, encode } from "js-base64";
-import { Route } from "@/app/routes";
-
-import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { PlaygroundSettings } from "@/components/Playground/types";
-
-function encodeBase64(str: string) {
-  return encode(str).replace(/=/g, "");
-}
-
-export function decodeBase64(str: string) {
-  const padding = "=".repeat((4 - (str.length % 4)) % 4);
-  return decode(str + padding);
-}
+import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
+import { Route } from "@/app/routes";
+import { encodeBase64 } from "@/utils/base64";
 
 function encodePlaygroundSettings(settings: PlaygroundSettings): string {
   const { endpoint, variables, query } = settings;
@@ -33,8 +23,4 @@ function createParamsTailURL(searchParams: URLSearchParams): string {
 
 export function createPlaygroundURL(settings: PlaygroundSettings) {
   return `${Route.GraphQL}/${encodePlaygroundSettings(settings)}${createParamsTailURL(settings.headers)}`;
-}
-
-export function updateUrlInBrowser(url: string) {
-  window.history.pushState({}, "", url);
 }

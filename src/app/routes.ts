@@ -3,6 +3,8 @@ enum Route {
   Login = "/login",
   Registration = "/register",
   GraphQL = "/GRAPHQL",
+  Get = "/GET",
+  Post = "/POST",
   RESTfull = "/restfull",
   History = "/history",
 }

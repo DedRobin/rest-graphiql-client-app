@@ -3,28 +3,66 @@ import { ResponseData } from "@/components/Playground/types";
 import { makeRequest } from "@/services/requests/makeRequest";
 import { Param } from "@/components/Postman/types";
 import {
+  createParamsFromSearchParamsUrl,
   createRecordFromParams,
   createSearchParamsURLFormParams,
 } from "@/utils/paramsUtils";
+import { usePathname } from "next/navigation";
+import { createRestfullURL } from "@/components/Postman/utils";
+import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
+import { decodeBase64 } from "@/utils/base64";
 
-interface RestfullSettings {
+export interface RestfullSettings {
   endpoint: string;
+  searchParams: Param[];
   postBody: string | undefined;
   method: "GET" | "POST";
+  headers: URLSearchParams;
 }
 
-const initSettings: RestfullSettings = {
-  endpoint: "https://dummyjson.com/products/search",
+const emptySettings: RestfullSettings = {
+  endpoint: "https://dummyjson.com/products/search", //пока указал тестовую апи
+  searchParams: [],
   postBody: undefined,
   method: "GET",
+  headers: new URLSearchParams(),
 };
 
-export function usePostman() {
-  // const slug = usePathname().split("/");
+function parseSlug(slug: string): RestfullSettings {
+  const [, method, encodedFullEndpoint, encodedBody] = slug.split("/");
+  console.log(encodedBody);
 
-  const [settings, setSettings] = useState<RestfullSettings>(initSettings);
+  if (method !== "POST" && method !== "GET") {
+    return emptySettings;
+  }
+
+  if (!encodedFullEndpoint) {
+    return {
+      ...emptySettings,
+      method,
+    };
+  }
+
+  const fullEndpoint = decodeBase64(encodedFullEndpoint);
+  const [endpoint, searchParamsURL] = fullEndpoint.split("?");
+  const searchParams = createParamsFromSearchParamsUrl(searchParamsURL);
+
+  return {
+    method,
+    endpoint,
+    searchParams,
+    postBody: undefined,
+    headers: new URLSearchParams(),
+  };
+}
+
+export function usePostman() {
+  const slug = usePathname();
+  const parsedSettings = parseSlug(slug);
+
+  const [settings, setSettings] = useState<RestfullSettings>(parsedSettings);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [searchParams, setSearchParams] = useState<Param[]>([]);
+
   const [variables, setVariables] = useState<Param[]>([]);
   const [headers, setHeaders] = useState<Param[]>([]);
   const [response, setResponse] = useState<ResponseData>({
@@ -33,7 +71,7 @@ export function usePostman() {
     error: "",
   });
 
-  const { endpoint, method, postBody } = settings;
+  const { endpoint, method, postBody, searchParams } = settings;
 
   const fullEndpoint = `${endpoint}${createSearchParamsURLFormParams(searchParams)}`;
 
@@ -54,21 +92,21 @@ export function usePostman() {
     setIsLoading(false);
   }
 
-  function setNewSetting(
-    settingName: keyof RestfullSettings,
-    value: string | URLSearchParams,
-  ) {
-    if (settings[settingName] === value) {
-      return;
-    }
-    const newSettings = { ...settings, [settingName]: value };
-
+  function setEndpoint(newEndpoint: string) {
+    const newSettings = { ...settings, endpoint: newEndpoint };
     setSettings(newSettings);
+    updateUrlInBrowser(createRestfullURL(newSettings));
+  }
+
+  function setSearchParams(newSearchParams: Param[]) {
+    const newSettings = { ...settings, searchParams: newSearchParams };
+    setSettings(newSettings);
+    updateUrlInBrowser(createRestfullURL(newSettings));
   }
 
   return {
     executeQuery,
-    setNewSetting,
+    setEndpoint,
     response,
     ...settings,
     isLoading,

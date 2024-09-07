@@ -7,7 +7,6 @@ import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 export function Postman() {
   const {
     executeQuery,
-    setNewSetting,
     endpoint,
     response,
     isLoading,
@@ -17,6 +16,7 @@ export function Postman() {
     setHeaders,
     searchParams,
     setSearchParams,
+    setEndpoint,
   } = usePostman();
 
   const responseValue =
@@ -33,7 +33,7 @@ export function Postman() {
           type="text"
           placeholder="Endpoint"
           defaultValue={endpoint}
-          onBlur={(event) => setNewSetting("endpoint", event.target.value)}
+          onBlur={(event) => setEndpoint(event.target.value)}
         />
       </div>
       <div>

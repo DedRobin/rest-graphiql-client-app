@@ -15,14 +15,12 @@ import {
 import { hasMessageField } from "@/utils/hasMessageField";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
-  createPlaygroundURL,
-  decodeBase64,
-  updateUrlInBrowser,
-} from "@/utils/urlUtils";
-import {
   PlaygroundSettings,
   PlaygroundState,
 } from "@/components/Playground/types";
+import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
+import { decodeBase64 } from "@/utils/base64";
+import { createPlaygroundURL } from "@/components/Playground/utils";
 
 export function usePlayground() {
   const slug = usePathname().split("/");

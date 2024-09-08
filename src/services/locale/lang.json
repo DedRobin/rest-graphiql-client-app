@@ -41,6 +41,52 @@
       }
     }
   },
+  "login": {
+    "heading": {
+      "en": "Please Login",
+      "ru": "Пожалуйста, войдите в систему"
+    },
+    "text": {
+      "en": "Login in to your account to continue working with APIs and graphs. Experience the simplicity and power of our unified tool in one interface.",
+      "ru": "Войдите в свою учетную запись, чтобы продолжить работу с API и графиками. Оцените простоту и мощь нашего унифицированного инструмента в одном интерфейсе."
+    },
+    "form": {
+      "email": {
+        "label": {
+          "en": "Email",
+          "ru": "Почта"
+        },
+        "placeholder": {
+          "en": "Enter your email",
+          "ru": "Введите свою почту"
+        }
+      },
+      "password": {
+        "label": {
+          "en": "Password",
+          "ru": "Пароль"
+        },
+        "placeholder": {
+          "en": "Enter your password",
+          "ru": "Введите пароль"
+        }
+      },
+      "signInBtn": {
+        "en": "Sign in",
+        "ru": "Войти"
+      },
+      "register": {
+        "text": {
+          "en": "Don't have an account? ",
+          "ru": "У вас нет учетной записи?"
+        },
+        "link": {
+          "en": "Register now",
+          "ru": "Зарегистрируйтесь сейчас"
+        }
+      }
+    }
+  },
   "nav": {
     "history": {
       "en": "History",
@@ -56,5 +102,10 @@
       "en": "Ru",
       "ru": "Рус."
     }
+  },
+  "unauthenticatedSidebarNavigation": {
+    "main": { "en": "Main", "ru": "Главная" },
+    "login": { "en": "Login", "ru": "Войти" },
+    "register": { "en": "Register", "ru": "Регистрация" }
   }
 }

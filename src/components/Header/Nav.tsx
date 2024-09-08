@@ -1,8 +1,8 @@
 import { Route } from "@/app/routes";
-import { useLocale } from "@/services/locale/contex";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale } from "@/services/locale/contex";
 import localeData from "@/services/locale/lang.json";
 
 export function Nav() {

@@ -1,14 +1,4 @@
 {
-  "toogleSwitch": {
-    "textEng": {
-      "en": "Eng",
-      "ru": "Анг."
-    },
-    "textRu": {
-      "en": "Ru",
-      "ru": "Рус."
-    }
-  },
   "authBtnGroup": {
     "login": {
       "en": "Login",
@@ -21,6 +11,44 @@
     "register": {
       "en": "Register",
       "ru": "Регистрация"
+    }
+  },
+  "authenticatedSidebarNavigation": {
+    "main": {
+      "en": "Main",
+      "ru": "Главная"
+    },
+    "history": {
+      "en": "History",
+      "ru": "История"
+    }
+  },
+  "home": {
+    "welcome": {
+      "label": {
+        "en": "Welcome",
+        "ru": "Добро пожаловать"
+      },
+      "text": {
+        "forAuthUser": {
+          "en": "Seamlessly manage REST APIs and GraphQL endpoints in one efficient interface, designed to streamline your workflow.",
+          "ru": "Простое управление REST API и конечными точками GraphQL с помощью одного эффективного интерфейса, разработанного для оптимизации вашего рабочего процесса."
+        },
+        "forNotAuthUser": {
+          "en": "Explore and interact with REST APIs and GraphQL endpoints effortlessly using our unified client.",
+          "ru": "Изучайте REST API и конечную точку GraphQL и взаимодействуйте с ними используя наш унифицированный клиент, вы сможете легко и непринужденно работать с ними"
+        }
+      }
+    }
+  },
+  "toogleSwitch": {
+    "textEng": {
+      "en": "Eng",
+      "ru": "Анг."
+    },
+    "textRu": {
+      "en": "Ru",
+      "ru": "Рус."
     }
   }
 }

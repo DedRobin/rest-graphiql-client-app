@@ -4,6 +4,8 @@ import { Pixelify_Sans } from "next/font/google";
 import AuthenticatedSidebarNavigation from "@/components/UI/Navigation/AuthenticatedSidebarNavigation";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import localeData from "@/services/locale/lang.json";
+import { useLocale } from "@/services/locale/contex";
 
 export const pixelifySans = Pixelify_Sans({
   subsets: ["latin"],
@@ -12,6 +14,7 @@ export const pixelifySans = Pixelify_Sans({
 
 export function Home() {
   const { user } = useAuth();
+  const { language } = useLocale();
 
   return (
     <div className="home grid grid-cols-8 grid-rows-[1fr,auto] gap-6 col-span-8 bg-[url('/main-img.webp')] bg-cover bg-no-repeat bg-center h-full w-full">
@@ -29,19 +32,18 @@ export function Home() {
         {user ? (
           <>
             <h3 className="text-lightGray">
-              Welcome, {user.displayName || user.email}
+              {localeData.home.welcome.label[language]},
+              {user.displayName || user.email}
             </h3>
             <h5 className="text-mediumGray">
-              Seamlessly manage REST APIs and GraphQL endpoints in one efficient
-              interface, designed to streamline your workflow.
+              {localeData.home.welcome.text.forAuthUser[language]}
             </h5>
           </>
         ) : (
           <>
             <h3 className="text-lightGray">Welcome</h3>
             <h5 className="text-mediumGray">
-              Explore and interact with REST APIs and GraphQL endpoints
-              effortlessly using our unified client.
+              {localeData.home.welcome.text.forNotAuthUser[language]}
             </h5>
           </>
         )}

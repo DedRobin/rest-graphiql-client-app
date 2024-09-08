@@ -3,11 +3,14 @@ import { Route } from "@/app/routes";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
+import localeData from "@/services/locale/lang.json";
+import { useLocale } from "@/services/locale/contex";
 
 export function AuthBtnGroup() {
   const { user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const { language } = useLocale();
 
   const logoutThenRedirect = async (event: React.MouseEvent) => {
     event.preventDefault();
@@ -40,13 +43,19 @@ export function AuthBtnGroup() {
               className="h5 text-h5 font-h5 leading-h5 tracking-h5 text-center transition-colors duration-300"
               onClick={logoutThenRedirect}
             >
-              Logout
+              {localeData.authBtnGroup.logout[language]}
             </Link>
           </li>
         ) : (
           <>
-            {renderAuthLink(Route.Login, "Login")}
-            {renderAuthLink(Route.Registration, "Register")}
+            {renderAuthLink(
+              Route.Login,
+              localeData.authBtnGroup.login[language],
+            )}
+            {renderAuthLink(
+              Route.Registration,
+              localeData.authBtnGroup.register[language],
+            )}
           </>
         )}
       </ul>

@@ -47,6 +47,26 @@
       "ru": "Вы еще не выполнили ни одного запроса. Поле здесь пустое. Попробуйте эти варианты:"
     }
   },
+  "graphql": {
+    "heading": {
+      "en": "GraphiQL Editor",
+      "ru": "Редактор GraphiQL"
+    },
+    "buttons": {
+      "prettify": {
+        "en": "Prettify",
+        "ru": "Форматировать"
+      },
+      "execute": {
+        "en": "Execute",
+        "ru": "Выполнить"
+      },
+      "schema": {
+        "en": "Schema",
+        "ru": "Схема"
+      }
+    }
+  },
   "login": {
     "heading": {
       "en": "Please Login",

@@ -1,15 +1,12 @@
-import { RestfullSettings } from "@/components/Postman/usePostman";
-import { createSearchParamsURLFormParams } from "@/utils/paramsUtils";
+import { createSearchParamsURLFromParams } from "@/utils/paramsUtils";
 import { encodeBase64 } from "@/utils/base64";
 import { Param } from "@/components/Postman/types";
+import { PostmanState } from "@/components/Postman/usePostman";
 
-export function createRestfullURL(
-  settings: RestfullSettings,
-  variables: Param[],
-): string {
-  const { endpoint, searchParams, method } = settings;
+export function createRestfullURL(settings: PostmanState): string {
+  const { endpoint, searchParams, method, variables, headers } = settings;
 
-  const fullEndpoint = `${endpoint}${createSearchParamsURLFormParams(searchParams)}`;
+  const fullEndpoint = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
 
   const fullEndpointWithVarValues = replaceTagsToVariableValue(
     fullEndpoint,
@@ -20,7 +17,7 @@ export function createRestfullURL(
 
   // const encodedBody = encodeBase64("encodedBody");
 
-  return `/${method}/${encodedEndpoint}`;
+  return `/${method}/${encodedEndpoint}${createSearchParamsURLFromParams(headers)}`;
 }
 
 export function replaceTagsToVariableValue(
@@ -31,4 +28,17 @@ export function replaceTagsToVariableValue(
     const found = variables.find((variable) => variable.key === tag);
     return found ? found.value : match;
   });
+}
+
+export function convertUrlSearchParamsToParamsArray(
+  searchParams: URLSearchParams,
+) {
+  const result: Param[] = [];
+  let id = Date.now().valueOf();
+
+  searchParams.forEach((value, key) => {
+    result.push({ key, value, id });
+    id += 1;
+  });
+  return result;
 }

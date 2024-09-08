@@ -6,8 +6,8 @@ import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 
 export function Postman() {
   const {
-    executeQuery,
     endpoint,
+    executeQuery,
     response,
     isLoading,
     variables,

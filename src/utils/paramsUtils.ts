@@ -8,7 +8,7 @@ export function createRecordFromParams(params: Param[]) {
   }, {});
 }
 
-export function createSearchParamsURLFormParams(params: Param[]) {
+export function createSearchParamsURLFromParams(params: Param[]) {
   if (params.length === 0) {
     return "";
   }

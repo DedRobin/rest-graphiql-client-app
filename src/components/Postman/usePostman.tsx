@@ -1,86 +1,109 @@
-import { useState } from "react";
+import { useEffect, useReducer } from "react";
 import { ResponseData } from "@/components/Playground/types";
 import { makeRequest } from "@/services/requests/makeRequest";
 import { Param } from "@/components/Postman/types";
 import {
   createParamsFromSearchParamsUrl,
   createRecordFromParams,
-  createSearchParamsURLFormParams,
+  createSearchParamsURLFromParams,
 } from "@/utils/paramsUtils";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import {
+  convertUrlSearchParamsToParamsArray,
   createRestfullURL,
   replaceTagsToVariableValue,
 } from "@/components/Postman/utils";
 import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
 import { decodeBase64 } from "@/utils/base64";
+import {
+  PostmanActionTypes,
+  postmanReducer,
+} from "@/components/Postman/postmanReducer";
 
-export interface RestfullSettings {
+export interface PostmanState {
   endpoint: string;
   searchParams: Param[];
   postBody: string | undefined;
   method: "GET" | "POST";
-  headers: URLSearchParams;
+  headers: Param[];
+  variables: Param[];
+  isLoading: boolean;
+  response: ResponseData;
 }
 
-const emptySettings: RestfullSettings = {
+const initStore: PostmanState = {
   endpoint: "https://dummyjson.com/products/search", //пока указал тестовую апи
   searchParams: [],
   postBody: undefined,
   method: "GET",
-  headers: new URLSearchParams(),
-};
-
-function parseSlug(slug: string): RestfullSettings {
-  const [, method, encodedFullEndpoint, encodedBody] = slug.split("/");
-  console.log(encodedBody);
-
-  if (method !== "POST" && method !== "GET") {
-    return emptySettings;
-  }
-
-  if (!encodedFullEndpoint) {
-    return {
-      ...emptySettings,
-      method,
-    };
-  }
-
-  const fullEndpoint = decodeBase64(encodedFullEndpoint);
-  const [endpoint, searchParamsURL] = fullEndpoint.split("?");
-  const searchParams = createParamsFromSearchParamsUrl(searchParamsURL);
-
-  return {
-    method,
-    endpoint,
-    searchParams,
-    postBody: undefined,
-    headers: new URLSearchParams(),
-  };
-}
-
-export function usePostman() {
-  const slug = usePathname();
-  const parsedSettings = parseSlug(slug);
-
-  const [settings, setSettings] = useState<RestfullSettings>(parsedSettings);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const [variables, setVariables] = useState<Param[]>([]);
-  const [headers, setHeaders] = useState<Param[]>([]);
-  const [response, setResponse] = useState<ResponseData>({
+  headers: [],
+  variables: [],
+  isLoading: false,
+  response: {
     status: undefined,
     body: "",
     error: "",
-  });
+  },
+};
 
-  const { endpoint, method, postBody, searchParams } = settings;
+export function usePostman() {
+  const slug = usePathname();
+  const pageSearchParams = useSearchParams();
+  const parsedSettings = parseSlug(slug, pageSearchParams);
 
-  const fullEndpoint = `${endpoint}${createSearchParamsURLFormParams(searchParams)}`;
+  const [state, dispatch] = useReducer(postmanReducer, parsedSettings);
+
+  const {
+    endpoint,
+    method,
+    postBody,
+    searchParams,
+    variables,
+    headers,
+    response,
+  } = state;
+
+  const fullEndpoint = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+
+  function parseSlug(
+    slug: string,
+    pageSearchParams: URLSearchParams,
+  ): PostmanState {
+    const [, method, encodedFullEndpoint, encodedBody] = slug.split("/");
+
+    console.log(encodedBody);
+
+    if (method !== "POST" && method !== "GET") {
+      return initStore;
+    }
+
+    if (!encodedFullEndpoint) {
+      return {
+        ...initStore,
+        method,
+      };
+    }
+
+    const headers = convertUrlSearchParamsToParamsArray(pageSearchParams);
+
+    const fullEndpoint = decodeBase64(encodedFullEndpoint);
+    const [endpoint, searchParamsURL] = fullEndpoint.split("?");
+    const searchParams = createParamsFromSearchParamsUrl(searchParamsURL);
+
+    return {
+      ...initStore,
+      method,
+      endpoint,
+      searchParams,
+      headers,
+    };
+  }
+
+  useEffect(() => {
+    updateUrlInBrowser(createRestfullURL(state));
+  }, [state]);
 
   async function executeQuery() {
-    setIsLoading(true);
-
     const res = await makeRequest(
       replaceTagsToVariableValue(fullEndpoint, variables),
       createRecordFromParams(headers),
@@ -88,42 +111,54 @@ export function usePostman() {
       method,
     );
     const responseData = await res.json();
-    setResponse({
-      body: JSON.stringify(responseData, null, 2),
-      status: response.status,
-      error: "",
+
+    const formattedResponse = JSON.stringify(responseData, null, 2);
+
+    dispatch({
+      type: PostmanActionTypes.SET_RESPONSE,
+      payload: {
+        body: formattedResponse,
+        status: response.status,
+        error: "",
+      },
     });
-    setIsLoading(false);
   }
 
   function setEndpoint(newEndpoint: string) {
-    const newSettings = { ...settings, endpoint: newEndpoint };
-    setSettings(newSettings);
-    updateUrlInBrowser(createRestfullURL(newSettings, variables));
+    dispatch({
+      type: PostmanActionTypes.SET_ENDPOINT,
+      payload: newEndpoint,
+    });
   }
 
   function setSearchParams(newSearchParams: Param[]) {
-    const newSettings = { ...settings, searchParams: newSearchParams };
-    setSettings(newSettings);
-    updateUrlInBrowser(createRestfullURL(newSettings, variables));
+    dispatch({
+      type: PostmanActionTypes.SET_SEARCH_PARAMS,
+      payload: newSearchParams,
+    });
   }
 
-  function handleSetVariables(newVariables: Param[]) {
-    setVariables(newVariables);
-    updateUrlInBrowser(createRestfullURL(settings, newVariables));
+  function setVariables(newVariables: Param[]) {
+    dispatch({
+      type: PostmanActionTypes.SET_VARIABLES,
+      payload: newVariables,
+    });
+  }
+
+  function setHeaders(newHeaders: Param[]) {
+    dispatch({
+      type: PostmanActionTypes.SET_HEADERS,
+      payload: newHeaders,
+    });
   }
 
   return {
-    executeQuery,
-    setEndpoint,
+    ...state,
     response,
-    ...settings,
-    isLoading,
-    variables,
-    headers,
-    setVariables: handleSetVariables,
+    setEndpoint,
+    setVariables,
     setHeaders,
-    searchParams,
     setSearchParams,
+    executeQuery,
   };
 }

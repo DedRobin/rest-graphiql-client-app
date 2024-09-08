@@ -59,7 +59,7 @@ export default function Register() {
     const { isRegistered, error } = await registerWithEmailAndPassword(data);
     if (error) setError(error.message);
     else if (isRegistered) {
-      toast("The user has been successfully registered!", { type: "success" });
+      toast.success(localeData.register.toast.successRegistration[language]);
       router.push(Route.Login);
     }
   };

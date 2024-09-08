@@ -65,9 +65,9 @@
         "en": "Schema",
         "ru": "Схема"
       }
-    }, 
-    "readonlyEditor":{
-      "placeholder":{
+    },
+    "readonlyEditor": {
+      "placeholder": {
         "en": "Headers",
         "ru": "Заголовки"
       }
@@ -116,6 +116,12 @@
           "en": "Register now",
           "ru": "Зарегистрируйтесь сейчас"
         }
+      }
+    },
+    "toast": {
+      "loginSuccess": {
+        "en": "The login was completed successfully",
+        "ru": "Вход в систему был успешно завершен"
       }
     }
   },
@@ -188,6 +194,12 @@
           "en": "Login now",
           "ru": "Войдите сейчас"
         }
+      }
+    },
+    "toast": {
+      "successRegistration": {
+        "en": "The user has been successfully registered!",
+        "ru": "Пользователь успешно зарегистрирован!"
       }
     }
   },

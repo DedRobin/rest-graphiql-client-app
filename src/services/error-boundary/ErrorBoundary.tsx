@@ -2,7 +2,6 @@
 
 import { Component, ReactNode } from "react";
 import { toast } from "react-toastify";
-import { errorMessageList } from "./constants";
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -23,8 +22,7 @@ export class ExpectedErrorBoundary extends Component<
   static getDerivedStateFromError() {}
 
   componentDidCatch(error: Error) {
-    const userFrendlyMessage = errorMessageList[error.message] ?? error.message;
-    toast.error(userFrendlyMessage);
+    toast.error(error.message);
   }
 
   render() {

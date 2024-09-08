@@ -1,4 +1,4 @@
-import { Param } from "@/components/Postman/types";
+import { Param } from "@/types/Param";
 
 export function createRecordFromParams(params: Param[]) {
   return params.reduce<Record<string, string>>((record, param) => {
@@ -31,4 +31,15 @@ export function createParamsFromSearchParamsUrl(url: string): Param[] {
     const [key, value] = paramString.split("=");
     return { key, value, id: id + index };
   });
+}
+
+export function createParamsFromUrlSearchParams(searchParams: URLSearchParams) {
+  const result: Param[] = [];
+  let id = Date.now().valueOf();
+
+  searchParams.forEach((value, key) => {
+    result.push({ key, value, id });
+    id += 1;
+  });
+  return result;
 }

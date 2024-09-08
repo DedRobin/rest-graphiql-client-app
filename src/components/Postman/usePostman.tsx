@@ -1,31 +1,30 @@
 import { useEffect, useReducer } from "react";
-import { ResponseData } from "@/components/Playground/types";
 import { makeRequest } from "@/services/requests/makeRequest";
-import { Param } from "@/components/Postman/types";
 import {
+  createParamsFromUrlSearchParams,
   createParamsFromSearchParamsUrl,
   createRecordFromParams,
   createSearchParamsURLFromParams,
 } from "@/utils/paramsUtils";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  convertUrlSearchParamsToParamsArray,
-  createRestfullURL,
-  replaceTagsToVariableValue,
-} from "@/components/Postman/utils";
-import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
+import { createRestfullURL } from "@/components/Postman/utils";
 import { decodeBase64 } from "@/utils/base64";
 import {
   FieldWithParams,
   PostmanActionTypes,
   postmanReducer,
 } from "@/components/Postman/postmanReducer";
+import { Param } from "@/types/Param";
+import { ResponseData } from "@/types/ResponseData";
+import { updateUrlInBrowser } from "@/utils/urlUtils";
+import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
+import { Method } from "@/types/Method";
 
 export interface PostmanState {
   endpoint: string;
   searchParams: Param[];
   postBody: string | undefined;
-  method: "GET" | "POST";
+  method: Method;
   headers: Param[];
   variables: Param[];
   isLoading: boolean;
@@ -85,7 +84,7 @@ export function usePostman() {
       };
     }
 
-    const headers = convertUrlSearchParamsToParamsArray(pageSearchParams);
+    const headers = createParamsFromUrlSearchParams(pageSearchParams);
 
     const fullEndpoint = decodeBase64(encodedFullEndpoint);
     const [endpoint, searchParamsURL] = fullEndpoint.split("?");

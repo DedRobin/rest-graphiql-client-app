@@ -18,9 +18,9 @@ import {
   PlaygroundSettings,
   PlaygroundState,
 } from "@/components/Playground/types";
-import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
 import { decodeBase64 } from "@/utils/base64";
 import { createPlaygroundURL } from "@/components/Playground/utils";
+import { updateUrlInBrowser } from "@/utils/urlUtils";
 
 export function usePlayground() {
   const slug = usePathname().split("/");

@@ -1,7 +1,7 @@
 import { Reducer } from "react";
-import { ResponseData } from "@/components/Playground/types";
-import { Param } from "@/components/Postman/types";
 import { PostmanState } from "@/components/Postman/usePostman";
+import { Param } from "@/types/Param";
+import { ResponseData } from "@/types/ResponseData";
 
 export enum PostmanActionTypes {
   SET_ENDPOINT,

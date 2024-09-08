@@ -1,8 +1,10 @@
+import { Method } from "@/types/Method";
+
 export async function makeRequest(
   endpoint: string,
   headers: Record<string, string>,
   body: string | undefined,
-  method: "POST" | "GET",
+  method: Method,
 ) {
   return fetch(endpoint, {
     method,

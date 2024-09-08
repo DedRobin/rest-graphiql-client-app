@@ -1,26 +1,19 @@
 import { TLanguage } from "@/services/locale/contex";
-import React, { useState } from "react";
+import React from "react";
 import localeData from "@/services/locale/lang.json";
 
 interface ToggleSwitchProps {
   language: TLanguage;
-  isChecked?: boolean;
-  onToggle?: (checked: boolean) => void;
+  onToggle: (checked: boolean) => void;
 }
 
 export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
   language,
-  isChecked = false,
   onToggle,
 }) => {
-  const [checked, setChecked] = useState(isChecked);
-
   const handleToggle = () => {
-    const newChecked = !checked;
-    setChecked(newChecked);
-    if (onToggle) {
-      onToggle(newChecked);
-    }
+    const checked = !(language === "ru");
+    onToggle(checked);
   };
 
   return (
@@ -37,7 +30,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       >
         <span
           className={`inline-block w-2 h-3 transform border-2 border-green rounded-full transition-transform duration-300 ${
-            checked ? "translate-x-8" : "translate-x-1"
+            language === "ru" ? "translate-x-8" : "translate-x-1"
           }`}
         />
       </button>

@@ -1,21 +1,21 @@
-"use client ";
-
 import { LSKey } from "@/constants/localStorageKeys";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export function useLocalStorage(key: LSKey): {
   value: string;
-  setValue: Dispatch<SetStateAction<string>>;
+  setNewValue: (newValue: string) => void;
 } {
-  let initValue: string | null = "";
-
-  if (!(typeof localStorage === "undefined"))
-    initValue = localStorage.getItem(key) || "";
-  const [value, setValue] = useState(initValue);
+  const [value, setValue] = useState("");
 
   useEffect(() => {
-    localStorage.setItem(key, value);
-  }, [key, value]);
+    const initValue = localStorage.getItem(key) || "";
+    setValue(initValue);
+  }, [key]);
 
-  return { value, setValue };
+  const setNewValue = (newValue: string) => {
+    localStorage.setItem(key, newValue);
+    setValue(newValue);
+  };
+
+  return { value, setNewValue };
 }

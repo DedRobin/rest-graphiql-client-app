@@ -42,6 +42,10 @@
     }
   },
   "history": {
+    "heading": {
+      "en": "History Requests",
+      "ru": "История запросов"
+    },
     "fallback": {
       "en": "You haven't executed any requests yet. It's empty here. Try those options:",
       "ru": "Вы еще не выполнили ни одного запроса. Поле здесь пустое. Попробуйте эти варианты:"

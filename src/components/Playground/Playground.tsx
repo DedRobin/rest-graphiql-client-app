@@ -8,6 +8,8 @@ import { graphql } from "cm6-graphql";
 import { EditableEditor } from "@/components/Editors/EditableEditor";
 import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
+import { useLocale } from "@/services/locale/contex";
+import localeData from "@/services/locale/lang.json";
 
 export function Playground({ settings }: { settings: PlaygroundSettings }) {
   const {
@@ -24,6 +26,8 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
     prettify,
   } = usePlayground(settings);
 
+  const { language } = useLocale();
+
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
 
@@ -31,13 +35,13 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
     <div>
       <div className={"flex gap-2"}>
         <TempButton title="Prettify" onClick={prettify}>
-          Prettify
+          {localeData.graphql.buttons.prettify[language]}
         </TempButton>
         <TempButton title="Execute" onClick={executeQuery}>
-          Execute
+          {localeData.graphql.buttons.execute[language]}
         </TempButton>
         <TempButton title="Schema" onClick={getSchema}>
-          Schema
+          {localeData.graphql.buttons.schema[language]}
         </TempButton>
         <input
           type="text"

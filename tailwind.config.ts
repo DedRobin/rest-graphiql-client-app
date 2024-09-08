@@ -15,6 +15,7 @@ const config: Config = {
         lightGray: "#F3F3F3",
         red: "#FF6464",
         green: "#E3FD16",
+        darkGreen: "#34C759",
       },
       fontFamily: {
         spaceMono: ["Space Mono", "monospace"],

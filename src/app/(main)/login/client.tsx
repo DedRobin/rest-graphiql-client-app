@@ -14,6 +14,7 @@ import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import { toast } from "react-toastify";
 import localeData from "@/services/locale/lang.json";
 import { useLocale } from "@/services/locale/contex";
+import { errorMessageList } from "@/services/error-boundary/constants";
 
 export default function Login() {
   const {
@@ -27,7 +28,11 @@ export default function Login() {
   const { language } = useLocale();
 
   const [error, setError] = useState<string | null>(null);
-  if (error) throw new Error(error);
+  if (error) {
+    const msg = errorMessageList[error];
+    if (msg) throw new Error(msg[language]);
+    throw new Error(error);
+  }
 
   useEffect(() => {
     if (user) router.push(Route.Main);
@@ -41,7 +46,7 @@ export default function Login() {
     const { response, error } = await loginWithEmailAndPassword(data);
     if (error) setError(error.message);
     else if (response && response.status === 200) {
-      toast.success("The login was completed successfully");
+      toast.success(localeData.login.toast.loginSuccess[language]);
       router.push(Route.Main);
       router.refresh();
     }

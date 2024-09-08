@@ -41,13 +41,13 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={spaceMono.className}>
-        <ExpectedErrorBoundary>
-          <LocaleProvider>
-            <ToastProvider>
+        <ToastProvider>
+          <ExpectedErrorBoundary>
+            <LocaleProvider>
               <AuthProvider user={user}>{children}</AuthProvider>
-            </ToastProvider>
-          </LocaleProvider>
-        </ExpectedErrorBoundary>
+            </LocaleProvider>
+          </ExpectedErrorBoundary>
+        </ToastProvider>
       </body>
     </html>
   );

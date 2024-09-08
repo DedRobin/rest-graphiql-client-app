@@ -41,6 +41,12 @@
       }
     }
   },
+  "nav": {
+    "history": {
+      "en": "History",
+      "ru": "История"
+    }
+  },
   "toogleSwitch": {
     "textEng": {
       "en": "Eng",

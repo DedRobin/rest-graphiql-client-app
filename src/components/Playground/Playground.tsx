@@ -64,7 +64,7 @@ export function Playground() {
         {/*Headers*/}
         <textarea
           rows={8}
-          placeholder="Headers"
+          placeholder={localeData.graphql.readonlyEditor.placeholder[language]}
           defaultValue={headers.toString()}
         />
       </div>

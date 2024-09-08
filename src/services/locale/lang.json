@@ -8,5 +8,19 @@
       "en": "Ru",
       "ru": "Рус."
     }
+  },
+  "authBtnGroup": {
+    "login": {
+      "en": "Login",
+      "ru": "Войти"
+    },
+    "logout": {
+      "en": "Logout",
+      "ru": "Выйти"
+    },
+    "register": {
+      "en": "Register",
+      "ru": "Регистрация"
+    }
   }
 }

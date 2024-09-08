@@ -1,12 +1,12 @@
 {
-  "langToogle": {
-    "onEng": {
+  "toogleSwitch": {
+    "textEng": {
       "en": "Eng",
       "ru": "Англ."
     },
-    "onRu": {
+    "textRu": {
       "en": "Ru",
-      "ru": "Рус."
+      "ru": "Русск."
     }
   }
 }

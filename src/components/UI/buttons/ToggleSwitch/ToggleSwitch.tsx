@@ -27,7 +27,7 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
     <div className="flex items-center gap-2 mr-2">
       {/* Left label */}
       <h5 className="text-mediumGray">
-        {localeData.langToogle.onEng[language]}
+        {localeData.toogleSwitch.textEng[language]}
       </h5>
 
       {/* Toggle button */}
@@ -43,7 +43,9 @@ export const ToggleSwitch: React.FC<ToggleSwitchProps> = ({
       </button>
 
       {/* Right label */}
-      <h5 className="text-mediumGray">Ru</h5>
+      <h5 className="text-mediumGray">
+        {localeData.toogleSwitch.textRu[language]}
+      </h5>
     </div>
   );
 };

@@ -14,7 +14,6 @@ import { useLocale } from "@/services/locale/contex";
 export function Header() {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
   const { language, changeLanguage } = useLocale();
-  const [toggleChecked, setToggleChecked] = useState(language === "ru");
 
   const toggleBurgerMenu = () => {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);
@@ -22,7 +21,6 @@ export function Header() {
 
   const handleToggle = (checked: boolean) => {
     changeLanguage(checked ? "ru" : "en");
-    setToggleChecked(checked);
     console.log("Toggle is now:", checked);
   };
 
@@ -34,11 +32,7 @@ export function Header() {
 
       <div className="hidden sm:flex items-center gap-4 w-full ml-4">
         <Nav />
-        <ToggleSwitch
-          language={language}
-          isChecked={toggleChecked}
-          onToggle={handleToggle}
-        />
+        <ToggleSwitch language={language} onToggle={handleToggle} />
         <AuthBtnGroup />
       </div>
 

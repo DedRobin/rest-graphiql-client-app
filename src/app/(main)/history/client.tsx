@@ -8,7 +8,7 @@ import { LSKey } from "@/constants/localStorageKeys";
 import { HistoryData } from "@/components/HistoryData/HistoryData";
 
 export default function History() {
-  const { value: historyData, setValue: setHistoryData } = useLocalStorage(
+  const { value: historyData, setNewValue: setHistoryData } = useLocalStorage(
     LSKey.HistoryData,
   );
 

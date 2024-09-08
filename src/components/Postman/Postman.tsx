@@ -7,16 +7,14 @@ import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 export function Postman() {
   const {
     endpoint,
-    executeQuery,
-    response,
-    isLoading,
-    variables,
-    setVariables,
     headers,
-    setHeaders,
     searchParams,
-    setSearchParams,
+    variables,
+    isLoading,
+    response,
+    executeQuery,
     setEndpoint,
+    setParamsByField,
   } = usePostman();
 
   const responseValue =
@@ -37,15 +35,19 @@ export function Postman() {
         />
       </div>
       <div>
-        <ParamsEditor params={headers} setParams={setHeaders} title="Headers" />
+        <ParamsEditor
+          params={headers}
+          setParams={(params) => setParamsByField(params, "headers")}
+          title="Headers"
+        />
         <ParamsEditor
           params={searchParams}
-          setParams={setSearchParams}
+          setParams={(params) => setParamsByField(params, "searchParams")}
           title="Search Params"
         />
         <ParamsEditor
           params={variables}
-          setParams={setVariables}
+          setParams={(params) => setParamsByField(params, "variables")}
           title="Variables"
         />
         {/*Response*/}

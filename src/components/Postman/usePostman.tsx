@@ -16,6 +16,7 @@ import {
 import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
 import { decodeBase64 } from "@/utils/base64";
 import {
+  FieldWithParams,
   PostmanActionTypes,
   postmanReducer,
 } from "@/components/Postman/postmanReducer";
@@ -131,24 +132,11 @@ export function usePostman() {
     });
   }
 
-  function setSearchParams(newSearchParams: Param[]) {
+  function setParamsByField(newSearchParams: Param[], field: FieldWithParams) {
     dispatch({
-      type: PostmanActionTypes.SET_SEARCH_PARAMS,
+      type: PostmanActionTypes.SET_PARAMS,
+      field,
       payload: newSearchParams,
-    });
-  }
-
-  function setVariables(newVariables: Param[]) {
-    dispatch({
-      type: PostmanActionTypes.SET_VARIABLES,
-      payload: newVariables,
-    });
-  }
-
-  function setHeaders(newHeaders: Param[]) {
-    dispatch({
-      type: PostmanActionTypes.SET_HEADERS,
-      payload: newHeaders,
     });
   }
 
@@ -156,9 +144,7 @@ export function usePostman() {
     ...state,
     response,
     setEndpoint,
-    setVariables,
-    setHeaders,
-    setSearchParams,
+    setParamsByField,
     executeQuery,
   };
 }

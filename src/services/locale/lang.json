@@ -65,6 +65,12 @@
         "en": "Schema",
         "ru": "Схема"
       }
+    }, 
+    "readonlyEditor":{
+      "placeholder":{
+        "en": "Headers",
+        "ru": "Заголовки"
+      }
     }
   },
   "login": {

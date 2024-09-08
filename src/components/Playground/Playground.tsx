@@ -66,7 +66,7 @@ export function Playground({ settings }: { settings: PlaygroundSettings }) {
         <ReadOnlyEditor value={responseValue} />
         <textarea
           rows={8}
-          placeholder="Headers"
+          placeholder={localeData.graphql.readonlyEditor.placeholder[language]}
           defaultValue={headers.toString()}
         />
       </div>

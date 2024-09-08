@@ -8,7 +8,10 @@ import {
   createSearchParamsURLFormParams,
 } from "@/utils/paramsUtils";
 import { usePathname } from "next/navigation";
-import { createRestfullURL } from "@/components/Postman/utils";
+import {
+  createRestfullURL,
+  replaceTagsToVariableValue,
+} from "@/components/Postman/utils";
 import { updateUrlInBrowser } from "@/utils/updateUrlInBrowser";
 import { decodeBase64 } from "@/utils/base64";
 
@@ -77,8 +80,9 @@ export function usePostman() {
 
   async function executeQuery() {
     setIsLoading(true);
+
     const res = await makeRequest(
-      fullEndpoint,
+      replaceTagsToVariableValue(fullEndpoint, variables),
       createRecordFromParams(headers),
       postBody,
       method,
@@ -95,13 +99,18 @@ export function usePostman() {
   function setEndpoint(newEndpoint: string) {
     const newSettings = { ...settings, endpoint: newEndpoint };
     setSettings(newSettings);
-    updateUrlInBrowser(createRestfullURL(newSettings));
+    updateUrlInBrowser(createRestfullURL(newSettings, variables));
   }
 
   function setSearchParams(newSearchParams: Param[]) {
     const newSettings = { ...settings, searchParams: newSearchParams };
     setSettings(newSettings);
-    updateUrlInBrowser(createRestfullURL(newSettings));
+    updateUrlInBrowser(createRestfullURL(newSettings, variables));
+  }
+
+  function handleSetVariables(newVariables: Param[]) {
+    setVariables(newVariables);
+    updateUrlInBrowser(createRestfullURL(settings, newVariables));
   }
 
   return {
@@ -112,7 +121,7 @@ export function usePostman() {
     isLoading,
     variables,
     headers,
-    setVariables,
+    setVariables: handleSetVariables,
     setHeaders,
     searchParams,
     setSearchParams,

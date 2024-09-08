@@ -7,7 +7,7 @@ import { useLocale } from "@/services/locale/contex";
 
 interface BurgerMenuProps {
   isOpen: boolean;
-  onToggle?: (checked: boolean) => void;
+  onToggle: (checked: boolean) => void;
 }
 
 export function BurgerMenu({ isOpen, onToggle }: BurgerMenuProps) {
@@ -19,11 +19,7 @@ export function BurgerMenu({ isOpen, onToggle }: BurgerMenuProps) {
       } sm:hidden`}
     >
       <div className="pl-6 pb-8 pt-2 pr-16">
-        <ToggleSwitch
-          language={language}
-          isChecked={true}
-          onToggle={onToggle}
-        />
+        <ToggleSwitch language={language} onToggle={onToggle} />
         <BurgerNav />
         <AuthBtnGroup />
       </div>

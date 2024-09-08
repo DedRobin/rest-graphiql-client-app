@@ -2,7 +2,8 @@
 
 import { LSKey } from "@/constants/localStorageKeys";
 import { useLocalStorage } from "@/hooks/localStorageHook";
-import { createContext, PropsWithChildren, useContext } from "react";
+import { createContext, PropsWithChildren, useContext, useEffect } from "react";
+import { isTLanguage } from "./utils";
 
 export type TLanguage = "en" | "ru";
 
@@ -22,6 +23,11 @@ export function LocaleProvider({ children }: PropsWithChildren) {
   const changeLanguage = (updatedValue: TLanguage) => {
     setNewValue(updatedValue);
   };
+
+  useEffect(() => {
+    const lang = localStorage.getItem(LSKey.Language);
+    if (!isTLanguage(lang)) localStorage.setItem(LSKey.Language, "en");
+  }, []);
 
   return (
     <LocaleContext.Provider

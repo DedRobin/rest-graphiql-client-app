@@ -18,6 +18,14 @@
       "en": "Main",
       "ru": "Главная"
     },
+    "graphql": {
+      "en": "GraphiQL",
+      "ru": "GraphiQL"
+    },
+    "restfull": {
+      "en": "RESTful",
+      "ru": "RESTful"
+    },
     "history": {
       "en": "History",
       "ru": "История"

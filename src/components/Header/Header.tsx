@@ -9,17 +9,18 @@ import Link from "next/link";
 import { Route } from "@/app/routes";
 import { BurgerMenu } from "./BurgerMenu";
 import { ToggleSwitch } from "../UI/buttons/ToggleSwitch/ToggleSwitch";
+import { useLocale } from "@/services/locale/contex";
 
 export function Header() {
   const [isBurgerMenuOpen, setIsBurgerMenuOpen] = useState(false);
-  const [toggleChecked, setToggleChecked] = useState(true);
+  const { language, changeLanguage } = useLocale();
 
   const toggleBurgerMenu = () => {
     setIsBurgerMenuOpen(!isBurgerMenuOpen);
   };
 
   const handleToggle = (checked: boolean) => {
-    setToggleChecked(checked);
+    changeLanguage(checked ? "ru" : "en");
     console.log("Toggle is now:", checked);
   };
 
@@ -31,7 +32,7 @@ export function Header() {
 
       <div className="hidden sm:flex items-center gap-4 w-full ml-4">
         <Nav />
-        <ToggleSwitch isChecked={toggleChecked} onToggle={handleToggle} />
+        <ToggleSwitch language={language} onToggle={handleToggle} />
         <AuthBtnGroup />
       </div>
 

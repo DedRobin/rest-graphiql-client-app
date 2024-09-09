@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Route } from "@/app/routes";
+import { useLocale } from "@/services/locale/contex";
+import localeData from "@/services/locale/lang.json";
 
 export default function UnauthenticatedSidebarNavigation() {
   const pathname = usePathname();
+  const { language } = useLocale();
 
   const isActive = (route: string) => pathname === route;
 
@@ -17,7 +20,7 @@ export default function UnauthenticatedSidebarNavigation() {
           isActive(Route.Main) ? "text-lightGray" : ""
         }`}
       >
-        Main
+        {localeData.unauthenticatedSidebarNavigation.main[language]}
       </Link>
       <Link
         href={Route.Login}
@@ -25,7 +28,7 @@ export default function UnauthenticatedSidebarNavigation() {
           isActive(Route.Login) ? "text-lightGray" : ""
         }`}
       >
-        Login
+        {localeData.unauthenticatedSidebarNavigation.login[language]}
       </Link>
       <Link
         href={Route.Registration}
@@ -33,7 +36,7 @@ export default function UnauthenticatedSidebarNavigation() {
           isActive(Route.Registration) ? "text-lightGray" : ""
         }`}
       >
-        Register
+        {localeData.unauthenticatedSidebarNavigation.register[language]}
       </Link>
     </>
   );

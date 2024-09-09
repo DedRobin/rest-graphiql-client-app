@@ -2,10 +2,13 @@ import { Route } from "@/app/routes";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useLocale } from "@/services/locale/contex";
+import localeData from "@/services/locale/lang.json";
 
 export function Nav() {
   const { user } = useAuth();
   const pathname = usePathname();
+  const { language } = useLocale();
 
   const isActive = (route: string) => pathname === route;
 
@@ -29,7 +32,7 @@ export function Nav() {
           <>
             {renderNavLink(Route.GraphQL, "GraphQL")}
             {renderNavLink(Route.RESTfull, "RESTfull")}
-            {renderNavLink(Route.History, "History")}
+            {renderNavLink(Route.History, localeData.nav.history[language])}
           </>
         )}
       </ul>

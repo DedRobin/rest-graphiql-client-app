@@ -4,9 +4,7 @@ import Link from "next/link";
 export function DataItem({ item }: { item: { [key: string]: string } }) {
   return (
     <Link
-      href={
-        ["GET", "POST"].includes(item.method) ? Route.RESTfull : Route.GraphQL
-      }
+      href={["GET", "POST"].includes(item.method) ? Route.Get : Route.GraphQL}
       className="request"
     >
       <div className="request-row grid grid-cols-4 *:border-2">

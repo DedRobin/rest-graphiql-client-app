@@ -31,7 +31,7 @@ export function BurgerNav() {
         {user && (
           <>
             {renderNavLink(Route.GraphQL, "GraphQL")}
-            {renderNavLink(Route.RESTfull, "RESTfull")}
+            {renderNavLink(Route.Get, "RESTfull")}
             {renderNavLink(Route.History, localeData.nav.history[language])}
           </>
         )}

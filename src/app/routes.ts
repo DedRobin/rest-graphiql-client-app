@@ -5,7 +5,6 @@ enum Route {
   GraphQL = "/GRAPHQL",
   Get = "/GET",
   Post = "/POST",
-  RESTfull = "/restfull",
   History = "/history",
 }
 

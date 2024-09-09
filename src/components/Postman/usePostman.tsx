@@ -110,6 +110,7 @@ export function usePostman() {
       postBody,
       method,
     );
+
     const responseData = await res.json();
 
     const formattedResponse = JSON.stringify(responseData, null, 2);

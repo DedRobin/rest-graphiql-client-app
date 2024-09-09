@@ -6,6 +6,7 @@ import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 
 export function Postman() {
   const {
+
     endpoint,
     headers,
     searchParams,
@@ -22,11 +23,14 @@ export function Postman() {
 
   return (
     <div>
+
       <div className={"flex gap-2 w-[800px]"}>
+
         <TempButton title="Execute" onClick={executeQuery}>
           Execute
         </TempButton>
         <input
+
           className="bg-gray-800 w-[800px]"
           type="text"
           placeholder="Endpoint"

@@ -12,6 +12,9 @@ import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
 import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 import { toast } from "react-toastify";
+import localeData from "@/services/locale/lang.json";
+import { useLocale } from "@/services/locale/contex";
+import { errorMessageList } from "@/services/error-boundary/constants";
 
 export default function Login() {
   const {
@@ -22,9 +25,14 @@ export default function Login() {
   } = useForm<TLoginForm>();
   const { user } = useAuth();
   const router = useRouter();
+  const { language } = useLocale();
 
   const [error, setError] = useState<string | null>(null);
-  if (error) throw new Error(error);
+  if (error) {
+    const msg = errorMessageList[error];
+    if (msg) throw new Error(msg[language]);
+    throw new Error(error);
+  }
 
   useEffect(() => {
     if (user) router.push(Route.Main);
@@ -38,7 +46,7 @@ export default function Login() {
     const { response, error } = await loginWithEmailAndPassword(data);
     if (error) setError(error.message);
     else if (response && response.status === 200) {
-      toast.success("The login was completed successfully");
+      toast.success(localeData.login.toast.loginSuccess[language]);
       router.push(Route.Main);
       router.refresh();
     }
@@ -50,36 +58,37 @@ export default function Login() {
         className="flex-container col-span-8 sm:col-span-8 md:col-span-6 lg:col-span-4"
         onSubmit={handleSubmit(login)}
       >
-        <h2>Please Login</h2>
-        <span className="-mt-2">
-          Login in to your account to continue working with APIs and graphs.
-          Experience the simplicity and power of our unified tool in one
-          interface.
-        </span>
+        <h2>{localeData.login.heading[language]}</h2>
+        <span className="-mt-2">{localeData.login.text[language]}</span>
         <EmailInput
-          label="Email"
-          placeholder="Enter your email"
+          label={localeData.login.form.email.label[language]}
+          placeholder={localeData.login.form.email.placeholder[language]}
           value={email}
           onChange={register("email").onChange}
           error={errors?.email?.message}
           register={register("email")}
         />
         <PasswordInput
-          label="Password"
-          placeholder="Enter your password"
+          label={localeData.login.form.password.label[language]}
+          placeholder={localeData.login.form.password.placeholder[language]}
           value={password}
           error={errors?.password?.message}
           disabled={false}
           register={register("password")}
         />
         <div className="flex justify-between items-center mt-4">
-          <LargeButton disabled={isButtonDisabled} disabledText="Login">
-            Sign in
+          <LargeButton
+            disabled={isButtonDisabled}
+            disabledText={localeData.login.form.signInBtn[language]}
+          >
+            {localeData.login.form.signInBtn[language]}
           </LargeButton>
           <div className="opacity-60">
             <span>
-              Don&apos;t have an account?&nbsp;
-              <Link href={Route.Registration}>Register now</Link>
+              {localeData.login.form.register.text[language]}
+              <Link href={Route.Registration}>
+                {localeData.login.form.register.link[language]}
+              </Link>
             </span>
           </div>
         </div>

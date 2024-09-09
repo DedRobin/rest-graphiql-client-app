@@ -3,9 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Route } from "@/app/routes";
+import localeData from "@/services/locale/lang.json";
+import { useLocale } from "@/services/locale/contex";
 
 export default function AuthenticatedSidebarNavigation() {
   const pathname = usePathname();
+  const { language } = useLocale();
 
   const isActive = (route: string) => pathname === route;
 
@@ -17,7 +20,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.Main) ? "text-lightGray" : ""
         }`}
       >
-        Main
+        {localeData.authenticatedSidebarNavigation.main[language]}
       </Link>
       <Link
         href={Route.RESTfull}
@@ -25,7 +28,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.RESTfull) ? "text-lightGray" : ""
         }`}
       >
-        RESTful
+        {localeData.authenticatedSidebarNavigation.graphql[language]}
       </Link>
       <Link
         href={Route.GraphQL}
@@ -33,7 +36,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.GraphQL) ? "text-lightGray" : ""
         }`}
       >
-        GraphiQL
+        {localeData.authenticatedSidebarNavigation.restfull[language]}
       </Link>
       <Link
         href={Route.History}
@@ -41,7 +44,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.History) ? "text-lightGray" : ""
         }`}
       >
-        History
+        {localeData.authenticatedSidebarNavigation.history[language]}
       </Link>
     </>
   );

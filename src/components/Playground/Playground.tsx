@@ -5,6 +5,8 @@ import { graphql } from "cm6-graphql";
 import { EditableEditor } from "@/components/Editors/EditableEditor";
 import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
+import { useLocale } from "@/services/locale/contex";
+import localeData from "@/services/locale/lang.json";
 
 export function Playground() {
   const {
@@ -20,6 +22,8 @@ export function Playground() {
 
   const { headers, variables, endpoint, query } = settings;
 
+  const { language } = useLocale();
+
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
   // когда запрашиваем схему эдитор начинает прыгать  - пока видимо так оставим. после как авто подгрузку сделаем  - тут что поменяем, скорее не будет загрузка влиять на содержание респонс едитора
@@ -28,13 +32,13 @@ export function Playground() {
     <div>
       <div className={"flex gap-2"}>
         <TempButton title="Prettify" onClick={prettify}>
-          Prettify
+          {localeData.graphql.buttons.prettify[language]}
         </TempButton>
         <TempButton title="Execute" onClick={executeQuery}>
-          Execute
+          {localeData.graphql.buttons.execute[language]}
         </TempButton>
         <TempButton title="Schema" onClick={getSchema}>
-          Schema
+          {localeData.graphql.buttons.schema[language]}
         </TempButton>
         <input
           type="text"
@@ -60,7 +64,7 @@ export function Playground() {
         {/*Headers*/}
         <textarea
           rows={8}
-          placeholder="Headers"
+          placeholder={localeData.graphql.readonlyEditor.placeholder[language]}
           defaultValue={headers.toString()}
         />
       </div>

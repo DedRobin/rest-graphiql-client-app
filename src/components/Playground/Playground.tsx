@@ -1,4 +1,3 @@
-import { TempButton } from "@/components/UI/TempButton";
 import { usePlayground } from "@/components/Playground/usePlayground";
 import { SchemaViewer } from "@/components/Playground/SchemaViewer/SchemaViewer";
 import { graphql } from "cm6-graphql";

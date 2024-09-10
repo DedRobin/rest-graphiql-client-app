@@ -7,7 +7,7 @@ interface TextInputProps {
   placeholder?: string;
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur?: () => void;
+  onBlur?: React.FocusEventHandler<HTMLInputElement>;
   error?: string;
   disabled?: boolean;
   register?: UseFormRegisterReturn;

@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { Param } from "@/types/Param";
+import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
+import { Button } from "@/components/UI/buttons/Button";
+import { TrashIcon } from "@/components/UI/buttons/TrashIcon";
 
 export function ParamKeyValue({
   param,
   changeParamOnBlur,
-  deleteParam,
+  removeParam,
 }: {
   param: Param;
   changeParamOnBlur: (param: Param) => void;
-  deleteParam: (id: number) => void;
+  removeParam: (id: number) => void;
 }) {
   const { value, key, id } = param;
 
@@ -32,24 +35,26 @@ export function ParamKeyValue({
   }
 
   return (
-    <div className="my-2">
-      <input
-        className="bg-black border-amber-50 border-2 mr-2"
-        type="text"
+    <div className="flex gap-2 items-center">
+      <TextInput
+        className="bg-darkGray"
+        placeholder="Key"
         value={localKey}
-        onBlur={(event) => onBlurKey(event.target.value)}
-        onChange={(event) => setLocalKey(event.target.value)}
+        onBlur={(e) => onBlurKey(e.target.value)}
+        onChange={(e) => setLocalKey(e.target.value)}
       />
-      <input
-        type="text"
-        className="bg-black border-amber-50 border-2"
+      <TextInput
+        className="bg-darkGray"
+        placeholder="Value"
         value={localValue}
-        onBlur={(event) => onBlurValue(event.target.value)}
-        onChange={(event) => setLocalValue(event.target.value)}
+        onBlur={(e) => onBlurValue(e.target.value)}
+        onChange={(e) => setLocalValue(e.target.value)}
       />
-      <button type="button" onClick={() => deleteParam(id)}>
-        Delete
-      </button>
+      <Button
+        title="Remove"
+        onClick={() => removeParam(id)}
+        IconComponent={TrashIcon}
+      ></Button>
     </div>
   );
 }

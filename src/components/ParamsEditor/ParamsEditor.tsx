@@ -39,7 +39,7 @@ export function ParamsEditor({
           <ParamKeyValue
             param={param}
             key={param.id}
-            deleteParam={deleteParam}
+            removeParam={deleteParam}
             changeParamOnBlur={changeParamOnBlur}
           />
         );

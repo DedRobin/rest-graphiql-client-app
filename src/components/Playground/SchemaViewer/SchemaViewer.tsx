@@ -22,18 +22,20 @@ export function SchemaViewer({ schema }: { schema: GraphQLSchema }) {
   }
 
   return (
-    <div>
-      <QueriesTab queries={queries} setOpenedTypes={setOpenedTypes} />
-      {openedTypes.map((openedType, index) => {
-        return (
-          <TypeTab
-            key={index}
-            typeToDisplay={openedType}
-            tabIndex={index}
-            addNewTypeToDisplay={addNewTypeToDisplay}
-          />
-        );
-      })}
+    <div className="w-full flex flex-row relative">
+      <QueriesTab
+        queries={queries}
+        openedTypes={openedTypes}
+        setOpenedTypes={setOpenedTypes}
+      />
+      {openedTypes.map((openedType, index) => (
+        <TypeTab
+          key={index}
+          typeToDisplay={openedType}
+          tabIndex={index}
+          addNewTypeToDisplay={addNewTypeToDisplay}
+        />
+      ))}
     </div>
   );
 }

@@ -79,7 +79,7 @@ a:hover {
 
 @layer components {
   .flex-container {
-    @apply flex flex-col gap-4 px-8 py-6 max-w-lg mx-auto;
+    @apply flex flex-col gap-4 px-8 py-6 mx-auto;
   }
 
   @layer utilities {

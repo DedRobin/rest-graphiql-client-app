@@ -1,7 +1,5 @@
 import React from "react";
 import { TypeToDisplay } from "../types";
-import { Field } from "@/components/Playground/SchemaViewer/ui/Field";
-
 import {
   isOutputFieldType,
   isScalarFieldType,
@@ -15,11 +13,11 @@ export function TypeTabHeader({
   const { name, type } = typeToDisplay;
 
   const tabHeaderWithoutArgs = (
-    <p>
+    <h5 className="text-green">
       {name}
       {": "}
       {type.toString()}
-    </p>
+    </h5>
   );
 
   if (isScalarFieldType(typeToDisplay)) {
@@ -35,18 +33,16 @@ export function TypeTabHeader({
   }
 
   return (
-    <div>
-      <p>{`${name} (`}</p>
+    <div className="text-green">
+      <h4>{`${name} (`}</h4>
       {typeToDisplay.args.map((argument) => {
         return (
-          <Field
-            key={argument.name}
-            name={argument.name}
-            type={argument.type.toString()}
-          />
+          <h4 key={argument.name}>
+            {argument.name}: {argument.type.toString()}
+          </h4>
         );
       })}
-      <p>{`): ${type.toString()}`}</p>
+      <h4>{`): ${type.toString()}`}</h4>
     </div>
   );
 }

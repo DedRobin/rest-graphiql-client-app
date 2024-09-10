@@ -1,63 +1,38 @@
-// import React from "react";
-// import { GraphQLField } from "graphql";
-// import { TypeToDisplay } from "./types";
-
-// export function QueriesTab({
-//   queries,
-//   setOpenedTypes,
-// }: {
-//   queries: GraphQLField<unknown, unknown, unknown>[];
-//   setOpenedTypes: React.Dispatch<React.SetStateAction<TypeToDisplay[]>>;
-// }) {
-//   return (
-//     <div>
-//       <h3>Queries</h3>
-//       <ul>
-//         {queries.map((field) => {
-//           return (
-//             <li key={field.name} onClick={() => setOpenedTypes([field])}>
-//               <p>
-//                 name={field.name}: {field.type.toString()}
-//               </p>
-//             </li>
-//           );
-//         })}
-//       </ul>
-//     </div>
-//   );
-// }
-
 import React from "react";
 import { GraphQLField } from "graphql";
 import { TypeToDisplay } from "./types";
 import { Field } from "./ui/Field";
 
-export function QueriesTab({
-  queries,
-  setOpenedTypes,
-  openedTypes,
-}: {
+type SidebarProps = {
   queries: GraphQLField<unknown, unknown, unknown>[];
   openedTypes: TypeToDisplay[];
   setOpenedTypes: React.Dispatch<React.SetStateAction<TypeToDisplay[]>>;
-}) {
+  setIsAccordionVisible: React.Dispatch<React.SetStateAction<boolean>>; // Добавляем пропс
+};
+
+export function Sidebar({
+  queries,
+  openedTypes,
+  setOpenedTypes,
+  setIsAccordionVisible,
+}: SidebarProps) {
+  // Функция для переключения состояния типа
   const toggleType = (field: TypeToDisplay) => {
     setOpenedTypes((prev) => {
       const isAlreadyOpen = prev.some(
         (openedType) => openedType.name === field.name,
       );
-      if (isAlreadyOpen) {
-        // Закрываем вкладку, если она уже открыта
-        return prev.filter((openedType) => openedType.name !== field.name);
-      } else {
-        // Открываем новую вкладку
-        return [...prev, field];
-      }
+      // Закрываем все вкладки и открываем только выбранную
+      return isAlreadyOpen
+        ? [] // Если вкладка уже открыта, закрываем её
+        : [field]; // Иначе открываем только выбранную вкладку
     });
+    setIsAccordionVisible(true); // Открываем аккордеон при нажатии на таб
   };
 
   return (
-    <div className="flex flex-col w-full">
+    <div className="w-full flex flex-col">
+      <div className="flex flex-row items-center"></div>
       <h5 className="text-green pb-1">Schema queries</h5>
       <div className="custom-scroll max-h-[calc(100vh-464px)] overflow-y-auto pr-2">
         <ul>

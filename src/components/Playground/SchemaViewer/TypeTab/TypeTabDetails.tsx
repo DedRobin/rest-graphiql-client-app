@@ -18,8 +18,8 @@ export function TypeTabDetails({
   if (isScalarType(pureType)) {
     return (
       <div>
-        <h4>Scalar type</h4>
-        <p>{pureType.description}</p>
+        <h4 className="pb-2 text-green">Scalar type</h4>
+        <h6 className="text-mediumGray">{pureType.description}</h6>
         <Field name="scalar" type={pureType.name} />
       </div>
     );
@@ -37,8 +37,8 @@ export function TypeTabDetails({
 
   return (
     <div>
-      <h4>Details</h4>
-      <p>{`${pureType.toString()} {`}</p>
+      <h4 className="pb-2 text-green">Details</h4>
+      <h6 className="-pb-3 text-mediumGray">{`${pureType.toString()} {`}</h6>
       <ul>
         {fields.map((field) => {
           const { name, type } = field;
@@ -49,7 +49,7 @@ export function TypeTabDetails({
           );
         })}
       </ul>
-      {"}"}
+      <h6 className=" text-mediumGray">{`}`}</h6>
     </div>
   );
 }

@@ -30,7 +30,7 @@ export function TypeTabArguments({
 
   return (
     <div>
-      <h4>Arguments</h4>
+      <h4 className="pt-2 text-green">Arguments</h4>
       <ul>
         {typeToDisplay.args.map((argument) => {
           const { name, type } = argument;

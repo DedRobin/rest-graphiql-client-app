@@ -15,19 +15,21 @@ export function TypeTab({
   addNewTypeToDisplay: (type: TypeToDisplay, tabIndex: number) => void;
 }) {
   return (
-    <div>
+    <div className="flex-container ml-0 mr-0 pb-0 flex w-1/4 z-10 flex-col max-h-[calc(100vh-96px)]">
       <TypeTabHeader typeToDisplay={typeToDisplay} />
       <TypeTabDescription typeToDisplay={typeToDisplay} />
-      <TypeTabDetails
-        typeToDisplay={typeToDisplay}
-        tabIndex={tabIndex}
-        addNewTypeToDisplay={addNewTypeToDisplay}
-      />
-      <TypeTabArguments
-        typeToDisplay={typeToDisplay}
-        tabIndex={tabIndex}
-        addNewTypeToDisplay={addNewTypeToDisplay}
-      />
+      <div className="flex flex-col gap-2 custom-scroll overflow-y-auto pr-2 w-full">
+        <TypeTabDetails
+          typeToDisplay={typeToDisplay}
+          tabIndex={tabIndex}
+          addNewTypeToDisplay={addNewTypeToDisplay}
+        />
+        <TypeTabArguments
+          typeToDisplay={typeToDisplay}
+          tabIndex={tabIndex}
+          addNewTypeToDisplay={addNewTypeToDisplay}
+        />
+      </div>
     </div>
   );
 }

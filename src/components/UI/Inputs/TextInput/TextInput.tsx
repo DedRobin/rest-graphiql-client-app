@@ -12,12 +12,14 @@ interface TextInputProps {
   disabled?: boolean;
   register?: UseFormRegisterReturn;
   className?: string;
+  defaultValue?: string;
 }
 
 export const TextInput: React.FC<TextInputProps> = ({
   label,
   placeholder,
   value,
+  defaultValue,
   onChange,
   onBlur,
   error,
@@ -43,6 +45,7 @@ export const TextInput: React.FC<TextInputProps> = ({
         onChange={onChange}
         onBlur={onBlur}
         disabled={disabled}
+        defaultValue={defaultValue}
         className={cn(
           "w-full px-4 py-2 placeholder-mediumGray bg-black border border-mediumGray rounded-none",
           "text-h6 font-h6 leading-h6 tracking-h6 text-lightGray",

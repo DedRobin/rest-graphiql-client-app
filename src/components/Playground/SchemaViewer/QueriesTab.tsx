@@ -33,19 +33,6 @@ export function QueriesTab({
           })}
         </ul>
       </div>
-
-      <h3>Queries</h3>
-      <ul>
-        {queries.map((field) => {
-          return (
-            <li key={field.name} onClick={() => setOpenedTypes([field])}>
-              <p>
-                name={field.name}: {field.type.toString()}
-              </p>
-            </li>
-          );
-        })}
-      </ul>
     </>
   );
 }

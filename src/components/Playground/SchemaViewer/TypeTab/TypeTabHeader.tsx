@@ -1,6 +1,5 @@
 import React from "react";
 import { TypeToDisplay } from "../types";
-import { Field } from "@/components/Playground/SchemaViewer/ui/Field";
 
 import {
   isOutputFieldType,
@@ -35,18 +34,16 @@ export function TypeTabHeader({
   }
 
   return (
-    <div>
+    <div className="text-green">
       <p>{`${name} (`}</p>
       {typeToDisplay.args.map((argument) => {
         return (
-          <Field
-            key={argument.name}
-            name={argument.name}
-            type={argument.type.toString()}
-          />
+          <h4 key={argument.name}>
+            {argument.name}: {argument.type.toString()}
+          </h4>
         );
       })}
-      <p>{`): ${type.toString()}`}</p>
+      <h4>{`): ${type.toString()}`}</h4>
     </div>
   );
 }

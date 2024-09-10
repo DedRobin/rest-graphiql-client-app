@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import {
   buildClientSchema,
   getIntrospectionQuery,
@@ -110,9 +110,10 @@ export function usePlayground() {
     });
   }
 
-  async function getSchema() {
+  const getSchema = useCallback(async () => {
     dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
+
     const headersOfRequest = createHeadersOfRequest();
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createBodyOfRequest(introspectionQuery);
@@ -130,10 +131,38 @@ export function usePlayground() {
         type: PlaygroundActionTypes.SET_SCHEMA,
         payload: clientSchema,
       });
+      console.log("Ye");
     } catch (error) {
       handleError("HTTP Error", error);
     }
-  }
+  }, [endpoint]);
+
+  // async function getSchema() {
+  //   dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
+  //   dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
+  //
+  //   const headersOfRequest = createHeadersOfRequest();
+  //   const introspectionQuery = getIntrospectionQuery();
+  //   const bodyOfRequest = createBodyOfRequest(introspectionQuery);
+  //
+  //   try {
+  //     const response = await makeRequest(
+  //       endpoint,
+  //       headersOfRequest,
+  //       bodyOfRequest,
+  //       "POST",
+  //     );
+  //     const { data } = await response.json();
+  //     const clientSchema = buildClientSchema(data);
+  //     dispatch({
+  //       type: PlaygroundActionTypes.SET_SCHEMA,
+  //       payload: clientSchema,
+  //     });
+  //     console.log("Ye");
+  //   } catch (error) {
+  //     handleError("HTTP Error", error);
+  //   }
+  // }
 
   async function executeQuery() {
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
@@ -183,6 +212,10 @@ export function usePlayground() {
   useEffect(() => {
     updateUrlInBrowser(createPlaygroundURL(settings));
   }, [settings]);
+
+  useEffect(() => {
+    getSchema();
+  }, [endpoint, getSchema]);
 
   function setHeaders(newHeaders: Param[]) {
     const newSettings = { ...settings, headers: newHeaders };

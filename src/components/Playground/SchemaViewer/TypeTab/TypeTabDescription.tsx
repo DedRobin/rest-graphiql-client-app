@@ -8,5 +8,9 @@ export function TypeTabDescription({
 }) {
   const { description } = typeToDisplay;
 
-  return <p>{description || "Type without description"}</p>;
+  return (
+    <h6 className="text-mediumGray -mt-2">
+      {description || "Type without description"}
+    </h6>
+  );
 }

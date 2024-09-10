@@ -1,11 +1,11 @@
-import { PlaygroundSettings } from "@/components/Playground/types";
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { Route } from "@/app/routes";
 import { encodeBase64 } from "@/utils/base64";
 import { createSearchParamsURLFromParams } from "@/utils/paramsUtils";
+import { PlaygroundState } from "@/components/Playground/usePlayground";
 
-function encodePlaygroundSettings(settings: PlaygroundSettings): string {
-  const { endpoint, variables, query } = settings;
+function encodePlaygroundSettings(state: PlaygroundState): string {
+  const { endpoint, variables, query } = state;
 
   const encodedEndpoint = encodeBase64(endpoint);
 
@@ -15,6 +15,6 @@ function encodePlaygroundSettings(settings: PlaygroundSettings): string {
   return `${encodedEndpoint}/${encodedBody}`;
 }
 
-export function createPlaygroundURL(settings: PlaygroundSettings) {
-  return `${Route.GraphQL}/${encodePlaygroundSettings(settings)}${createSearchParamsURLFromParams(settings.headers)}`;
+export function createPlaygroundURL(state: PlaygroundState) {
+  return `${Route.GraphQL}/${encodePlaygroundSettings(state)}${createSearchParamsURLFromParams(state.headers)}`;
 }

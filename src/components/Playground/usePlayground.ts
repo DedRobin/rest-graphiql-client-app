@@ -9,71 +9,79 @@ import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersO
 import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
 import { makeRequest } from "@/services/requests/makeRequest";
 import {
+  FieldWithString,
   PlaygroundActionTypes,
   playgroundReducer,
 } from "@/components/Playground/playgroundReducer";
 import { hasMessageField } from "@/utils/hasMessageField";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  PlaygroundSettings,
-  PlaygroundState,
-} from "@/components/Playground/types";
 import { decodeBase64 } from "@/utils/base64";
 import { createPlaygroundURL } from "@/components/Playground/utils";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
 import { createParamsFromUrlSearchParams } from "@/utils/paramsUtils";
 import { Param } from "@/types/Param";
+import { ResponseData } from "@/types/ResponseData";
+import { GraphQLSchema } from "graphql/type";
+
+export interface PlaygroundState {
+  response: ResponseData;
+  schema: GraphQLSchema | undefined;
+  isLoading: boolean;
+  endpoint: string;
+  query: string;
+  variables: string;
+  headers: Param[];
+}
+
+const initState: PlaygroundState = {
+  schema: undefined,
+  isLoading: false,
+  endpoint: "",
+  query: "",
+  variables: "",
+  headers: [],
+  response: {
+    status: undefined,
+    body: "",
+    error: "",
+  },
+};
 
 export function usePlayground() {
   const slug = usePathname().split("/");
   const urlSearchParams = useSearchParams();
 
-  const initSettings = parseGraphQLSlug(slug, urlSearchParams);
+  const stateFromUrl = parseGraphQLSlug(slug, urlSearchParams);
 
-  const initialPlaygroundState: PlaygroundState = {
-    settings: initSettings,
-    isLoading: false,
-    response: { status: undefined, body: "", error: "" },
-    schema: undefined,
-  };
+  const [state, dispatch] = useReducer(playgroundReducer, stateFromUrl);
 
-  const [state, dispatch] = useReducer(
-    playgroundReducer,
-    initialPlaygroundState,
-  );
-
-  const { settings } = state;
-
-  const { endpoint, variables, query, headers } = settings;
+  const { endpoint, variables, query } = state;
 
   function parseGraphQLSlug(
     slug: string[],
     urlSearchParams: URLSearchParams,
-  ): PlaygroundSettings {
+  ): PlaygroundState {
     const [, , endpoint, body] = slug.map(decodeBase64);
 
     const headers = createParamsFromUrlSearchParams(urlSearchParams);
 
-    const emptySettings: PlaygroundSettings = {
-      query: "",
-      endpoint: "",
-      variables: "",
+    const emptyState: PlaygroundState = {
+      ...initState,
       headers,
     };
 
-    const settingsWithoutBody: PlaygroundSettings = {
-      query: "",
+    const stateWithoutBody: PlaygroundState = {
+      ...initState,
       endpoint,
-      variables: "",
       headers,
     };
 
     if (!endpoint) {
-      return emptySettings;
+      return emptyState;
     }
 
     if (!body) {
-      return settingsWithoutBody;
+      return stateWithoutBody;
     }
 
     let query = "";
@@ -86,13 +94,13 @@ export function usePlayground() {
         ? JSON.stringify(bodyObj.variables, null, 2)
         : "";
     } catch {
-      updateUrlInBrowser(createPlaygroundURL(settingsWithoutBody));
+      updateUrlInBrowser(createPlaygroundURL(stateWithoutBody));
       console.log(
         "Проброс ошибки что в ссылке был плохой объект и мы его удалили",
       );
     }
 
-    return { query, endpoint, variables, headers };
+    return { ...initState, query, endpoint, variables, headers };
   }
 
   function handleError(title: string, error: unknown, status?: number) {
@@ -137,33 +145,6 @@ export function usePlayground() {
     }
   }, [endpoint]);
 
-  // async function getSchema() {
-  //   dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
-  //   dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
-  //
-  //   const headersOfRequest = createHeadersOfRequest();
-  //   const introspectionQuery = getIntrospectionQuery();
-  //   const bodyOfRequest = createBodyOfRequest(introspectionQuery);
-  //
-  //   try {
-  //     const response = await makeRequest(
-  //       endpoint,
-  //       headersOfRequest,
-  //       bodyOfRequest,
-  //       "POST",
-  //     );
-  //     const { data } = await response.json();
-  //     const clientSchema = buildClientSchema(data);
-  //     dispatch({
-  //       type: PlaygroundActionTypes.SET_SCHEMA,
-  //       payload: clientSchema,
-  //     });
-  //     console.log("Ye");
-  //   } catch (error) {
-  //     handleError("HTTP Error", error);
-  //   }
-  // }
-
   async function executeQuery() {
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
     const headersOfRequest = createHeadersOfRequest();
@@ -195,68 +176,61 @@ export function usePlayground() {
     }
   }
 
-  function setNewSetting(
-    settingName: keyof PlaygroundSettings,
-    value: string | URLSearchParams,
-  ) {
-    if (settings[settingName] === value) {
-      return;
-    }
-    const newSettings = { ...settings, [settingName]: value };
-    dispatch({
-      type: PlaygroundActionTypes.SET_SETTINGS,
-      payload: newSettings,
-    });
-  }
-
-  useEffect(() => {
-    updateUrlInBrowser(createPlaygroundURL(settings));
-  }, [settings]);
-
   useEffect(() => {
     getSchema();
   }, [endpoint, getSchema]);
 
   function setHeaders(newHeaders: Param[]) {
-    const newSettings = { ...settings, headers: newHeaders };
     dispatch({
-      type: PlaygroundActionTypes.SET_SETTINGS,
-      payload: newSettings,
+      type: PlaygroundActionTypes.SET_HEADERS,
+      payload: newHeaders,
     });
   }
 
   function prettify() {
     const prettifiedQuery = print(parse(query));
-
-    let prettifiedVariables;
+    if (prettifiedQuery !== query) {
+      dispatch({
+        type: PlaygroundActionTypes.SET_STR_FIELD,
+        field: "query",
+        payload: prettifiedQuery,
+      });
+    }
 
     try {
-      prettifiedVariables = JSON.stringify(JSON.parse(variables), null, 2);
-    } catch {
-      prettifiedVariables = variables;
-    }
+      const prettifiedVariables = JSON.stringify(
+        JSON.parse(variables),
+        null,
+        2,
+      );
+      if (prettifiedVariables !== variables) {
+        dispatch({
+          type: PlaygroundActionTypes.SET_STR_FIELD,
+          field: "variables",
+          payload: prettifiedVariables,
+        });
+      }
+    } catch {}
+  }
 
-    if (prettifiedQuery === query && prettifiedVariables === variables) {
-      return;
-    }
-
-    const prettifiedSettings: PlaygroundSettings = {
-      query: prettifiedQuery,
-      variables: prettifiedVariables,
-      endpoint,
-      headers,
-    };
+  function setNewStrValue(field: FieldWithString, newValue: string) {
+    if (state[field] === newValue) return;
     dispatch({
-      type: PlaygroundActionTypes.SET_SETTINGS,
-      payload: prettifiedSettings,
+      type: PlaygroundActionTypes.SET_STR_FIELD,
+      field,
+      payload: newValue,
     });
   }
+
+  useEffect(() => {
+    updateUrlInBrowser(createPlaygroundURL(state));
+  }, [state]);
 
   return {
     ...state,
     getSchema,
     executeQuery,
-    setNewSetting,
+    setNewStrValue,
     setHeaders,
     prettify,
   };

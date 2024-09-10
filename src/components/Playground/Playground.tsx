@@ -10,20 +10,22 @@ import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
 import { Button } from "@/components/UI/buttons/Button";
 import { ExecuteIcon } from "@/components/UI/buttons/ExecuteIcon";
 import { PrettifyIcon } from "@/components/UI/buttons/PrettifyIcon";
+import { cn } from "@/utils/cn";
 
 export function Playground() {
   const {
-    settings,
-    schema,
-    executeQuery,
-    response,
-    setNewSetting,
+    endpoint,
+    variables,
+    query,
+    headers,
     isLoading,
-    prettify,
+    schema,
+    response,
+    executeQuery,
+    setNewStrValue,
     setHeaders,
+    prettify,
   } = usePlayground();
-
-  const { headers, variables, endpoint, query } = settings;
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
@@ -41,7 +43,7 @@ export function Playground() {
               label="Endpoint URL"
               placeholder="Endpoint"
               defaultValue={endpoint}
-              onBlur={(e) => setNewSetting("endpoint", e.target.value)}
+              onBlur={(e) => setNewStrValue("endpoint", e.target.value)}
             />
           </div>
 
@@ -62,7 +64,6 @@ export function Playground() {
         <div className="flex justify-between w-full mb-4 pt-8">
           <div className="flex gap-4">
             <Image src="/icons/link.svg" alt="Link" width={24} height={24} />
-
             <h3 className="text-mediumGray">{endpoint}</h3>
           </div>
           <div className="flex gap-4">
@@ -90,13 +91,13 @@ export function Playground() {
               <EditableEditor
                 value={variables}
                 setValueOnBlur={(newValue) =>
-                  setNewSetting("variables", newValue)
+                  setNewStrValue("variables", newValue)
                 }
               />
               <h6 className="mt-1">Query</h6>
               <EditableEditor
                 value={query}
-                setValueOnBlur={(newValue) => setNewSetting("query", newValue)}
+                setValueOnBlur={(newValue) => setNewStrValue("query", newValue)}
                 extensions={schema ? graphql(schema) : undefined}
               />
               <ParamsEditor
@@ -113,13 +114,11 @@ export function Playground() {
               <div className="flex justify-between items-center">
                 <h5 className="text-green">Response</h5>
                 <h6
-                  className={
-                    response.status === 200
-                      ? "text-darkGreen"
-                      : response.status === 400
-                        ? "text-red"
-                        : "text-mediumGray"
-                  }
+                  className={cn(
+                    "text-mediumGray",
+                    { "text-darkGreen": response.status === 200 },
+                    { "text-red": response.status === 400 },
+                  )}
                 >
                   {response.status || "No status"}
                 </h6>

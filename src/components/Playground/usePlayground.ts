@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import {
   buildClientSchema,
   getIntrospectionQuery,
@@ -21,15 +21,17 @@ import {
 import { decodeBase64 } from "@/utils/base64";
 import { createPlaygroundURL } from "@/components/Playground/utils";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
+import { createParamsFromUrlSearchParams } from "@/utils/paramsUtils";
+import { Param } from "@/types/Param";
 
 export function usePlayground() {
   const slug = usePathname().split("/");
-  const headers = useSearchParams();
+  const urlSearchParams = useSearchParams();
 
-  const settings = parseGraphQLSlug(slug, headers);
+  const initSettings = parseGraphQLSlug(slug, urlSearchParams);
 
   const initialPlaygroundState: PlaygroundState = {
-    settings,
+    settings: initSettings,
     isLoading: false,
     response: { status: undefined, body: "", error: "" },
     schema: undefined,
@@ -40,13 +42,17 @@ export function usePlayground() {
     initialPlaygroundState,
   );
 
-  const { endpoint, variables, query } = settings;
+  const { settings } = state;
+
+  const { endpoint, variables, query, headers } = settings;
 
   function parseGraphQLSlug(
     slug: string[],
-    headers: URLSearchParams,
+    urlSearchParams: URLSearchParams,
   ): PlaygroundSettings {
     const [, , endpoint, body] = slug.map(decodeBase64);
+
+    const headers = createParamsFromUrlSearchParams(urlSearchParams);
 
     const emptySettings: PlaygroundSettings = {
       query: "",
@@ -172,7 +178,18 @@ export function usePlayground() {
       type: PlaygroundActionTypes.SET_SETTINGS,
       payload: newSettings,
     });
-    updateUrlInBrowser(createPlaygroundURL(newSettings));
+  }
+
+  useEffect(() => {
+    updateUrlInBrowser(createPlaygroundURL(settings));
+  }, [settings]);
+
+  function setHeaders(newHeaders: Param[]) {
+    const newSettings = { ...settings, headers: newHeaders };
+    dispatch({
+      type: PlaygroundActionTypes.SET_SETTINGS,
+      payload: newSettings,
+    });
   }
 
   function prettify() {
@@ -200,7 +217,6 @@ export function usePlayground() {
       type: PlaygroundActionTypes.SET_SETTINGS,
       payload: prettifiedSettings,
     });
-    updateUrlInBrowser(createPlaygroundURL(prettifiedSettings));
   }
 
   return {
@@ -208,6 +224,7 @@ export function usePlayground() {
     getSchema,
     executeQuery,
     setNewSetting,
+    setHeaders,
     prettify,
   };
 }

@@ -3,8 +3,8 @@ import { Reducer } from "react";
 import {
   PlaygroundSettings,
   PlaygroundState,
-  ResponseData,
 } from "@/components/Playground/types";
+import { ResponseData } from "@/types/ResponseData";
 
 export enum PlaygroundActionTypes {
   SET_SCHEMA,

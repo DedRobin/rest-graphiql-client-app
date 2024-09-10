@@ -12,13 +12,13 @@ export function createSearchParamsURLFromParams(params: Param[]) {
   if (params.length === 0) {
     return "";
   }
+
   const record = createRecordFromParams(params);
   const tail = Object.entries(record)
     .map(([key, value]) => {
       return `${key}=${value}`;
     })
     .join("&");
-
   return `?${tail}`;
 }
 

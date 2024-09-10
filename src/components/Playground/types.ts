@@ -1,11 +1,12 @@
 import { GraphQLSchema } from "graphql/type";
 import { ResponseData } from "@/types/ResponseData";
+import { Param } from "@/types/Param";
 
 export interface PlaygroundSettings {
   endpoint: string;
   query: string;
   variables: string;
-  headers: URLSearchParams;
+  headers: Param[];
 }
 
 export interface PlaygroundState {

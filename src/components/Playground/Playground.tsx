@@ -7,6 +7,7 @@ import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 import { useLocale } from "@/services/locale/contex";
 import localeData from "@/services/locale/lang.json";
+import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 
 export function Playground() {
   const {
@@ -18,6 +19,7 @@ export function Playground() {
     setNewSetting,
     isLoading,
     prettify,
+    setHeaders,
   } = usePlayground();
 
   const { headers, variables, endpoint, query } = settings;
@@ -26,7 +28,6 @@ export function Playground() {
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
-  // когда запрашиваем схему эдитор начинает прыгать  - пока видимо так оставим. после как авто подгрузку сделаем  - тут что поменяем, скорее не будет загрузка влиять на содержание респонс едитора
 
   return (
     <div>
@@ -62,11 +63,7 @@ export function Playground() {
         {/*Response*/}
         <ReadOnlyEditor value={responseValue} />
         {/*Headers*/}
-        <textarea
-          rows={8}
-          placeholder={localeData.graphql.readonlyEditor.placeholder[language]}
-          defaultValue={headers.toString()}
-        />
+        <ParamsEditor params={headers} setParams={setHeaders} title="Headers" />
       </div>
       {schema && <SchemaViewer schema={schema} />}
     </div>

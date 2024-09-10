@@ -51,7 +51,6 @@ export function EditableEditor({
       }),
       extensions ?? [],
     ].flat(),
-    width: "800px",
   };
 
   return <CodeMirror {...editorConfigs} />;

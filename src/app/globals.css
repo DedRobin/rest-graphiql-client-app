@@ -9,7 +9,6 @@ body {
   margin: 0;
   padding-top: 48px;
   padding-bottom: 48px;
-  position: relative;
 }
 
 header,
@@ -80,8 +79,27 @@ a:hover {
 
 @layer components {
   .flex-container {
-    @apply flex flex-col gap-4 px-8 py-6 max-w-lg mx-auto;
+    @apply flex flex-col gap-4 px-8 py-6 mx-auto;
   }
+
+  @layer utilities {
+    .custom-scroll::-webkit-scrollbar {
+      @apply h-1 w-1
+    }
+
+    .custom-scroll::-webkit-scrollbar-track {
+      @apply bg-black; /* Цвет заднего плана скроллбара */
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb {
+      @apply bg-darkGray;
+    }
+
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      @apply bg-mediumGray; /* Цвет ползунка при наведении */
+    }
+  }
+
 
   @media (max-width: 1024px) {
     .flex-container {
@@ -98,3 +116,5 @@ a:hover {
     }
   }
 }
+
+

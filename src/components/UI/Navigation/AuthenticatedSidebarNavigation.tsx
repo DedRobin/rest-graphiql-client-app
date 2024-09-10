@@ -23,9 +23,9 @@ export default function AuthenticatedSidebarNavigation() {
         {localeData.authenticatedSidebarNavigation.main[language]}
       </Link>
       <Link
-        href={Route.RESTfull}
+        href={Route.Get}
         className={`text-h6 font-h6 leading-h6 tracking-h6 ${
-          isActive(Route.RESTfull) ? "text-lightGray" : ""
+          isActive(Route.Get) ? "text-lightGray" : ""
         }`}
       >
         {localeData.authenticatedSidebarNavigation.graphql[language]}

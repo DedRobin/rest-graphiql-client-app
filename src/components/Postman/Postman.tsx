@@ -6,15 +6,15 @@ import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 
 export function Postman() {
   const {
-    executeQuery,
-    setNewSetting,
     endpoint,
-    response,
-    isLoading,
-    variables,
-    setVariables,
     headers,
-    setHeaders,
+    searchParams,
+    variables,
+    isLoading,
+    response,
+    executeQuery,
+    setEndpoint,
+    setParamsByField,
   } = usePostman();
 
   const responseValue =
@@ -22,22 +22,32 @@ export function Postman() {
 
   return (
     <div>
-      <div className={"flex gap-2"}>
+      <div className={"flex gap-2 w-[800px]"}>
         <TempButton title="Execute" onClick={executeQuery}>
           Execute
         </TempButton>
         <input
+          className="bg-gray-800 w-[800px]"
           type="text"
           placeholder="Endpoint"
           defaultValue={endpoint}
-          onBlur={(event) => setNewSetting("endpoint", event.target.value)}
+          onBlur={(event) => setEndpoint(event.target.value)}
         />
       </div>
       <div>
-        <ParamsEditor params={headers} setParams={setHeaders} title="Headers" />
+        <ParamsEditor
+          params={headers}
+          setParams={(params) => setParamsByField(params, "headers")}
+          title="Headers"
+        />
+        <ParamsEditor
+          params={searchParams}
+          setParams={(params) => setParamsByField(params, "searchParams")}
+          title="Search Params"
+        />
         <ParamsEditor
           params={variables}
-          setParams={setVariables}
+          setParams={(params) => setParamsByField(params, "variables")}
           title="Variables"
         />
         {/*Response*/}

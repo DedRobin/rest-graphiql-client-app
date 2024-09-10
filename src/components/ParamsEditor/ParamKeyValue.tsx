@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Param } from "@/components/Postman/types";
+import { Param } from "@/types/Param";
 
 export function ParamKeyValue({
   param,

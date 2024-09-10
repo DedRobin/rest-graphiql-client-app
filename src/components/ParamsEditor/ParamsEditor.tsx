@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction } from "react";
 import { ParamKeyValue } from "@/components/ParamsEditor/ParamKeyValue";
 import { ParamBuilder } from "@/components/ParamsEditor/ParamBuilder";
-import { Param } from "@/components/Postman/types";
+import { Param } from "@/types/Param";
 
 export function ParamsEditor({
   params,
@@ -9,7 +8,7 @@ export function ParamsEditor({
   title,
 }: {
   params: Param[];
-  setParams: Dispatch<SetStateAction<Param[]>>;
+  setParams: (params: Param[]) => void;
   title: string;
 }) {
   function changeParamOnBlur(updatedParam: Param) {

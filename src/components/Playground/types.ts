@@ -1,10 +1,5 @@
 import { GraphQLSchema } from "graphql/type";
-
-export interface ResponseData {
-  status: number | undefined;
-  body: string;
-  error: string;
-}
+import { ResponseData } from "@/types/ResponseData";
 
 export interface PlaygroundSettings {
   endpoint: string;

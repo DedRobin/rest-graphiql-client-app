@@ -52,6 +52,7 @@ export function Postman() {
           params={headers}
           setParams={(params) => setParamsByField(params, "headers")}
           title="Headers"
+          readOnlyItems={method === "POST" ? 1 : 0}
         />
         {method === "GET" && (
           <ParamsEditor

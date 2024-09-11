@@ -7,7 +7,10 @@ import {
   createSearchParamsURLFromParams,
 } from "@/utils/paramsUtils";
 import { usePathname, useSearchParams } from "next/navigation";
-import { createRestfullURL } from "@/components/Postman/utils";
+import {
+  createRestfullURL,
+  isFirstHeaderPostDefault,
+} from "@/components/Postman/utils";
 import { decodeBase64 } from "@/utils/base64";
 import {
   FieldWithParams,
@@ -20,6 +23,7 @@ import { updateUrlInBrowser } from "@/utils/urlUtils";
 import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Method } from "@/types/Method";
 import { PostBody } from "@/components/Postman/types";
+import { READ_ONLY_HEADERS } from "@/constants/requestHeadersDefault";
 
 export interface PostmanState {
   endpoint: string;
@@ -108,7 +112,7 @@ export function usePostman() {
     const res = await makeRequest(
       replaceTagsToVariableValue(fullEndpoint, variables),
       createRecordFromParams(headers),
-      postBody.data,
+      method === "POST" ? postBody.data : undefined,
       method,
     );
 
@@ -126,7 +130,23 @@ export function usePostman() {
     });
   }
 
+  function addReadOnlyHeader() {
+    if (headers.length > 0 && isFirstHeaderPostDefault(headers[0])) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[postBody.type],
+        ...headers.slice(1),
+      ];
+      setParamsByField(newHeaders, "headers");
+    } else {
+      const newHeaders = [READ_ONLY_HEADERS[postBody.type], ...headers];
+      setParamsByField(newHeaders, "headers");
+    }
+  }
+
   function setMethod(newMethod: Method) {
+    if (newMethod === "POST") {
+      addReadOnlyHeader();
+    }
     dispatch({
       type: PostmanActionTypes.SET_METHOD,
       payload: newMethod,
@@ -149,6 +169,14 @@ export function usePostman() {
   }
 
   function setPostBody(newPostBody: PostBody) {
+    if (newPostBody.type !== postBody.type) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[newPostBody.type],
+        ...headers.slice(1),
+      ];
+      setParamsByField(newHeaders, "headers");
+    }
+
     dispatch({
       type: PostmanActionTypes.SET_POST_BODY,
       payload: newPostBody,

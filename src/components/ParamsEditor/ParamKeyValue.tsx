@@ -8,10 +8,12 @@ export function ParamKeyValue({
   param,
   changeParamOnBlur,
   removeParam,
+  isReadOnly,
 }: {
   param: Param;
   changeParamOnBlur: (param: Param) => void;
   removeParam: (id: number) => void;
+  isReadOnly: boolean;
 }) {
   const { value, key, id } = param;
 
@@ -40,6 +42,7 @@ export function ParamKeyValue({
         className="bg-darkGray"
         placeholder="Key"
         value={localKey}
+        disabled={isReadOnly}
         onBlur={(e) => onBlurKey(e.target.value)}
         onChange={(e) => setLocalKey(e.target.value)}
       />
@@ -47,6 +50,7 @@ export function ParamKeyValue({
         className="bg-darkGray"
         placeholder="Value"
         value={localValue}
+        disabled={isReadOnly}
         onBlur={(e) => onBlurValue(e.target.value)}
         onChange={(e) => setLocalValue(e.target.value)}
       />
@@ -54,6 +58,7 @@ export function ParamKeyValue({
         title="Remove"
         onClick={() => removeParam(id)}
         IconComponent={TrashIcon}
+        disabled={isReadOnly}
       ></Button>
     </div>
   );

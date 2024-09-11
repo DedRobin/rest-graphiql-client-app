@@ -6,10 +6,12 @@ export function ParamsEditor({
   params,
   setParams,
   title,
+  readOnlyItems = 0,
 }: {
   params: Param[];
   setParams: (params: Param[]) => void;
   title: string;
+  readOnlyItems?: number;
 }) {
   function changeParamOnBlur(updatedParam: Param) {
     const newParams = params.map((param) => {
@@ -34,14 +36,15 @@ export function ParamsEditor({
   return (
     <div className="mt-1">
       <h6>{title}</h6>
-      <div className="bg-darkGray px-3 py-2 mt-2 flex flex-col gap-1.5 overflow-auto">
-        {params.map((param) => {
+      <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto">
+        {params.map((param, index) => {
           return (
             <ParamKeyValue
               param={param}
               key={param.id}
               removeParam={removeParam}
               changeParamOnBlur={changeParamOnBlur}
+              isReadOnly={index + 1 <= readOnlyItems}
             />
           );
         })}

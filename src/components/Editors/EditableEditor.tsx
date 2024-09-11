@@ -46,7 +46,7 @@ export function EditableEditor({
       EditorView.updateListener.of((v: ViewUpdate) => {
         const curValue = v.state.doc.toString();
         // по логике надо писать v.docChanged , но работает именно с !
-        if (!v.view.hasFocus && !v.docChanged && curValue !== value) {
+        if (!v.view.hasFocus && !v.docChanged && value !== curValue) {
           setValueOnBlur(curValue);
         }
       }),

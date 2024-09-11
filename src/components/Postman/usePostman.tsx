@@ -19,11 +19,12 @@ import { ResponseData } from "@/types/ResponseData";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
 import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Method } from "@/types/Method";
+import { PostBody } from "@/components/Postman/types";
 
 export interface PostmanState {
   endpoint: string;
   searchParams: Param[];
-  postBody: string | undefined;
+  postBody: PostBody;
   method: Method;
   headers: Param[];
   variables: Param[];
@@ -34,7 +35,7 @@ export interface PostmanState {
 const initStore: PostmanState = {
   endpoint: "https://dummyjson.com/products/search", //пока указал тестовую апи
   searchParams: [],
-  postBody: undefined,
+  postBody: { data: "", type: "json" },
   method: "GET",
   headers: [],
   variables: [],
@@ -107,7 +108,7 @@ export function usePostman() {
     const res = await makeRequest(
       replaceTagsToVariableValue(fullEndpoint, variables),
       createRecordFromParams(headers),
-      postBody,
+      postBody.data,
       method,
     );
 
@@ -147,11 +148,19 @@ export function usePostman() {
     });
   }
 
+  function setPostBody(newPostBody: PostBody) {
+    dispatch({
+      type: PostmanActionTypes.SET_POST_BODY,
+      payload: newPostBody,
+    });
+  }
+
   return {
     ...state,
     response,
     setEndpoint,
     setMethod,
+    setPostBody,
     setParamsByField,
     executeQuery,
   };

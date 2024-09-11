@@ -4,6 +4,7 @@ import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 import { usePostman } from "@/components/Postman/usePostman";
 import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 import { Method } from "@/types/Method";
+import { PostBodyEditor } from "@/components/Postman/PostBodyEditor";
 
 export function Postman() {
   const {
@@ -12,11 +13,13 @@ export function Postman() {
     headers,
     searchParams,
     variables,
+    postBody,
     isLoading,
     response,
     setMethod,
     executeQuery,
     setEndpoint,
+    setPostBody,
     setParamsByField,
   } = usePostman();
 
@@ -50,11 +53,16 @@ export function Postman() {
           setParams={(params) => setParamsByField(params, "headers")}
           title="Headers"
         />
-        <ParamsEditor
-          params={searchParams}
-          setParams={(params) => setParamsByField(params, "searchParams")}
-          title="Search Params"
-        />
+        {method === "GET" && (
+          <ParamsEditor
+            params={searchParams}
+            setParams={(params) => setParamsByField(params, "searchParams")}
+            title="Search Params"
+          />
+        )}
+        {method === "POST" && (
+          <PostBodyEditor postBody={postBody} setPostBody={setPostBody} />
+        )}
         <ParamsEditor
           params={variables}
           setParams={(params) => setParamsByField(params, "variables")}

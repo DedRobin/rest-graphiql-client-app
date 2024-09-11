@@ -2,11 +2,13 @@ import { Reducer } from "react";
 import { PostmanState } from "@/components/Postman/usePostman";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
+import { Method } from "@/types/Method";
 
 export enum PostmanActionTypes {
   SET_ENDPOINT,
   SET_PARAMS,
   SET_IS_LOADING,
+  SET_METHOD,
   SET_RESPONSE,
 }
 
@@ -20,7 +22,8 @@ export type PostmanAction =
       payload: Param[];
     }
   | { type: PostmanActionTypes.SET_IS_LOADING; payload: boolean }
-  | { type: PostmanActionTypes.SET_RESPONSE; payload: ResponseData };
+  | { type: PostmanActionTypes.SET_RESPONSE; payload: ResponseData }
+  | { type: PostmanActionTypes.SET_METHOD; payload: Method };
 
 export const postmanReducer: Reducer<PostmanState, PostmanAction> = (
   state,
@@ -43,6 +46,12 @@ export const postmanReducer: Reducer<PostmanState, PostmanAction> = (
       return {
         ...state,
         isLoading: action.payload,
+      };
+    }
+    case PostmanActionTypes.SET_METHOD: {
+      return {
+        ...state,
+        method: action.payload,
       };
     }
     case PostmanActionTypes.SET_RESPONSE: {

@@ -125,6 +125,13 @@ export function usePostman() {
     });
   }
 
+  function setMethod(newMethod: Method) {
+    dispatch({
+      type: PostmanActionTypes.SET_METHOD,
+      payload: newMethod,
+    });
+  }
+
   function setEndpoint(newEndpoint: string) {
     dispatch({
       type: PostmanActionTypes.SET_ENDPOINT,
@@ -144,6 +151,7 @@ export function usePostman() {
     ...state,
     response,
     setEndpoint,
+    setMethod,
     setParamsByField,
     executeQuery,
   };

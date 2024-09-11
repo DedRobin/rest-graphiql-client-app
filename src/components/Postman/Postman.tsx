@@ -3,15 +3,18 @@ import React from "react";
 import { ReadOnlyEditor } from "@/components/Editors/ReadOnlyEditor";
 import { usePostman } from "@/components/Postman/usePostman";
 import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
+import { Method } from "@/types/Method";
 
 export function Postman() {
   const {
+    method,
     endpoint,
     headers,
     searchParams,
     variables,
     isLoading,
     response,
+    setMethod,
     executeQuery,
     setEndpoint,
     setParamsByField,
@@ -23,6 +26,13 @@ export function Postman() {
   return (
     <div>
       <div className={"flex gap-2 w-[800px]"}>
+        <select
+          value={method}
+          onChange={(event) => setMethod(event.target.value as Method)}
+        >
+          <option value="GET">GET</option>
+          <option value="POST">POST</option>
+        </select>
         <TempButton title="Execute" onClick={executeQuery}>
           Execute
         </TempButton>

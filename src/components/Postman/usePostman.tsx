@@ -36,8 +36,19 @@ export interface PostmanState {
   response: ResponseData;
 }
 
+// fetch('https://dummyjson.com/products/add', {
+//   method: 'POST',
+//   headers: { 'Content-Type': 'application/json' },
+//   body: JSON.stringify({
+//     title: 'BMW Pencil',
+//     /* other product data */
+//   })
+// })
+//   .then(res => res.json())
+//   .then(console.log);
+
 const initStore: PostmanState = {
-  endpoint: "https://dummyjson.com/products/search", //пока указал тестовую апи
+  endpoint: "https://dummyjson.com/products/add", //пока указал тестовую апи
   searchParams: [],
   postBody: { data: "", type: "json" },
   method: "GET",
@@ -109,10 +120,15 @@ export function usePostman() {
   }, [state]);
 
   async function executeQuery() {
+    const postBodyData =
+      postBody.type === "json"
+        ? JSON.stringify(JSON.parse(postBody.data))
+        : postBody.data;
+
     const res = await makeRequest(
       replaceTagsToVariableValue(fullEndpoint, variables),
       createRecordFromParams(headers),
-      method === "POST" ? postBody.data : undefined,
+      method === "POST" ? postBodyData : undefined,
       method,
     );
 

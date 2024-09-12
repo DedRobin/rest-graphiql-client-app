@@ -4,13 +4,15 @@ import {
   replaceVariablesInStr,
 } from "@/utils/paramsUtils";
 import { encodeBase64 } from "@/utils/base64";
-import { PostmanState } from "@/components/Postman/usePostman";
 import { Param } from "@/types/Param";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
+import { PostmanURLState } from "@/components/Postman/types";
 
-export function createRestfullURL(state: PostmanState): string {
-  const { endpoint, searchParams, method, variables, headers, postBody } =
-    state;
+export function createRestfullURL(
+  state: PostmanURLState,
+  variables: Param[],
+): string {
+  const { endpoint, searchParams, method, headers, postBody } = state;
 
   if (method === "POST") {
     const encodedEndpoint = encodeBase64(

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { Param } from "@/types/Param";
+import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
+import { Button } from "@/components/UI/buttons/Button";
+import { PlusIcon } from "@/components/UI/buttons/BurgerButton/PlusIcon";
 
 export function ParamBuilder({
   addNewParam,
@@ -21,22 +24,24 @@ export function ParamBuilder({
   }
 
   return (
-    <div className="my-2">
-      <input
-        type="text"
-        className="bg-gray-800 border-amber-50 border-2 mr-2"
+    <div className="flex gap-2 items-center">
+      <TextInput
+        className="bg-darkGray"
+        placeholder="New key"
         value={localKey}
-        onChange={(event) => setLocalKey(event.target.value)}
+        onChange={(e) => setLocalKey(e.target.value)}
       />
-      <input
-        className="bg-gray-800 border-amber-50 border-2 mr-2"
-        type="text"
+      <TextInput
+        className="bg-darkGray"
+        placeholder="New value"
         value={localValue}
         onChange={(event) => setLocalValue(event.target.value)}
       />
-      <button type="button" onClick={handleAddNewParam}>
-        Add
-      </button>
+      <Button
+        title="Add"
+        onClick={handleAddNewParam}
+        IconComponent={PlusIcon}
+      ></Button>
     </div>
   );
 }

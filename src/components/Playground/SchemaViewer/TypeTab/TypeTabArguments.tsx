@@ -11,9 +11,11 @@ export function TypeTabArguments({
   typeToDisplay,
   tabIndex,
   addNewTypeToDisplay,
+  nextType,
 }: {
   typeToDisplay: TypeToDisplay;
   tabIndex: number;
+  nextType: TypeToDisplay | null;
   addNewTypeToDisplay: (type: TypeToDisplay, tabIndex: number) => void;
 }) {
   if (!isOutputFieldType(typeToDisplay)) {
@@ -30,7 +32,7 @@ export function TypeTabArguments({
 
   return (
     <div>
-      <h4>Arguments</h4>
+      <h4 className="pt-2 text-green">Arguments</h4>
       <ul>
         {typeToDisplay.args.map((argument) => {
           const { name, type } = argument;
@@ -39,7 +41,11 @@ export function TypeTabArguments({
               key={name}
               onClick={() => addNewTypeToDisplay(argument, tabIndex)}
             >
-              <Field name={name} type={type.toString()} />
+              <Field
+                name={name}
+                type={type.toString()}
+                isOpen={nextType === argument}
+              />
             </li>
           );
         })}

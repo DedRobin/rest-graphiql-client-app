@@ -22,7 +22,6 @@ export function ReadOnlyEditor({ value }: { value: string }) {
         background: BACKGROUND_COLOR,
       },
     }),
-    width: "800px",
     extensions: [EditorState.readOnly.of(true), EditorView.lineWrapping],
   };
 

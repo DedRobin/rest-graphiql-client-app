@@ -44,14 +44,14 @@ export function EditableEditor({
     extensions: [
       EditorView.lineWrapping,
       EditorView.updateListener.of((v: ViewUpdate) => {
+        const curValue = v.state.doc.toString();
         // по логике надо писать v.docChanged , но работает именно с !
-        if (!v.view.hasFocus && !v.docChanged) {
-          setValueOnBlur(v.state.doc.toString());
+        if (!v.view.hasFocus && !v.docChanged && curValue !== value) {
+          setValueOnBlur(curValue);
         }
       }),
       extensions ?? [],
     ].flat(),
-    width: "800px",
   };
 
   return <CodeMirror {...editorConfigs} />;

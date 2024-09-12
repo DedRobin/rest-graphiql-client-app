@@ -8,16 +8,22 @@ export function HistoryFallback() {
 
   return (
     <>
-      <div className="histoty-empty text-center text-5xl">
-        <p>{localeData.history.fallback[language]}</p>
-      </div>
+      <h4 className="text-mediumGray">
+        {localeData.history.fallback[language]}
+      </h4>
 
-      <div className="history-link flex justify-around gap-3 text-3xl m-10 *:border-2 *:rounded *:p-2 hover:*:text-lime-500 hover:*:border-lime-400">
-        <Link className="history-link-rest" href={Route.Get}>
-          REST Client
+      <div className="flex flex-row gap-4 -mt-4">
+        <Link
+          href={Route.Get}
+          className={`text-h6 font-h6 leading-h6 tracking-h6`}
+        >
+          {localeData.authenticatedSidebarNavigation.graphql[language]}
         </Link>
-        <Link className="history-link-graphql" href={Route.GraphQL}>
-          GraphQL Client
+        <Link
+          href={Route.GraphQL}
+          className={`text-h6 font-h6 leading-h6 tracking-h6`}
+        >
+          {localeData.authenticatedSidebarNavigation.restfull[language]}
         </Link>
       </div>
     </>

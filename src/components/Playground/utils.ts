@@ -7,7 +7,7 @@ import {
 import { PlaygroundState } from "@/components/Playground/usePlayground";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
-function encodePlaygroundSettings(state: PlaygroundState): string {
+function encodePlaygroundState(state: PlaygroundState): string {
   const { endpoint, variables, query } = state;
 
   const encodedEndpoint = encodeBase64(endpoint);
@@ -19,7 +19,9 @@ function encodePlaygroundSettings(state: PlaygroundState): string {
 }
 
 export function createPlaygroundURL(state: PlaygroundState) {
-  return `${Route.GraphQL}/${encodePlaygroundSettings(state)}${createSearchParamsURLFromParams(state.headers)}`;
+  return encodeURI(
+    `${Route.GraphQL}/${encodePlaygroundState(state)}${createSearchParamsURLFromParams(state.headers)}`,
+  );
 }
 
 export function createGraphqlBodyOfRequest(query: string, variables?: string) {

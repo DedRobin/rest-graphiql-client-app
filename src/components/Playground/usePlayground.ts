@@ -5,7 +5,7 @@ import {
   parse,
   print,
 } from "graphql";
-import { makeRequest } from "@/services/requests/makeRequest";
+import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   FieldWithString,
   PlaygroundActionTypes,
@@ -120,17 +120,18 @@ export function usePlayground() {
     dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
 
-    const headersOfRequest = createRecordFromParams(headers);
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
+    const requestProps: RequestProps = {
+      endpoint,
+      headers: createRecordFromParams(headers),
+      body: bodyOfRequest,
+      method: "POST",
+    };
+
     try {
-      const response = await makeRequest(
-        endpoint,
-        headersOfRequest,
-        bodyOfRequest,
-        "POST",
-      );
+      const response = await makeRequest(requestProps);
       const { data } = await response.json();
       const clientSchema = buildClientSchema(data);
       dispatch({
@@ -144,15 +145,14 @@ export function usePlayground() {
 
   async function executeQuery() {
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
-    const headersOfRequest = createRecordFromParams(headers);
-    const bodyOfRequest = createGraphqlBodyOfRequest(query, variables);
+    const requestProps: RequestProps = {
+      endpoint,
+      headers: createRecordFromParams(headers),
+      body: createGraphqlBodyOfRequest(query, variables),
+      method: "POST",
+    };
     try {
-      const response = await makeRequest(
-        endpoint,
-        headersOfRequest,
-        bodyOfRequest,
-        "POST",
-      );
+      const response = await makeRequest(requestProps);
 
       const responseData = await response.json();
 

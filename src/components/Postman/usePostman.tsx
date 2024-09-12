@@ -1,10 +1,12 @@
 import { useEffect, useReducer } from "react";
-import { makeRequest } from "@/services/requests/makeRequest";
+import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   createParamsFromUrlSearchParams,
   createParamsFromSearchParamsUrl,
   createRecordFromParams,
   createSearchParamsURLFromParams,
+  replaceVariablesInStr,
+  replaceVariablesInParams,
 } from "@/utils/paramsUtils";
 import { usePathname, useSearchParams } from "next/navigation";
 import {
@@ -20,7 +22,6 @@ import {
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
-import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Method } from "@/types/Method";
 import { PostBody } from "@/components/Postman/types";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
@@ -36,21 +37,12 @@ export interface PostmanState {
   response: ResponseData;
 }
 
-// fetch('https://dummyjson.com/products/add', {
-//   method: 'POST',
-//   headers: { 'Content-Type': 'application/json' },
-//   body: JSON.stringify({
-//     title: 'BMW Pencil',
-//     /* other product data */
-//   })
-// })
-//   .then(res => res.json())
-//   .then(console.log);
+const emptyPostBody: PostBody = { data: "", type: "json" };
 
-const initStore: PostmanState = {
+const initState: PostmanState = {
   endpoint: "https://dummyjson.com/products/add", //пока указал тестовую апи
   searchParams: [],
-  postBody: { data: "", type: "json" },
+  postBody: emptyPostBody,
   method: "GET",
   headers: [],
   variables: [],
@@ -79,7 +71,7 @@ export function usePostman() {
     response,
   } = state;
 
-  const fullEndpoint = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+  const endpointWithSearchParams = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
 
   function parseSlug(
     slug: string,
@@ -87,15 +79,13 @@ export function usePostman() {
   ): PostmanState {
     const [, method, encodedFullEndpoint, encodedBody] = slug.split("/");
 
-    console.log(encodedBody);
-
     if (method !== "POST" && method !== "GET") {
-      return initStore;
+      return initState;
     }
 
     if (!encodedFullEndpoint) {
       return {
-        ...initStore,
+        ...initState,
         method,
       };
     }
@@ -106,12 +96,17 @@ export function usePostman() {
     const [endpoint, searchParamsURL] = fullEndpoint.split("?");
     const searchParams = createParamsFromSearchParamsUrl(searchParamsURL);
 
+    const postBody: PostBody = encodedBody
+      ? JSON.parse(decodeBase64(encodedBody))
+      : emptyPostBody;
+
     return {
-      ...initStore,
+      ...initState,
       method,
       endpoint,
       searchParams,
       headers,
+      postBody,
     };
   }
 
@@ -119,18 +114,39 @@ export function usePostman() {
     updateUrlInBrowser(createRestfullURL(state));
   }, [state]);
 
-  async function executeQuery() {
-    const postBodyData =
-      postBody.type === "json"
-        ? JSON.stringify(JSON.parse(postBody.data))
-        : postBody.data;
-
-    const res = await makeRequest(
-      replaceTagsToVariableValue(fullEndpoint, variables),
-      createRecordFromParams(headers),
-      method === "POST" ? postBodyData : undefined,
-      method,
+  function createRequestProps(): RequestProps {
+    const requestHeaders = createRecordFromParams(
+      replaceVariablesInParams(headers, variables),
     );
+
+    if (method === "POST") {
+      const dataWithoutVariables = replaceVariablesInStr(
+        postBody.data,
+        variables,
+      );
+      const body =
+        postBody.type === "json"
+          ? JSON.stringify(JSON.parse(dataWithoutVariables))
+          : dataWithoutVariables;
+      return {
+        endpoint: replaceVariablesInStr(endpoint, variables),
+        method,
+        headers: requestHeaders,
+        body,
+      };
+    }
+    return {
+      endpoint: replaceVariablesInStr(endpointWithSearchParams, variables),
+      method,
+      headers: requestHeaders,
+      body: undefined,
+    };
+  }
+
+  async function executeQuery() {
+    const requestProps = createRequestProps();
+
+    const res = await makeRequest(requestProps);
 
     const responseData = await res.json();
 

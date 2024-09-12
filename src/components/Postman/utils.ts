@@ -3,7 +3,7 @@ import { encodeBase64 } from "@/utils/base64";
 import { PostmanState } from "@/components/Postman/usePostman";
 import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Param } from "@/types/Param";
-import { READ_ONLY_HEADERS } from "@/constants/requestHeadersDefault";
+import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export function createRestfullURL(settings: PostmanState): string {
   const { endpoint, searchParams, method, variables, headers } = settings;

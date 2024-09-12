@@ -104,6 +104,7 @@ export function Playground() {
                 params={headers}
                 setParams={setHeaders}
                 title="Headers"
+                readOnlyItems={1}
               />
             </div>
           </div>

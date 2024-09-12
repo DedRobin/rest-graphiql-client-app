@@ -23,7 +23,7 @@ import { updateUrlInBrowser } from "@/utils/urlUtils";
 import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Method } from "@/types/Method";
 import { PostBody } from "@/components/Postman/types";
-import { READ_ONLY_HEADERS } from "@/constants/requestHeadersDefault";
+import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export interface PostmanState {
   endpoint: string;

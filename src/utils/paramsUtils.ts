@@ -33,15 +33,14 @@ export function createParamsFromSearchParamsUrl(url: string): Param[] {
   });
 }
 
-export function createParamsFromUrlSearchParams(searchParams: URLSearchParams) {
-  const result: Param[] = [];
+export function createParamsFromUrlSearchParams(searchParams: {
+  [key: string]: string | undefined;
+}): Param[] {
   let id = Date.now().valueOf();
-
-  searchParams.forEach((value, key) => {
-    result.push({ key, value, id });
+  return Object.entries(searchParams).map(([key, value]) => {
     id += 1;
+    return { key, value: value || "", id };
   });
-  return result;
 }
 
 export function replaceVariablesInStr(template: string, variables: Param[]) {

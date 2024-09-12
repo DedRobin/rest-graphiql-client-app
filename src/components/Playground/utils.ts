@@ -6,8 +6,11 @@ import {
 } from "@/utils/paramsUtils";
 import { PlaygroundState } from "@/components/Playground/usePlayground";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
+import { PlaygroundURLState } from "@/components/Playground/types";
 
-function encodePlaygroundState(state: PlaygroundState): string {
+function encodePlaygroundState(
+  state: PlaygroundState | PlaygroundURLState,
+): string {
   const { endpoint, variables, query } = state;
 
   const encodedEndpoint = encodeBase64(endpoint);
@@ -18,7 +21,9 @@ function encodePlaygroundState(state: PlaygroundState): string {
   return `${encodedEndpoint}/${encodedBody}`;
 }
 
-export function createPlaygroundURL(state: PlaygroundState) {
+export function createPlaygroundURL(
+  state: PlaygroundState | PlaygroundURLState,
+) {
   return encodeURI(
     `${Route.GraphQL}/${encodePlaygroundState(state)}${createSearchParamsURLFromParams(state.headers)}`,
   );
@@ -32,12 +37,16 @@ export function createGraphqlBodyOfRequest(query: string, variables?: string) {
   return JSON.stringify({ query, variables: parsedVariables });
 }
 
-export function createHeaders(urlSearchParams: URLSearchParams) {
-  let headers = createParamsFromUrlSearchParams(urlSearchParams);
+export function createPlaygroundHeaders(searchParams?: {
+  [key: string]: string | undefined;
+}) {
+  if (!searchParams) return [READ_ONLY_HEADERS.json];
+  let headers = createParamsFromUrlSearchParams(searchParams);
+
   if (
     headers.length === 0 ||
     (headers[0].key !== READ_ONLY_HEADERS.json.key &&
-      headers[0].key !== READ_ONLY_HEADERS.json.value)
+      headers[0].value !== READ_ONLY_HEADERS.json.value)
   ) {
     headers = [READ_ONLY_HEADERS.json, ...headers];
   }

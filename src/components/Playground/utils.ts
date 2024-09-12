@@ -4,13 +4,10 @@ import {
   createParamsFromUrlSearchParams,
   createSearchParamsURLFromParams,
 } from "@/utils/paramsUtils";
-import { PlaygroundState } from "@/components/Playground/usePlayground";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { PlaygroundURLState } from "@/components/Playground/types";
 
-function encodePlaygroundState(
-  state: PlaygroundState | PlaygroundURLState,
-): string {
+function encodePlaygroundState(state: PlaygroundURLState): string {
   const { endpoint, variables, query } = state;
 
   const encodedEndpoint = encodeBase64(endpoint);
@@ -21,9 +18,7 @@ function encodePlaygroundState(
   return `${encodedEndpoint}/${encodedBody}`;
 }
 
-export function createPlaygroundURL(
-  state: PlaygroundState | PlaygroundURLState,
-) {
+export function createPlaygroundURL(state: PlaygroundURLState) {
   return encodeURI(
     `${Route.GraphQL}/${encodePlaygroundState(state)}${createSearchParamsURLFromParams(state.headers)}`,
   );

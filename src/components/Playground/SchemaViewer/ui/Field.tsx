@@ -26,9 +26,8 @@ export const Field: React.FC<FieldProps> = ({
         className={cn(
           "flex items-center justify-between px-4 py-2 w-full text-left transition-colors",
           {
-            "bg-black": !isOpen,
-            "bg-darkGray": isOpen,
-            "text-lightGray": !isOpen,
+            "bg-black hover:bg-darkGray text-lightGray": !isOpen,
+            "bg-darkGray hover:bg-opacity-75 text-lightGray": isOpen,
           },
         )}
       >

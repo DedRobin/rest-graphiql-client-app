@@ -34,7 +34,7 @@ export function Playground() {
 
   return (
     <>
-      <div className="sm:col-span-8 lg:col-span-2 flex flex-col gap-4 py-8">
+      <div className="col-span-8 md:col-span-3 lg:col-span-2 flex flex-col gap-4 py-8">
         <h2>GraphiQL Editor</h2>
         <div className="flex flex-col gap-4">
           {/* Поле для Endpoint */}
@@ -60,13 +60,13 @@ export function Playground() {
           {schema && <SchemaViewer schema={schema} setViewer={setViewer} />}
         </div>
       </div>
-      <div className="relativ lg:col-start-3 lg:col-span-6 pb-8 flex flex-col h-[calc(100vh-64px)] sm:col-span-8">
+      <div className="relativ lg:col-start-3 lg:col-span-6 md:col-start-4 md:col-span-5 pb-8 flex flex-col h-[calc(100vh-64px)] sm:col-span-8">
         <div className="flex justify-between w-full mb-4 pt-8">
-          <div className="flex gap-4">
+          <div className="flex gap-4 w-[calc(100%-96px)] items-center">
             <Image src="/icons/link.svg" alt="Link" width={24} height={24} />
-            <h3 className="text-mediumGray">{endpoint}</h3>
+            <h3 className="text-mediumGray truncate">{endpoint}</h3>
           </div>
-          <div className="flex gap-4">
+          <div className="flex gap-4 items-center">
             <Button
               title="Execute"
               onClick={executeQuery}

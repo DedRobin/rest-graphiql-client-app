@@ -10,7 +10,7 @@ export function Nav() {
   const pathname = usePathname();
   const { language } = useLocale();
 
-  const isActive = (route: string) => pathname === route;
+  const isActive = (route: string) => pathname.startsWith(route);
 
   const renderNavLink = (route: string, label: string) => (
     <li className="nav-link-item">

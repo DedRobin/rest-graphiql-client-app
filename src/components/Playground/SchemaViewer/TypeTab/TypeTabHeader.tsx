@@ -14,11 +14,11 @@ export function TypeTabHeader({
   const { name, type } = typeToDisplay;
 
   const tabHeaderWithoutArgs = (
-    <p>
+    <h4 className="text-green">
       {name}
       {": "}
       {type.toString()}
-    </p>
+    </h4>
   );
 
   if (isScalarFieldType(typeToDisplay)) {
@@ -35,7 +35,7 @@ export function TypeTabHeader({
 
   return (
     <div className="text-green">
-      <p>{`${name} (`}</p>
+      <h4>{`${name} (`}</h4>
       {typeToDisplay.args.map((argument) => {
         return (
           <h4 key={argument.name}>

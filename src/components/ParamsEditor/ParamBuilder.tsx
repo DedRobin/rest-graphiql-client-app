@@ -26,13 +26,13 @@ export function ParamBuilder({
   return (
     <div className="flex gap-2 items-center">
       <TextInput
-        className="bg-gray-700"
+        className="bg-darkGray"
         placeholder="New key"
         value={localKey}
         onChange={(e) => setLocalKey(e.target.value)}
       />
       <TextInput
-        className="bg-gray-700"
+        className="bg-darkGray"
         placeholder="New value"
         value={localValue}
         onChange={(event) => setLocalValue(event.target.value)}

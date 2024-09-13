@@ -5,7 +5,6 @@ import { ResponseData } from "@/types/ResponseData";
 import { Method } from "@/types/Method";
 import { PostBody } from "@/components/Postman/types";
 
-
 type Action =
   | { type: "SET_METHOD"; payload: Method }
   | { type: "SET_ENDPOINT"; payload: string }

@@ -87,7 +87,6 @@ export function usePlayground(urlState: PlaygroundURLState) {
     } finally {
       setIsLoading(false);
     }
-
   }, [endpoint, headers, handleError]);
 
   async function executeQuery() {

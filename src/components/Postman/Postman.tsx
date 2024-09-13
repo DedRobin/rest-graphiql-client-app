@@ -7,7 +7,6 @@ import { Method } from "@/types/Method";
 import { PostBodyEditor } from "@/components/Postman/PostBodyEditor";
 import { PostmanURLState } from "@/components/Postman/types";
 
-
 export function Postman({ urlState }: { urlState: PostmanURLState }) {
   const {
     method,
@@ -26,7 +25,6 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     setVariables,
     executeQuery,
   } = usePostman(urlState);
-
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
@@ -62,9 +60,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
         {method === "GET" && (
           <ParamsEditor
             params={searchParams}
-
             setParams={setSearchParams}
-
             title="Search Params"
           />
         )}

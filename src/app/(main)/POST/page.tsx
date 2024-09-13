@@ -3,5 +3,4 @@ import { emptyPostmanPostUrlState } from "@/constants/postmanEmptyState";
 
 export default function GetPage() {
   return <RestfullClient urlState={emptyPostmanPostUrlState} />;
-
 }

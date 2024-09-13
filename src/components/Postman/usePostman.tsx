@@ -7,8 +7,8 @@ import {
   replaceVariablesInParams,
 } from "@/utils/paramsUtils";
 import {
+  addReadOnlyHeader,
   createRestfullURL,
-  isFirstHeaderPostDefault,
 } from "@/components/Postman/utils";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
@@ -44,7 +44,7 @@ export function usePostman(urlState: PostmanURLState) {
       postBody,
     };
     updateUrlInBrowser(createRestfullURL(urlState, variables));
-  }, [endpoint, searchParams, headers, method, variables]);
+  }, [endpoint, searchParams, headers, method, variables, postBody]);
 
   function createRequestProps(): RequestProps {
     const requestHeaders = createRecordFromParams(
@@ -97,23 +97,12 @@ export function usePostman(urlState: PostmanURLState) {
     }
   }
 
-  function addReadOnlyHeader() {
-    if (headers.length > 0 && isFirstHeaderPostDefault(headers[0])) {
-      const newHeaders = [
-        READ_ONLY_HEADERS[postBody.type],
-        ...headers.slice(1),
-      ];
-      setHeaders(newHeaders);
-    } else {
-      const newHeaders = [READ_ONLY_HEADERS[postBody.type], ...headers];
-      setHeaders(newHeaders);
-    }
-  }
-
   function handleSetMethod(newMethod: Method) {
     if (newMethod === "POST") {
-      addReadOnlyHeader();
+      const newHeaders = addReadOnlyHeader(headers, postBody.type);
+      setHeaders(newHeaders);
     }
+
     setMethod(newMethod);
   }
 

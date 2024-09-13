@@ -43,3 +43,27 @@ export function createParamsFromUrlSearchParams(searchParams: URLSearchParams) {
   });
   return result;
 }
+
+export function replaceVariablesInStr(template: string, variables: Param[]) {
+  return template.replace(/{{(.*?)}}/g, (match, tag) => {
+    const found = variables.find((variable) => variable.key === tag);
+    return found ? found.value : match;
+  });
+}
+
+export function replaceVariablesInParams(
+  params: Param[],
+  variables: Param[],
+): Param[] {
+  return params.map((param) => {
+    const newKey = param.key.replace(/{{(.*?)}}/g, (_, tag) => {
+      const variable = variables.find((v) => v.key === tag);
+      return variable ? variable.value : `{{${tag}}}`;
+    });
+    const newValue = param.value.replace(/{{(.*?)}}/g, (_, tag) => {
+      const variable = variables.find((v) => v.key === tag);
+      return variable ? variable.value : `{{${tag}}}`;
+    });
+    return { ...param, key: newKey, value: newValue };
+  });
+}

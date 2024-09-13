@@ -1,11 +1,14 @@
 import { Method } from "@/types/Method";
 
-export async function makeRequest(
-  endpoint: string,
-  headers: Record<string, string>,
-  body: string | undefined,
-  method: Method,
-) {
+export interface RequestProps {
+  endpoint: string;
+  headers: Record<string, string>;
+  body: string | undefined;
+  method: Method;
+}
+
+export async function makeRequest(props: RequestProps) {
+  const { endpoint, method, headers, body } = props;
   return fetch(endpoint, {
     method,
     headers,

@@ -1,6 +1,6 @@
 import React from "react";
 import { UseFormRegisterReturn } from "react-hook-form";
-import cn from "clsx";
+import { cn } from "@/utils/cn";
 
 interface TextInputProps {
   label?: string;

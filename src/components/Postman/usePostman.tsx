@@ -1,13 +1,18 @@
 import { useEffect, useReducer } from "react";
-import { makeRequest } from "@/services/requests/makeRequest";
+import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   createParamsFromUrlSearchParams,
   createParamsFromSearchParamsUrl,
   createRecordFromParams,
   createSearchParamsURLFromParams,
+  replaceVariablesInStr,
+  replaceVariablesInParams,
 } from "@/utils/paramsUtils";
 import { usePathname, useSearchParams } from "next/navigation";
-import { createRestfullURL } from "@/components/Postman/utils";
+import {
+  createRestfullURL,
+  isFirstHeaderPostDefault,
+} from "@/components/Postman/utils";
 import { decodeBase64 } from "@/utils/base64";
 import {
   FieldWithParams,
@@ -17,13 +22,14 @@ import {
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
-import { replaceTagsToVariableValue } from "@/utils/replaceTagsToVariableValue";
 import { Method } from "@/types/Method";
+import { PostBody } from "@/components/Postman/types";
+import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export interface PostmanState {
   endpoint: string;
   searchParams: Param[];
-  postBody: string | undefined;
+  postBody: PostBody;
   method: Method;
   headers: Param[];
   variables: Param[];
@@ -31,10 +37,12 @@ export interface PostmanState {
   response: ResponseData;
 }
 
-const initStore: PostmanState = {
-  endpoint: "https://dummyjson.com/products/search", //пока указал тестовую апи
+const emptyPostBody: PostBody = { data: "", type: "json" };
+
+const initState: PostmanState = {
+  endpoint: "https://dummyjson.com/products/add", //пока указал тестовую апи
   searchParams: [],
-  postBody: undefined,
+  postBody: emptyPostBody,
   method: "GET",
   headers: [],
   variables: [],
@@ -63,7 +71,7 @@ export function usePostman() {
     response,
   } = state;
 
-  const fullEndpoint = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+  const endpointWithSearchParams = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
 
   function parseSlug(
     slug: string,
@@ -71,15 +79,13 @@ export function usePostman() {
   ): PostmanState {
     const [, method, encodedFullEndpoint, encodedBody] = slug.split("/");
 
-    console.log(encodedBody);
-
     if (method !== "POST" && method !== "GET") {
-      return initStore;
+      return initState;
     }
 
     if (!encodedFullEndpoint) {
       return {
-        ...initStore,
+        ...initState,
         method,
       };
     }
@@ -90,12 +96,17 @@ export function usePostman() {
     const [endpoint, searchParamsURL] = fullEndpoint.split("?");
     const searchParams = createParamsFromSearchParamsUrl(searchParamsURL);
 
+    const postBody: PostBody = encodedBody
+      ? JSON.parse(decodeBase64(encodedBody))
+      : emptyPostBody;
+
     return {
-      ...initStore,
+      ...initState,
       method,
       endpoint,
       searchParams,
       headers,
+      postBody,
     };
   }
 
@@ -103,13 +114,39 @@ export function usePostman() {
     updateUrlInBrowser(createRestfullURL(state));
   }, [state]);
 
-  async function executeQuery() {
-    const res = await makeRequest(
-      replaceTagsToVariableValue(fullEndpoint, variables),
-      createRecordFromParams(headers),
-      postBody,
-      method,
+  function createRequestProps(): RequestProps {
+    const requestHeaders = createRecordFromParams(
+      replaceVariablesInParams(headers, variables),
     );
+
+    if (method === "POST") {
+      const dataWithoutVariables = replaceVariablesInStr(
+        postBody.data,
+        variables,
+      );
+      const body =
+        postBody.type === "json"
+          ? JSON.stringify(JSON.parse(dataWithoutVariables))
+          : dataWithoutVariables;
+      return {
+        endpoint: replaceVariablesInStr(endpoint, variables),
+        method,
+        headers: requestHeaders,
+        body,
+      };
+    }
+    return {
+      endpoint: replaceVariablesInStr(endpointWithSearchParams, variables),
+      method,
+      headers: requestHeaders,
+      body: undefined,
+    };
+  }
+
+  async function executeQuery() {
+    const requestProps = createRequestProps();
+
+    const res = await makeRequest(requestProps);
 
     const responseData = await res.json();
 
@@ -122,6 +159,29 @@ export function usePostman() {
         status: response.status,
         error: "",
       },
+    });
+  }
+
+  function addReadOnlyHeader() {
+    if (headers.length > 0 && isFirstHeaderPostDefault(headers[0])) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[postBody.type],
+        ...headers.slice(1),
+      ];
+      setParamsByField(newHeaders, "headers");
+    } else {
+      const newHeaders = [READ_ONLY_HEADERS[postBody.type], ...headers];
+      setParamsByField(newHeaders, "headers");
+    }
+  }
+
+  function setMethod(newMethod: Method) {
+    if (newMethod === "POST") {
+      addReadOnlyHeader();
+    }
+    dispatch({
+      type: PostmanActionTypes.SET_METHOD,
+      payload: newMethod,
     });
   }
 
@@ -140,10 +200,27 @@ export function usePostman() {
     });
   }
 
+  function setPostBody(newPostBody: PostBody) {
+    if (newPostBody.type !== postBody.type) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[newPostBody.type],
+        ...headers.slice(1),
+      ];
+      setParamsByField(newHeaders, "headers");
+    }
+
+    dispatch({
+      type: PostmanActionTypes.SET_POST_BODY,
+      payload: newPostBody,
+    });
+  }
+
   return {
     ...state,
     response,
     setEndpoint,
+    setMethod,
+    setPostBody,
     setParamsByField,
     executeQuery,
   };

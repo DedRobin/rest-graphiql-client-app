@@ -5,9 +5,7 @@ import {
   parse,
   print,
 } from "graphql";
-import { createHeadersOfRequest } from "@/services/requests/utils/createHeadersOfRequest";
-import { createBodyOfRequest } from "@/services/requests/utils/createBodyOfRequest";
-import { makeRequest } from "@/services/requests/makeRequest";
+import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   FieldWithString,
   PlaygroundActionTypes,
@@ -16,12 +14,17 @@ import {
 import { hasMessageField } from "@/utils/hasMessageField";
 import { usePathname, useSearchParams } from "next/navigation";
 import { decodeBase64 } from "@/utils/base64";
-import { createPlaygroundURL } from "@/components/Playground/utils";
+import {
+  createGraphqlBodyOfRequest,
+  createHeaders,
+  createPlaygroundURL,
+} from "@/components/Playground/utils";
 import { updateUrlInBrowser } from "@/utils/urlUtils";
-import { createParamsFromUrlSearchParams } from "@/utils/paramsUtils";
+import { createRecordFromParams } from "@/utils/paramsUtils";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 import { GraphQLSchema } from "graphql/type";
+import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export interface PlaygroundState {
   response: ResponseData;
@@ -39,7 +42,7 @@ const initState: PlaygroundState = {
   endpoint: "",
   query: "",
   variables: "",
-  headers: [],
+  headers: [READ_ONLY_HEADERS.json],
   response: {
     status: undefined,
     body: "",
@@ -55,7 +58,7 @@ export function usePlayground() {
 
   const [state, dispatch] = useReducer(playgroundReducer, stateFromUrl);
 
-  const { endpoint, variables, query } = state;
+  const { endpoint, variables, query, headers } = state;
 
   function parseGraphQLSlug(
     slug: string[],
@@ -63,12 +66,7 @@ export function usePlayground() {
   ): PlaygroundState {
     const [, , endpoint, body] = slug.map(decodeBase64);
 
-    const headers = createParamsFromUrlSearchParams(urlSearchParams);
-
-    const emptyState: PlaygroundState = {
-      ...initState,
-      headers,
-    };
+    const headers = createHeaders(urlSearchParams);
 
     const stateWithoutBody: PlaygroundState = {
       ...initState,
@@ -77,7 +75,7 @@ export function usePlayground() {
     };
 
     if (!endpoint) {
-      return emptyState;
+      return initState;
     }
 
     if (!body) {
@@ -122,40 +120,39 @@ export function usePlayground() {
     dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
 
-    const headersOfRequest = createHeadersOfRequest();
     const introspectionQuery = getIntrospectionQuery();
-    const bodyOfRequest = createBodyOfRequest(introspectionQuery);
+    const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
+
+    const requestProps: RequestProps = {
+      endpoint,
+      headers: createRecordFromParams(headers),
+      body: bodyOfRequest,
+      method: "POST",
+    };
 
     try {
-      const response = await makeRequest(
-        endpoint,
-        headersOfRequest,
-        bodyOfRequest,
-        "POST",
-      );
+      const response = await makeRequest(requestProps);
       const { data } = await response.json();
       const clientSchema = buildClientSchema(data);
       dispatch({
         type: PlaygroundActionTypes.SET_SCHEMA,
         payload: clientSchema,
       });
-      console.log("Ye");
     } catch (error) {
       handleError("HTTP Error", error);
     }
-  }, [endpoint]);
+  }, [endpoint, headers]);
 
   async function executeQuery() {
     dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
-    const headersOfRequest = createHeadersOfRequest();
-    const bodyOfRequest = createBodyOfRequest(query, variables);
+    const requestProps: RequestProps = {
+      endpoint,
+      headers: createRecordFromParams(headers),
+      body: createGraphqlBodyOfRequest(query, variables),
+      method: "POST",
+    };
     try {
-      const response = await makeRequest(
-        endpoint,
-        headersOfRequest,
-        bodyOfRequest,
-        "POST",
-      );
+      const response = await makeRequest(requestProps);
 
       const responseData = await response.json();
 

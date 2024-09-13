@@ -52,7 +52,7 @@ export function Playground() {
             <TextInput
               label="SDL URL"
               placeholder="SDL"
-              value={"sdlValue"}
+              defaultValue={"sdlValue"}
               // onChange={handleSdlChange}
               // onBlur={handleBlur}
             />
@@ -104,6 +104,7 @@ export function Playground() {
                 params={headers}
                 setParams={setHeaders}
                 title="Headers"
+                readOnlyItems={1}
               />
             </div>
           </div>

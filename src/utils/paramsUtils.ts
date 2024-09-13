@@ -22,7 +22,7 @@ export function createSearchParamsURLFromParams(params: Param[]) {
   return `?${tail}`;
 }
 
-export function createParamsFromSearchParamsUrl(url: string): Param[] {
+export function createParamsFromSearchParamsURL(url: string): Param[] {
   if (!url) {
     return [];
   }
@@ -33,7 +33,7 @@ export function createParamsFromSearchParamsUrl(url: string): Param[] {
   });
 }
 
-export function createParamsFromUrlSearchParams(searchParams: {
+export function createParamsFromNextSearchParams(searchParams: {
   [key: string]: string | undefined;
 }): Param[] {
   let id = Date.now().valueOf();

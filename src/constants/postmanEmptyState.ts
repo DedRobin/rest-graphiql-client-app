@@ -1,4 +1,8 @@
-import { PostBody, PostmanURLState } from "@/components/Postman/types";
+import {
+  PostBody,
+  PostmanState,
+  PostmanURLState,
+} from "@/components/Postman/types";
 
 export const emptyPostBody: PostBody = { data: "", type: "json" };
 
@@ -16,6 +20,13 @@ export const emptyPostmanPostUrlState: PostmanURLState = {
   postBody: emptyPostBody,
   method: "POST",
   headers: [],
+};
+
+export const initialPostmanState: PostmanState = {
+  ...emptyPostmanGetUrlState,
+  variables: [],
+  response: { status: undefined, body: "", error: "" },
+  isLoading: false,
 };
 
 // export const emptyPostmanGetUrlState: PostmanURLState = {

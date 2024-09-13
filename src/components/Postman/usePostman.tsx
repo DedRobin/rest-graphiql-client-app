@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer } from "react";
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   createRecordFromParams,
@@ -12,28 +12,51 @@ import {
 } from "@/components/Postman/utils";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
-import { updateUrlInBrowser } from "@/utils/urlUtils";
+import { updateURLInBrowser } from "@/utils/updateURLInBrowser";
 import { Method } from "@/types/Method";
 import { PostBody, PostmanURLState } from "@/components/Postman/types";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
+import { initialPostmanState } from "@/constants/postmanEmptyState";
+import { postmanReducer } from "@/components/Postman/postmanReducer";
 
 export function usePostman(urlState: PostmanURLState) {
-  const [method, setMethod] = useState<Method>(urlState.method);
-  const [endpoint, setEndpoint] = useState<string>(urlState.endpoint);
-  const [postBody, setPostBody] = useState<PostBody>(urlState.postBody);
-  const [variables, setVariables] = useState<Param[]>([]);
-  const [searchParams, setSearchParams] = useState<Param[]>(
-    urlState.searchParams,
-  );
-  const [headers, setHeaders] = useState<Param[]>(urlState.headers);
-  const [response, setResponse] = useState<ResponseData>({
-    status: undefined,
-    body: "",
-    error: "",
+  const [state, dispatch] = useReducer(postmanReducer, {
+    ...initialPostmanState,
+    ...urlState,
   });
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const endpointWithSearchParams = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+  const { method, endpoint, postBody, variables, searchParams, headers } =
+    state;
+
+  const setMethod = (newMethod: Method) => {
+    if (newMethod === "POST") {
+      const newHeaders = addReadOnlyHeader(headers, postBody.type);
+      dispatch({ type: "SET_HEADERS", payload: newHeaders });
+    }
+    dispatch({ type: "SET_METHOD", payload: newMethod });
+  };
+  const setEndpoint = (endpoint: string) =>
+    dispatch({ type: "SET_ENDPOINT", payload: endpoint });
+  const setVariables = (variables: Param[]) =>
+    dispatch({ type: "SET_VARIABLES", payload: variables });
+  const setSearchParams = (searchParams: Param[]) =>
+    dispatch({ type: "SET_SEARCH_PARAMS", payload: searchParams });
+  const setHeaders = (headers: Param[]) =>
+    dispatch({ type: "SET_HEADERS", payload: headers });
+  const setPostBody = (newPostBody: PostBody) => {
+    if (newPostBody.type !== postBody.type) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[newPostBody.type],
+        ...headers.slice(1),
+      ];
+      setHeaders(newHeaders);
+    }
+    dispatch({ type: "SET_POST_BODY", payload: postBody });
+  };
+  const setIsLoading = (isLoading: boolean) =>
+    dispatch({ type: "SET_LOADING", payload: isLoading });
+  const setResponse = (response: ResponseData) =>
+    dispatch({ type: "SET_RESPONSE", payload: response });
 
   useEffect(() => {
     const urlState: PostmanURLState = {
@@ -43,7 +66,7 @@ export function usePostman(urlState: PostmanURLState) {
       method,
       postBody,
     };
-    updateUrlInBrowser(createRestfullURL(urlState, variables));
+    updateURLInBrowser(createRestfullURL(urlState, variables));
   }, [endpoint, searchParams, headers, method, variables, postBody]);
 
   function createRequestProps(): RequestProps {
@@ -61,14 +84,19 @@ export function usePostman(urlState: PostmanURLState) {
           ? JSON.stringify(JSON.parse(dataWithoutVariables))
           : dataWithoutVariables;
       return {
-        endpoint: replaceVariablesInStr(endpoint, variables),
+        endpoint: encodeURI(replaceVariablesInStr(endpoint, variables)),
         method,
         headers: requestHeaders,
         body,
       };
     }
+
+    const endpointWithSearchParams = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+
     return {
-      endpoint: replaceVariablesInStr(endpointWithSearchParams, variables),
+      endpoint: encodeURI(
+        replaceVariablesInStr(endpointWithSearchParams, variables),
+      ),
       method,
       headers: requestHeaders,
       body: undefined,
@@ -88,7 +116,7 @@ export function usePostman(urlState: PostmanURLState) {
 
       setResponse({
         body: formattedResponse,
-        status: response.status,
+        status: res.status,
         error: "",
       });
     } catch {
@@ -97,40 +125,13 @@ export function usePostman(urlState: PostmanURLState) {
     }
   }
 
-  function handleSetMethod(newMethod: Method) {
-    if (newMethod === "POST") {
-      const newHeaders = addReadOnlyHeader(headers, postBody.type);
-      setHeaders(newHeaders);
-    }
-
-    setMethod(newMethod);
-  }
-
-  function handleSetPostBody(newPostBody: PostBody) {
-    if (newPostBody.type !== postBody.type) {
-      const newHeaders = [
-        READ_ONLY_HEADERS[newPostBody.type],
-        ...headers.slice(1),
-      ];
-      setHeaders(newHeaders);
-    }
-    setPostBody(newPostBody);
-  }
-
   return {
-    method,
-    endpoint,
-    headers,
-    searchParams,
-    postBody,
-    variables,
-    isLoading,
-    response,
-    setMethod: handleSetMethod,
+    ...state,
+    setMethod,
     setEndpoint,
     setSearchParams,
     setHeaders,
-    setPostBody: handleSetPostBody,
+    setPostBody,
     setVariables,
     executeQuery,
   };

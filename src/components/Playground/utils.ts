@@ -1,7 +1,7 @@
 import { Route } from "@/app/routes";
 import { encodeBase64 } from "@/utils/base64";
 import {
-  createParamsFromUrlSearchParams,
+  createParamsFromNextSearchParams,
   createSearchParamsURLFromParams,
 } from "@/utils/paramsUtils";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
@@ -36,7 +36,7 @@ export function createPlaygroundHeaders(searchParams?: {
   [key: string]: string | undefined;
 }) {
   if (!searchParams) return [READ_ONLY_HEADERS.json];
-  let headers = createParamsFromUrlSearchParams(searchParams);
+  let headers = createParamsFromNextSearchParams(searchParams);
 
   if (
     headers.length === 0 ||

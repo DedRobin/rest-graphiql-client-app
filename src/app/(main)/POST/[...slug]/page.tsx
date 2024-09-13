@@ -1,7 +1,7 @@
 import RestfullClient from "@/app/(main)/GET/client";
 import { emptyPostmanPostUrlState } from "@/constants/postmanEmptyState";
 import { PostBody, PostmanURLState } from "@/components/Postman/types";
-import { createParamsFromUrlSearchParams } from "@/utils/paramsUtils";
+import { createParamsFromNextSearchParams } from "@/utils/paramsUtils";
 import { decodeBase64 } from "@/utils/base64";
 import { addReadOnlyHeader } from "@/components/Postman/utils";
 
@@ -22,7 +22,7 @@ export default function PostPage({
     const postBody: PostBody = JSON.parse(body);
 
     const headers = searchParams
-      ? createParamsFromUrlSearchParams(searchParams)
+      ? createParamsFromNextSearchParams(searchParams)
       : [];
 
     const allHeaders = addReadOnlyHeader(headers, postBody.type);

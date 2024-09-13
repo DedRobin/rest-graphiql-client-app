@@ -4,8 +4,7 @@ import { Postman } from "@/components/Postman/Postman";
 
 export default function RestfullClient() {
   return (
-    <div>
-      <h1 className="graphiql text-5xl">Restfull Client</h1>
+    <div className="col-span-8 grid grid-cols-8 gap-6 h-full">
       <Postman />
     </div>
   );

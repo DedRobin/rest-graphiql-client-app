@@ -1,4 +1,5 @@
 import { PostBody, PostmanURLState } from "@/components/Postman/types";
+import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export const emptyPostBody: PostBody = { data: "", type: "json" };
 
@@ -15,7 +16,7 @@ export const emptyPostmanPostUrlState: PostmanURLState = {
   searchParams: [],
   postBody: emptyPostBody,
   method: "POST",
-  headers: [],
+  headers: [READ_ONLY_HEADERS.json],
 };
 
 // export const emptyPostmanGetUrlState: PostmanURLState = {

@@ -1,76 +1,41 @@
-import { Reducer } from "react";
-import { PostmanState } from "@/components/Postman/usePostman";
+import { Method } from "@/types/Method";
+import { PostBody, PostmanState } from "@/components/Postman/types";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
-import { Method } from "@/types/Method";
-import { PostBody } from "@/components/Postman/types";
 
-export enum PostmanActionTypes {
-  SET_ENDPOINT,
-  SET_PARAMS,
-  SET_IS_LOADING,
-  SET_METHOD,
-  SET_POST_BODY,
-  SET_RESPONSE,
-}
+type Action =
+  | { type: "SET_METHOD"; payload: Method }
+  | { type: "SET_ENDPOINT"; payload: string }
+  | { type: "SET_POST_BODY"; payload: PostBody }
+  | { type: "SET_VARIABLES"; payload: Param[] }
+  | { type: "SET_SEARCH_PARAMS"; payload: Param[] }
+  | { type: "SET_HEADERS"; payload: Param[] }
+  | { type: "SET_RESPONSE"; payload: ResponseData }
+  | { type: "SET_LOADING"; payload: boolean };
 
-export type FieldWithParams = "variables" | "headers" | "searchParams";
-
-export type PostmanAction =
-  | { type: PostmanActionTypes.SET_ENDPOINT; payload: string }
-  | {
-      type: PostmanActionTypes.SET_PARAMS;
-      field: FieldWithParams;
-      payload: Param[];
-    }
-  | { type: PostmanActionTypes.SET_IS_LOADING; payload: boolean }
-  | { type: PostmanActionTypes.SET_RESPONSE; payload: ResponseData }
-  | { type: PostmanActionTypes.SET_POST_BODY; payload: PostBody }
-  | { type: PostmanActionTypes.SET_METHOD; payload: Method };
-
-export const postmanReducer: Reducer<PostmanState, PostmanAction> = (
-  state,
-  action,
-) => {
+export function postmanReducer(
+  state: PostmanState,
+  action: Action,
+): PostmanState {
   switch (action.type) {
-    case PostmanActionTypes.SET_PARAMS: {
-      return {
-        ...state,
-        [action.field]: action.payload,
-      };
-    }
-    case PostmanActionTypes.SET_ENDPOINT: {
-      return {
-        ...state,
-        endpoint: action.payload,
-      };
-    }
-    case PostmanActionTypes.SET_IS_LOADING: {
-      return {
-        ...state,
-        isLoading: action.payload,
-      };
-    }
-    case PostmanActionTypes.SET_METHOD: {
-      return {
-        ...state,
-        method: action.payload,
-      };
-    }
-    case PostmanActionTypes.SET_POST_BODY: {
-      return {
-        ...state,
-        postBody: action.payload,
-      };
-    }
-    case PostmanActionTypes.SET_RESPONSE: {
-      return {
-        ...state,
-        response: action.payload,
-        isLoading: false,
-      };
-    }
+    case "SET_METHOD":
+      return { ...state, method: action.payload };
+    case "SET_ENDPOINT":
+      return { ...state, endpoint: action.payload };
+    case "SET_POST_BODY":
+      return { ...state, postBody: action.payload };
+    case "SET_VARIABLES":
+      return { ...state, variables: action.payload };
+    case "SET_SEARCH_PARAMS":
+      return { ...state, searchParams: action.payload };
+    case "SET_HEADERS":
+      return { ...state, headers: action.payload };
+    case "SET_RESPONSE":
+      return { ...state, response: action.payload };
+    case "SET_LOADING":
+      return { ...state, isLoading: action.payload };
+
     default:
       return state;
   }
-};
+}

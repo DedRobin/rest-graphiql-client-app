@@ -4,13 +4,15 @@ import {
   replaceVariablesInStr,
 } from "@/utils/paramsUtils";
 import { encodeBase64 } from "@/utils/base64";
-import { PostmanState } from "@/components/Postman/usePostman";
 import { Param } from "@/types/Param";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
+import { PostmanURLState, TypePostBody } from "@/components/Postman/types";
 
-export function createRestfullURL(state: PostmanState): string {
-  const { endpoint, searchParams, method, variables, headers, postBody } =
-    state;
+export function createRestfullURL(
+  state: PostmanURLState,
+  variables: Param[],
+): string {
+  const { endpoint, searchParams, method, headers, postBody } = state;
 
   if (method === "POST") {
     const encodedEndpoint = encodeBase64(
@@ -53,4 +55,14 @@ export function isFirstHeaderPostDefault(firstHeader: Param) {
   return (
     READ_ONLY_HEADERS.json.value === value || READ_ONLY_HEADERS.json.key === key
   );
+}
+
+export function addReadOnlyHeader(
+  headers: Param[],
+  typePosBody: TypePostBody,
+): Param[] {
+  if (headers.length > 0 && isFirstHeaderPostDefault(headers[0])) {
+    return [READ_ONLY_HEADERS[typePosBody], ...headers.slice(1)];
+  }
+  return [READ_ONLY_HEADERS[typePosBody], ...headers];
 }

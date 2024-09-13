@@ -11,21 +11,26 @@ import { Button } from "@/components/UI/buttons/Button";
 import { ExecuteIcon } from "@/components/UI/buttons/ExecuteIcon";
 import { PrettifyIcon } from "@/components/UI/buttons/PrettifyIcon";
 import { cn } from "@/utils/cn";
+import { PlaygroundURLState } from "@/components/Playground/types";
 
-export function Playground() {
+export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
   const {
     endpoint,
+    endpointSdl,
     variables,
     query,
     headers,
+    response,
     isLoading,
     schema,
-    response,
     executeQuery,
-    setNewStrValue,
     setHeaders,
+    setEndpoint,
+    setEndpointSdl,
+    setQuery,
+    setVariables,
     prettify,
-  } = usePlayground();
+  } = usePlayground(urlState);
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
@@ -43,7 +48,7 @@ export function Playground() {
               label="Endpoint URL"
               placeholder="Endpoint"
               defaultValue={endpoint}
-              onBlur={(e) => setNewStrValue("endpoint", e.target.value)}
+              onBlur={(e) => setEndpoint(e.target.value)}
             />
           </div>
 
@@ -52,9 +57,8 @@ export function Playground() {
             <TextInput
               label="SDL URL"
               placeholder="SDL"
-              defaultValue={"sdlValue"}
-              // onChange={handleSdlChange}
-              // onBlur={handleBlur}
+              defaultValue={endpointSdl}
+              onBlur={(e) => setEndpointSdl(e.target.value)}
             />
           </div>
           {schema && <SchemaViewer schema={schema} setViewer={setViewer} />}
@@ -88,16 +92,11 @@ export function Playground() {
             </div>
             <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-2">
               <h6 className="mt-1">Variables</h6>
-              <EditableEditor
-                value={variables}
-                setValueOnBlur={(newValue) =>
-                  setNewStrValue("variables", newValue)
-                }
-              />
+              <EditableEditor value={variables} setValueOnBlur={setVariables} />
               <h6 className="mt-1">Query</h6>
               <EditableEditor
                 value={query}
-                setValueOnBlur={(newValue) => setNewStrValue("query", newValue)}
+                setValueOnBlur={setQuery}
                 extensions={schema ? graphql(schema) : undefined}
               />
               <ParamsEditor

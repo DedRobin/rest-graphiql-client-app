@@ -5,8 +5,9 @@ import { usePostman } from "@/components/Postman/usePostman";
 import { ParamsEditor } from "@/components/ParamsEditor/ParamsEditor";
 import { Method } from "@/types/Method";
 import { PostBodyEditor } from "@/components/Postman/PostBodyEditor";
+import { PostmanURLState } from "@/components/Postman/types";
 
-export function Postman() {
+export function Postman({ urlState }: { urlState: PostmanURLState }) {
   const {
     method,
     endpoint,
@@ -17,11 +18,13 @@ export function Postman() {
     isLoading,
     response,
     setMethod,
-    executeQuery,
     setEndpoint,
+    setHeaders,
+    setSearchParams,
     setPostBody,
-    setParamsByField,
-  } = usePostman();
+    setVariables,
+    executeQuery,
+  } = usePostman(urlState);
 
   const responseValue =
     (isLoading && "Loading...") || response.error || response.body || "No data";
@@ -50,14 +53,14 @@ export function Postman() {
       <div>
         <ParamsEditor
           params={headers}
-          setParams={(params) => setParamsByField(params, "headers")}
+          setParams={setHeaders}
           title="Headers"
           readOnlyItems={method === "POST" ? 1 : 0}
         />
         {method === "GET" && (
           <ParamsEditor
             params={searchParams}
-            setParams={(params) => setParamsByField(params, "searchParams")}
+            setParams={setSearchParams}
             title="Search Params"
           />
         )}
@@ -66,7 +69,7 @@ export function Postman() {
         )}
         <ParamsEditor
           params={variables}
-          setParams={(params) => setParamsByField(params, "variables")}
+          setParams={setVariables}
           title="Variables"
         />
         {/*Response*/}

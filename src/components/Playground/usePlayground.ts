@@ -6,125 +6,72 @@ import {
   print,
 } from "graphql";
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
-import {
-  FieldWithString,
-  PlaygroundActionTypes,
-  playgroundReducer,
-} from "@/components/Playground/playgroundReducer";
 import { hasMessageField } from "@/utils/hasMessageField";
-import { usePathname, useSearchParams } from "next/navigation";
-import { decodeBase64 } from "@/utils/base64";
 import {
   createGraphqlBodyOfRequest,
-  createHeaders,
   createPlaygroundURL,
 } from "@/components/Playground/utils";
-import { updateUrlInBrowser } from "@/utils/urlUtils";
+import { updateURLInBrowser } from "@/utils/updateURLInBrowser";
 import { createRecordFromParams } from "@/utils/paramsUtils";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 import { GraphQLSchema } from "graphql/type";
-import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
+import { PlaygroundURLState } from "@/components/Playground/types";
+import { initialPlaygroundState } from "@/constants/playgroundEmptyState";
+import { playgroundReducer } from "@/components/Playground/playgroundReducer";
 
-export interface PlaygroundState {
-  response: ResponseData;
-  schema: GraphQLSchema | undefined;
-  isLoading: boolean;
-  endpoint: string;
-  query: string;
-  variables: string;
-  headers: Param[];
-}
+export function usePlayground(urlState: PlaygroundURLState) {
+  const [state, dispatch] = useReducer(playgroundReducer, {
+    ...initialPlaygroundState,
+    ...urlState,
+  });
 
-const initState: PlaygroundState = {
-  schema: undefined,
-  isLoading: false,
-  endpoint: "",
-  query: "",
-  variables: "",
-  headers: [READ_ONLY_HEADERS.json],
-  response: {
-    status: undefined,
-    body: "",
-    error: "",
-  },
-};
+  const setEndpoint = (endpoint: string) =>
+    dispatch({ type: "SET_ENDPOINT", payload: endpoint });
+  const setEndpointSdl = (endpointSdl: string) =>
+    dispatch({ type: "SET_ENDPOINT_SDL", payload: endpointSdl });
+  const setVariables = (variables: string) =>
+    dispatch({ type: "SET_VARIABLES", payload: variables });
+  const setQuery = (query: string) =>
+    dispatch({ type: "SET_QUERY", payload: query });
+  const setHeaders = (headers: Param[]) =>
+    dispatch({ type: "SET_HEADERS", payload: headers });
+  const setResponse = (response: ResponseData) =>
+    dispatch({ type: "SET_RESPONSE", payload: response });
+  const setIsLoading = (isLoading: boolean) =>
+    dispatch({ type: "SET_LOADING", payload: isLoading });
+  const setSchema = (schema: GraphQLSchema | undefined) =>
+    dispatch({ type: "SET_SCHEMA", payload: schema });
 
-export function usePlayground() {
-  const slug = usePathname().split("/");
-  const urlSearchParams = useSearchParams();
+  const { endpoint, variables, query, headers, endpointSdl } = state;
 
-  const stateFromUrl = parseGraphQLSlug(slug, urlSearchParams);
+  const handleError = useCallback(
+    (title: string, error: unknown, status?: number) => {
+      const errorMessage = hasMessageField(error)
+        ? error.message
+        : JSON.stringify(error, null, 2);
 
-  const [state, dispatch] = useReducer(playgroundReducer, stateFromUrl);
-
-  const { endpoint, variables, query, headers } = state;
-
-  function parseGraphQLSlug(
-    slug: string[],
-    urlSearchParams: URLSearchParams,
-  ): PlaygroundState {
-    const [, , endpoint, body] = slug.map(decodeBase64);
-
-    const headers = createHeaders(urlSearchParams);
-
-    const stateWithoutBody: PlaygroundState = {
-      ...initState,
-      endpoint,
-      headers,
-    };
-
-    if (!endpoint) {
-      return initState;
-    }
-
-    if (!body) {
-      return stateWithoutBody;
-    }
-
-    let query = "";
-    let variables = "";
-
-    try {
-      const bodyObj = JSON.parse(body);
-      query = bodyObj.query ? bodyObj.query : "";
-      variables = bodyObj.variables
-        ? JSON.stringify(bodyObj.variables, null, 2)
-        : "";
-    } catch {
-      updateUrlInBrowser(createPlaygroundURL(stateWithoutBody));
-      console.log(
-        "Проброс ошибки что в ссылке был плохой объект и мы его удалили",
-      );
-    }
-
-    return { ...initState, query, endpoint, variables, headers };
-  }
-
-  function handleError(title: string, error: unknown, status?: number) {
-    const errorMessage = hasMessageField(error)
-      ? error.message
-      : JSON.stringify(error, null, 2);
-
-    dispatch({
-      type: PlaygroundActionTypes.SET_RESPONSE,
-      payload: {
+      setResponse({
         body: "",
         status,
         error: `${title}: ${status ? `Status: ${status}` : ""}  \n\n ${errorMessage}`,
-      },
-    });
-  }
+      });
+    },
+    [],
+  );
 
   const getSchema = useCallback(async () => {
-    dispatch({ type: PlaygroundActionTypes.SET_SCHEMA, payload: undefined });
-    dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
+    setSchema(undefined);
+    setIsLoading(true);
 
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
+    // логика с endpointSdl
+
     const requestProps: RequestProps = {
-      endpoint,
+      endpoint: encodeURI(endpoint),
+
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
       method: "POST",
@@ -134,19 +81,19 @@ export function usePlayground() {
       const response = await makeRequest(requestProps);
       const { data } = await response.json();
       const clientSchema = buildClientSchema(data);
-      dispatch({
-        type: PlaygroundActionTypes.SET_SCHEMA,
-        payload: clientSchema,
-      });
+      setSchema(clientSchema);
     } catch (error) {
       handleError("HTTP Error", error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [endpoint, headers]);
+  }, [endpoint, headers, handleError]);
 
   async function executeQuery() {
-    dispatch({ type: PlaygroundActionTypes.SET_IS_LOADING, payload: true });
+    setIsLoading(true);
     const requestProps: RequestProps = {
-      endpoint,
+      endpoint: encodeURI(endpoint),
+
       headers: createRecordFromParams(headers),
       body: createGraphqlBodyOfRequest(query, variables),
       method: "POST",
@@ -159,76 +106,58 @@ export function usePlayground() {
       if (responseData.errors) {
         handleError("GraphQL Error!", responseData, response.status);
       } else {
-        dispatch({
-          type: PlaygroundActionTypes.SET_RESPONSE,
-          payload: {
-            body: JSON.stringify(responseData, null, 2),
-            status: response.status,
-            error: "",
-          },
+        setResponse({
+          body: JSON.stringify(responseData, null, 2),
+          status: response.status,
+          error: "",
         });
       }
     } catch (error) {
       handleError("HTTP Error", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   useEffect(() => {
     getSchema();
-  }, [endpoint, getSchema]);
+  }, [endpoint, endpointSdl, getSchema]);
 
-  function setHeaders(newHeaders: Param[]) {
-    dispatch({
-      type: PlaygroundActionTypes.SET_HEADERS,
-      payload: newHeaders,
-    });
-  }
+  useEffect(() => {
+    const urlState: PlaygroundURLState = {
+      endpoint,
+      variables,
+      query,
+      headers,
+    };
+    updateURLInBrowser(createPlaygroundURL(urlState));
+  }, [endpoint, variables, query, headers]);
 
   function prettify() {
-    const prettifiedQuery = print(parse(query));
-    if (prettifiedQuery !== query) {
-      dispatch({
-        type: PlaygroundActionTypes.SET_STR_FIELD,
-        field: "query",
-        payload: prettifiedQuery,
-      });
-    }
-
     try {
+      const prettifiedQuery = print(parse(query));
+      if (prettifiedQuery !== query) {
+        setQuery(prettifiedQuery);
+      }
       const prettifiedVariables = JSON.stringify(
         JSON.parse(variables),
         null,
         2,
       );
       if (prettifiedVariables !== variables) {
-        dispatch({
-          type: PlaygroundActionTypes.SET_STR_FIELD,
-          field: "variables",
-          payload: prettifiedVariables,
-        });
+        setVariables(prettifiedVariables);
       }
     } catch {}
   }
 
-  function setNewStrValue(field: FieldWithString, newValue: string) {
-    if (state[field] === newValue) return;
-    dispatch({
-      type: PlaygroundActionTypes.SET_STR_FIELD,
-      field,
-      payload: newValue,
-    });
-  }
-
-  useEffect(() => {
-    updateUrlInBrowser(createPlaygroundURL(state));
-  }, [state]);
-
   return {
     ...state,
-    getSchema,
     executeQuery,
-    setNewStrValue,
     setHeaders,
+    setEndpoint,
+    setEndpointSdl,
+    setQuery,
+    setVariables,
     prettify,
   };
 }

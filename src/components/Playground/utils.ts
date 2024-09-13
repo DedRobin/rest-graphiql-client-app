@@ -8,6 +8,7 @@ import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { PlaygroundURLState } from "@/components/Playground/types";
 
 function encodePlaygroundState(state: PlaygroundURLState): string {
+
   const { endpoint, variables, query } = state;
 
   const encodedEndpoint = encodeBase64(endpoint);
@@ -42,6 +43,7 @@ export function createPlaygroundHeaders(searchParams?: {
     headers.length === 0 ||
     (headers[0].key !== READ_ONLY_HEADERS.json.key &&
       headers[0].value !== READ_ONLY_HEADERS.json.value)
+
   ) {
     headers = [READ_ONLY_HEADERS.json, ...headers];
   }

@@ -1,3 +1,4 @@
+
 import { Param } from "@/types/Param";
 import { Method } from "@/types/Method";
 import { ResponseData } from "@/types/ResponseData";
@@ -22,3 +23,4 @@ export interface PostmanState extends PostmanURLState {
   response: ResponseData;
   isLoading: boolean;
 }
+

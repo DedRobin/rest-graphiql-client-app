@@ -6,7 +6,6 @@ import {
   print,
 } from "graphql";
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
-
 import { hasMessageField } from "@/utils/hasMessageField";
 import {
   createGraphqlBodyOfRequest,
@@ -72,6 +71,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
+
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
       method: "POST",
@@ -87,12 +87,14 @@ export function usePlayground(urlState: PlaygroundURLState) {
     } finally {
       setIsLoading(false);
     }
+
   }, [endpoint, headers, handleError]);
 
   async function executeQuery() {
     setIsLoading(true);
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
+
       headers: createRecordFromParams(headers),
       body: createGraphqlBodyOfRequest(query, variables),
       method: "POST",

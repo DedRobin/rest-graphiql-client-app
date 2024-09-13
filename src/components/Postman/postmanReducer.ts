@@ -2,6 +2,9 @@ import { Method } from "@/types/Method";
 import { PostBody, PostmanState } from "@/components/Postman/types";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
+import { Method } from "@/types/Method";
+import { PostBody } from "@/components/Postman/types";
+
 
 type Action =
   | { type: "SET_METHOD"; payload: Method }
@@ -34,6 +37,7 @@ export function postmanReducer(
       return { ...state, response: action.payload };
     case "SET_LOADING":
       return { ...state, isLoading: action.payload };
+
     default:
       return state;
   }

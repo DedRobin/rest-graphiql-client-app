@@ -6,6 +6,8 @@ import {
   replaceVariablesInStr,
   replaceVariablesInParams,
 } from "@/utils/paramsUtils";
+
+
 import {
   addReadOnlyHeader,
   createRestfullURL,
@@ -74,6 +76,7 @@ export function usePostman(urlState: PostmanURLState) {
       replaceVariablesInParams(headers, variables),
     );
 
+
     if (method === "POST") {
       const dataWithoutVariables = replaceVariablesInStr(
         postBody.data,
@@ -92,6 +95,10 @@ export function usePostman(urlState: PostmanURLState) {
     }
 
     const endpointWithSearchParams = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+
+    const postBody: PostBody = encodedBody
+      ? JSON.parse(decodeBase64(encodedBody))
+      : emptyPostBody;
 
     return {
       endpoint: encodeURI(
@@ -118,11 +125,27 @@ export function usePostman(urlState: PostmanURLState) {
         body: formattedResponse,
         status: res.status,
         error: "",
+
       });
     } catch {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  function setPostBody(newPostBody: PostBody) {
+    if (newPostBody.type !== postBody.type) {
+      const newHeaders = [
+        READ_ONLY_HEADERS[newPostBody.type],
+        ...headers.slice(1),
+      ];
+      setParamsByField(newHeaders, "headers");
+    }
+
+    dispatch({
+      type: PostmanActionTypes.SET_POST_BODY,
+      payload: newPostBody,
+    });
   }
 
   return {

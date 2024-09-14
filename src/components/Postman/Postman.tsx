@@ -36,12 +36,20 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     <div>
       <div className={"flex gap-2 w-[800px]"}>
         <select
+          className="text-black"
           value={method}
           onChange={(event) => setMethod(event.target.value as Method)}
         >
           <option value="GET">GET</option>
           <option value="POST">POST</option>
         </select>
+        <input
+          className="bg-gray-800 w-[800px]"
+          type="text"
+          placeholder="Endpoint"
+          defaultValue={endpoint}
+          onBlur={(event) => setEndpoint(event.target.value)}
+        />
         <Button
           title="Execute"
           onClick={executeQuery}
@@ -54,13 +62,6 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
             IconComponent={PrettifyIcon}
           />
         )}
-        <input
-          className="bg-gray-800 w-[800px]"
-          type="text"
-          placeholder="Endpoint"
-          defaultValue={endpoint}
-          onBlur={(event) => setEndpoint(event.target.value)}
-        />
       </div>
       <div>
         <ParamsEditor

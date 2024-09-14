@@ -3,7 +3,7 @@ import {
   PlaygroundURLState,
 } from "@/components/Playground/types";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
-
+import { parse, print } from "graphql";
 // export const emptyPlaygroundUrlState: PlaygroundURLState = {
 //   endpoint: "",
 //   query: "",
@@ -13,9 +13,12 @@ import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export const emptyPlaygroundUrlState: PlaygroundURLState = {
   endpoint: "https://rickandmortyapi.com/graphql",
-  query:
-    "query ($filter: FilterCharacter) {characters(filter: $filter) { results { name } }}",
-  variables: '{"filter":{"name":"black"}}',
+  query: print(
+    parse(
+      "query ($filter: FilterCharacter) {characters(filter: $filter) { results { name } }}",
+    ),
+  ),
+  variables: JSON.stringify({ filter: { name: "black" } }, null, 2),
   headers: [READ_ONLY_HEADERS.json],
 };
 

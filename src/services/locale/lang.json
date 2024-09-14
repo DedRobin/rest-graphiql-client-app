@@ -54,6 +54,10 @@
       "en": "History Requests",
       "ru": "История запросов"
     },
+    "description": {
+      "en": "Track all your previous API requests in one convenient place. The History Requests section allows you to quickly revisit and reuse your past queries, ensuring a seamless workflow and saving you valuable time.",
+      "ru": "Отслеживайте все ваши предыдущие запросы к API в одном удобном месте. Раздел 'История запросов' позволяет быстро просматривать и обновлять ваши прошлые запросы, обеспечивая бесперебойный рабочий процесс и экономя ваше драгоценное время."
+    },
     "fallback": {
       "en": "You haven't executed any requests yet. It's empty here. Try those options:",
       "ru": "Вы еще не выполнили ни одного запроса. Поле здесь пустое. Попробуйте эти варианты:"

@@ -33,7 +33,6 @@ export function usePlayground(urlState: PlaygroundURLState) {
   const [currURL, setCurrURL] = useState<string>("");
 
   const setEndpoint = (newEndpoint: string) => {
-    console.log(endpointSdl, createEndpointSdl(endpoint));
     if (endpointSdl === createEndpointSdl(endpoint)) {
       dispatch({
         type: "SET_ENDPOINT_SDL",
@@ -135,7 +134,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   useEffect(() => {
     getSchema();
-  }, [endpoint, endpointSdl, getSchema]);
+  }, [endpointSdl, getSchema]);
 
   useEffect(() => {
     const urlState: PlaygroundURLState = {
@@ -143,6 +142,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
       variables,
       query,
       headers,
+      endpointSdl,
     };
     const url = createPlaygroundURL(urlState);
     updateURLInBrowser(url);

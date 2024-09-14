@@ -10,7 +10,6 @@ export function History() {
   const { historyLines } = useHistoryStorage();
 
   const { language } = useLocale();
-  console.log("render");
 
   return (
     <>
@@ -23,12 +22,7 @@ export function History() {
         )}
       >
         <h2>{localeData.history.heading[language]}</h2>
-        <span>
-          Track all your previous API requests in one convenient place. The
-          History Requests section allows you to quickly revisit and reuse your
-          past queries, ensuring a seamless workflow and saving you valuable
-          time.
-        </span>
+        <span>{localeData.history.description[language]}</span>
       </div>
 
       {/* Средний div для отображения данных или состояния загрузки */}

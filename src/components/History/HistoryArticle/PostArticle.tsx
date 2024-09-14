@@ -14,6 +14,7 @@ export function PostArticle({
 }) {
   const { id, url } = historyLine;
   const { endpoint, headers, postBody } = state;
+  const parsedPostBody = JSON.parse(postBody.data);
 
   return (
     <div className="col-start-2 col-span-5 flex flex-col gap-2">
@@ -24,7 +25,7 @@ export function PostArticle({
         keyName="headers"
         value={createRecordFromParams(headers)}
       />
-      <KeyValueBlock keyName="body" value={postBody.data} />
+      <KeyValueBlock keyName="body" value={parsedPostBody} />
 
       <KeyValueBlock keyName="date" value={formatDateTime(id)} />
     </div>

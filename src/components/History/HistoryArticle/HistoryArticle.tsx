@@ -1,12 +1,18 @@
 import { Tag } from "../../UI/tags/Tag";
 import { HistoryLine } from "@/components/History/types";
-import { parsePlaygroundURL } from "@/utils/url/parsePlaygroundURL";
+import { parsePlaygroundURL } from "@/utils/urlState/parsePlaygroundURL";
 import { PlaygroundArticle } from "@/components/History/HistoryArticle/PlaygroundArticle";
 import { GetArticle } from "@/components/History/HistoryArticle/GetArticle";
 import { PostArticle } from "@/components/History/HistoryArticle/PostArticle";
-import { parsePostURL } from "@/utils/url/parsePostURL";
-import { parseGetURL } from "@/utils/url/parseGetURL";
-import { convertURLToNextSearchParams } from "@/utils/url/convertURLToNextSearchParams";
+import { parseURLWithBody } from "@/utils/urlState/parseURLWithBody";
+import { parseURLWithSearchParams } from "@/utils/urlState/parseURLWithSearchParams";
+import { convertURLToNextSearchParams } from "@/utils/urlState/convertURLToNextSearchParams";
+import clsx from "clsx";
+import {
+  HttpMethod,
+  isMethodWithBody,
+  isMethodWithSearchParams,
+} from "@/types/Method";
 
 export function HistoryArticle({ historyLine }: { historyLine: HistoryLine }) {
   const [path, searchParams] = historyLine.url.split("?");
@@ -16,7 +22,13 @@ export function HistoryArticle({ historyLine }: { historyLine: HistoryLine }) {
 
   let articleContent = null;
 
-  switch (page) {
+  const articleType = clsx(
+    { GRAPHQL: page === "GRAPHQL" },
+    { WithSearch: isMethodWithSearchParams(page) },
+    { WithBody: isMethodWithBody(page) },
+  );
+
+  switch (articleType) {
     case "GRAPHQL":
       articleContent = (
         <PlaygroundArticle
@@ -25,18 +37,22 @@ export function HistoryArticle({ historyLine }: { historyLine: HistoryLine }) {
         />
       );
       break;
-    case "GET":
+    case "WithSearch":
       articleContent = (
         <GetArticle
-          state={parseGetURL(slug, nextSearchParams)}
+          state={parseURLWithSearchParams(
+            page as HttpMethod,
+            slug,
+            nextSearchParams,
+          )}
           historyLine={historyLine}
         />
       );
       break;
-    case "POST":
+    case "WithBody":
       articleContent = (
         <PostArticle
-          state={parsePostURL(slug, nextSearchParams)}
+          state={parseURLWithBody(page as HttpMethod, slug, nextSearchParams)}
           historyLine={historyLine}
         />
       );

@@ -13,7 +13,7 @@ import {
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 import { updateURLInBrowser } from "@/utils/updateURLInBrowser";
-import { Method } from "@/types/Method";
+import { HttpMethod, isMethodWithBody } from "@/types/Method";
 import { PostBody, PostmanURLState } from "@/components/Postman/types";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { initialPostmanState } from "@/constants/postmanEmptyState";
@@ -35,8 +35,8 @@ export function usePostman(urlState: PostmanURLState) {
   const { method, endpoint, postBody, variables, searchParams, headers } =
     state;
 
-  const setMethod = (newMethod: Method) => {
-    if (newMethod === "POST") {
+  const setMethod = (newMethod: HttpMethod) => {
+    if (isMethodWithBody(newMethod)) {
       const newHeaders = addReadOnlyHeader(headers, postBody.type);
       dispatch({ type: "SET_HEADERS", payload: newHeaders });
     }
@@ -83,7 +83,7 @@ export function usePostman(urlState: PostmanURLState) {
       replaceVariablesInParams(headers, variables),
     );
 
-    if (method === "POST") {
+    if (isMethodWithBody(method)) {
       const dataWithoutVariables = replaceVariablesInStr(
         postBody.data,
         variables,

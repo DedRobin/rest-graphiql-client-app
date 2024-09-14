@@ -1,20 +1,22 @@
 import { PostBody, PostmanURLState } from "@/components/Postman/types";
 import { decodeBase64 } from "@/utils/base64";
-import { emptyPostmanPostUrlState } from "@/constants/postmanEmptyState";
 import { createParamsFromNextSearchParams } from "@/utils/paramsUtils";
 import { addReadOnlyHeader } from "@/components/Postman/utils";
 import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
+import { HttpMethod } from "@/types/Method";
+import { createEmptyPostmanUrlStateWithBody } from "@/utils/urlState/createEmptyPostmanUrlStateWithSearchParams";
 
-export function parsePostURL(
+export function parseURLWithBody(
+  method: HttpMethod,
   slug: string[],
   searchParams?: { [p: string]: string | undefined },
 ): PostmanURLState {
   const [endpointOrEmptyTag, body] = slug.map(decodeBase64);
 
   if (!endpointOrEmptyTag) {
-    return emptyPostmanPostUrlState;
+    return createEmptyPostmanUrlStateWithBody(method);
   }
-  console.log(endpointOrEmptyTag);
+
   const endpoint =
     endpointOrEmptyTag === EMPTY_ENDPOINT_TAG ? "" : endpointOrEmptyTag;
 
@@ -27,7 +29,7 @@ export function parsePostURL(
   const allHeaders = addReadOnlyHeader(headers, postBody.type);
 
   return {
-    method: "POST",
+    method,
     endpoint,
     searchParams: [],
     headers: allHeaders,

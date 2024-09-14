@@ -1,23 +1,23 @@
 import { PostmanURLState } from "@/components/Postman/types";
 import { decodeBase64 } from "@/utils/base64";
-import {
-  emptyPostBody,
-  emptyPostmanGetUrlState,
-} from "@/constants/postmanEmptyState";
+import { emptyPostBody } from "@/constants/postmanEmptyState";
 import {
   createParamsFromNextSearchParams,
   createParamsFromSearchParamsURL,
 } from "@/utils/paramsUtils";
 import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
+import { HttpMethod } from "@/types/Method";
+import { createEmptyPostmanUrlStateWithSearchParams } from "@/utils/urlState/asdf";
 
-export function parseGetURL(
+export function parseURLWithSearchParams(
+  method: HttpMethod,
   slug: string[],
   searchParams?: { [p: string]: string | undefined },
 ): PostmanURLState {
   const [encodedFullEndpoint] = slug;
 
   if (!encodedFullEndpoint) {
-    return emptyPostmanGetUrlState;
+    return createEmptyPostmanUrlStateWithSearchParams(method);
   }
 
   const headers = searchParams
@@ -32,7 +32,7 @@ export function parseGetURL(
   const paramsSearchParams = createParamsFromSearchParamsURL(searchParamsURL);
 
   return {
-    method: "GET",
+    method,
     endpoint,
     searchParams: paramsSearchParams,
     headers,

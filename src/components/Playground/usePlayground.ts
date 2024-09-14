@@ -146,7 +146,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
       variables,
       query,
       headers,
-      endpointSdl,
+      endpointSdl: "",
     };
     const url = createPlaygroundURL(urlState);
     updateURLInBrowser(url);

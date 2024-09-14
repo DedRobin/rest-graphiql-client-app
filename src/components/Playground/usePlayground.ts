@@ -8,6 +8,7 @@ import {
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import { hasMessageField } from "@/utils/hasMessageField";
 import {
+  createEndpointSdl,
   createGraphqlBodyOfRequest,
   createPlaygroundURL,
 } from "@/components/Playground/utils";
@@ -31,8 +32,17 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   const [currURL, setCurrURL] = useState<string>("");
 
-  const setEndpoint = (endpoint: string) =>
-    dispatch({ type: "SET_ENDPOINT", payload: endpoint });
+  const setEndpoint = (newEndpoint: string) => {
+    console.log(endpointSdl, createEndpointSdl(endpoint));
+    if (endpointSdl === createEndpointSdl(endpoint)) {
+      dispatch({
+        type: "SET_ENDPOINT_SDL",
+        payload: createEndpointSdl(newEndpoint),
+      });
+    }
+    dispatch({ type: "SET_ENDPOINT", payload: newEndpoint });
+  };
+
   const setEndpointSdl = (endpointSdl: string) =>
     dispatch({ type: "SET_ENDPOINT_SDL", payload: endpointSdl });
   const setVariables = (variables: string) =>
@@ -72,10 +82,8 @@ export function usePlayground(urlState: PlaygroundURLState) {
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
-    // логика с endpointSdl
-
     const requestProps: RequestProps = {
-      endpoint: encodeURI(endpoint),
+      endpoint: encodeURI(endpointSdl),
 
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
@@ -92,7 +100,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, headers, handleError]);
+  }, [endpointSdl, headers, handleError]);
 
   async function executeQuery() {
     setIsLoading(true);

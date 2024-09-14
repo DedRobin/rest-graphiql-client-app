@@ -6,11 +6,11 @@ import {
 } from "@/utils/paramsUtils";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { PlaygroundURLState } from "@/components/Playground/types";
+import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
 
 function encodePlaygroundState(state: PlaygroundURLState): string {
   const { endpoint, variables, query } = state;
-
-  const encodedEndpoint = encodeBase64(endpoint);
+  const encodedEndpoint = encodeBase64(endpoint || EMPTY_ENDPOINT_TAG);
 
   const body = createGraphqlBodyOfRequest(query, variables);
 
@@ -46,4 +46,8 @@ export function createPlaygroundHeaders(searchParams?: {
     headers = [READ_ONLY_HEADERS.json, ...headers];
   }
   return headers;
+}
+
+export function createEndpointSdl(endpoint: string) {
+  return `${endpoint}?sdl`;
 }

@@ -8,6 +8,7 @@ import {
   createParamsFromNextSearchParams,
   createParamsFromSearchParamsURL,
 } from "@/utils/paramsUtils";
+import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
 
 export function parseGetURL(
   slug: string[],
@@ -24,7 +25,9 @@ export function parseGetURL(
     : [];
 
   const fullEndpoint = decodeBase64(encodedFullEndpoint);
-  const [endpoint, searchParamsURL] = fullEndpoint.split("?");
+  const [endpointOrEmptyTag, searchParamsURL] = fullEndpoint.split("?");
+  const endpoint =
+    endpointOrEmptyTag === EMPTY_ENDPOINT_TAG ? "" : endpointOrEmptyTag;
 
   const paramsSearchParams = createParamsFromSearchParamsURL(searchParamsURL);
 

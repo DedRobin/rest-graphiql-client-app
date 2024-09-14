@@ -4,7 +4,7 @@ import Link from "next/link";
 import { KeyValueBlock } from "@/components/History/HistoryArticle/KeyValueBlock";
 import { createRecordFromParams } from "@/utils/paramsUtils";
 import { formatDateTime } from "@/utils/formatDateTime";
-import { parse } from "graphql";
+import { parse, print } from "graphql";
 export function PlaygroundArticle({
   state,
   historyLine,
@@ -15,7 +15,7 @@ export function PlaygroundArticle({
   const { id, url } = historyLine;
   const { endpoint, query, headers, variables } = state;
 
-  const parsedQuery = parse(query);
+  const parsedQuery = print(parse(query));
   const parsedVariables = JSON.parse(variables);
 
   return (

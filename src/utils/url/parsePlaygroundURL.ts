@@ -1,22 +1,31 @@
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { decodeBase64 } from "@/utils/base64";
-import { createPlaygroundHeaders } from "@/components/Playground/utils";
+import {
+  createEndpointSdl,
+  createPlaygroundHeaders,
+} from "@/components/Playground/utils";
 import { emptyPlaygroundUrlState } from "@/constants/playgroundEmptyState";
+import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
 
 export function parsePlaygroundURL(
   slug: string[],
   searchParams?: { [p: string]: string | undefined },
 ): PlaygroundURLState {
-  const [endpoint, body] = slug.map(decodeBase64);
+  const [endpointOrEmptyTag, body] = slug.map(decodeBase64);
   const headers = createPlaygroundHeaders(searchParams);
+
+  const endpoint =
+    endpointOrEmptyTag === EMPTY_ENDPOINT_TAG ? "" : endpointOrEmptyTag;
+  const endpointSdl = createEndpointSdl(endpoint);
 
   const stateWithoutBody: PlaygroundURLState = {
     ...emptyPlaygroundUrlState,
     endpoint,
+    endpointSdl,
     headers,
   };
 
-  if (!endpoint) {
+  if (endpoint === undefined) {
     return emptyPlaygroundUrlState;
   }
 
@@ -36,10 +45,8 @@ export function parsePlaygroundURL(
   } catch {
     // redirect(createPlaygroundURL(stateWithoutBody));
     // Проброс может ошибки что в ссылке был плохой объект и мы его удалили
-    console.log(
-      "Проброс может ошибки что в ссылке был плохой объект и мы его удалили",
-    );
+
     return stateWithoutBody;
   }
-  return { query, endpoint, variables, headers };
+  return { query, endpoint, variables, headers, endpointSdl };
 }

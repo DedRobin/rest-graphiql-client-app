@@ -8,6 +8,7 @@ import {
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import { hasMessageField } from "@/utils/hasMessageField";
 import {
+  createEndpointSdl,
   createGraphqlBodyOfRequest,
   createPlaygroundURL,
 } from "@/components/Playground/utils";
@@ -35,8 +36,16 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   const [currURL, setCurrURL] = useState<string>("");
 
-  const setEndpoint = (endpoint: string) =>
-    dispatch({ type: "SET_ENDPOINT", payload: endpoint });
+  const setEndpoint = (newEndpoint: string) => {
+    if (endpointSdl === createEndpointSdl(endpoint)) {
+      dispatch({
+        type: "SET_ENDPOINT_SDL",
+        payload: createEndpointSdl(newEndpoint),
+      });
+    }
+    dispatch({ type: "SET_ENDPOINT", payload: newEndpoint });
+  };
+
   const setEndpointSdl = (endpointSdl: string) =>
     dispatch({ type: "SET_ENDPOINT_SDL", payload: endpointSdl });
   const setVariables = (variables: string) =>
@@ -76,10 +85,8 @@ export function usePlayground(urlState: PlaygroundURLState) {
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
-    // логика с endpointSdl
-
     const requestProps: RequestProps = {
-      endpoint: encodeURI(endpoint),
+      endpoint: encodeURI(endpointSdl),
 
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
@@ -96,7 +103,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, headers, handleError]);
+  }, [endpointSdl, headers, handleError]);
 
   async function executeQuery() {
     setIsLoading(true);
@@ -131,7 +138,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   useEffect(() => {
     getSchema();
-  }, [endpoint, endpointSdl, getSchema]);
+  }, [endpointSdl, getSchema]);
 
   useEffect(() => {
     const urlState: PlaygroundURLState = {
@@ -139,6 +146,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
       variables,
       query,
       headers,
+      endpointSdl: "",
     };
     const url = createPlaygroundURL(urlState);
     updateURLInBrowser(url);

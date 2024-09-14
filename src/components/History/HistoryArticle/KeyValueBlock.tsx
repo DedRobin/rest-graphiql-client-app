@@ -10,7 +10,7 @@ export function KeyValueBlock({
       <h5 className="text-mediumGray">{keyName}:</h5>
       {typeof value === "object" && value !== null ? (
         <h5 className="truncate">
-          <pre>{JSON.stringify(value, null, 1)}</pre>
+          <pre>{JSON.stringify(value, null, 2)}</pre>
         </h5>
       ) : (
         <h5>{String(value)}</h5>

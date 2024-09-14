@@ -20,8 +20,12 @@ import { PlaygroundURLState } from "@/components/Playground/types";
 import { initialPlaygroundState } from "@/constants/playgroundEmptyState";
 import { playgroundReducer } from "@/components/Playground/playgroundReducer";
 import { useHistoryStorage } from "@/hooks/useHistoryStorage";
+import { toast } from "react-toastify";
+import { errorMessageList } from "@/services/error-boundary/constants";
+import { useLocale } from "@/services/locale/contex";
 
 export function usePlayground(urlState: PlaygroundURLState) {
+  const { language } = useLocale();
   const { addNewHistoryLineToLS } = useHistoryStorage();
 
   const [state, dispatch] = useReducer(playgroundReducer, {
@@ -155,7 +159,14 @@ export function usePlayground(urlState: PlaygroundURLState) {
       if (prettifiedVariables !== variables) {
         setVariables(prettifiedVariables);
       }
-    } catch {}
+    } catch (error) {
+      const { message } = error as Error;
+      toast.error(
+        errorMessageList[message]
+          ? errorMessageList[message][language]
+          : message,
+      );
+    }
   }
 
   return {

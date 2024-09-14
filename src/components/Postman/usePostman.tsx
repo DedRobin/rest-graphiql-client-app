@@ -19,8 +19,12 @@ import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { initialPostmanState } from "@/constants/postmanEmptyState";
 import { postmanReducer } from "@/components/Postman/postmanReducer";
 import { useHistoryStorage } from "@/hooks/useHistoryStorage";
+import { toast } from "react-toastify";
+import { errorMessageList } from "@/services/error-boundary/constants";
+import { useLocale } from "@/services/locale/contex";
 
 export function usePostman(urlState: PostmanURLState) {
+  const { language } = useLocale();
   const { addNewHistoryLineToLS } = useHistoryStorage();
   const [state, dispatch] = useReducer(postmanReducer, {
     ...initialPostmanState,
@@ -131,6 +135,22 @@ export function usePostman(urlState: PostmanURLState) {
     }
   }
 
+  function prettify() {
+    try {
+      const { data, type } = postBody;
+      const parsedData = JSON.parse(data);
+      const prettifiedData = JSON.stringify(parsedData, null, 2);
+      setPostBody({ data: prettifiedData, type });
+    } catch (error) {
+      const { message } = error as Error;
+      toast.error(
+        errorMessageList[message]
+          ? errorMessageList[message][language]
+          : message,
+      );
+    }
+  }
+
   return {
     ...state,
     setMethod,
@@ -140,5 +160,6 @@ export function usePostman(urlState: PostmanURLState) {
     setPostBody,
     setVariables,
     executeQuery,
+    prettify,
   };
 }

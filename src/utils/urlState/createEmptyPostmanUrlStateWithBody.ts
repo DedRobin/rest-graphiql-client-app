@@ -1,7 +1,6 @@
 import { PostmanURLState } from "@/components/Postman/types";
 import { HttpMethod } from "@/types/Method";
 import { emptyPostBody } from "@/constants/postmanEmptyState";
-import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 
 export function createEmptyPostmanUrlStateWithSearchParams(
   method: HttpMethod,
@@ -11,6 +10,6 @@ export function createEmptyPostmanUrlStateWithSearchParams(
     searchParams: [],
     postBody: emptyPostBody,
     method,
-    headers: [READ_ONLY_HEADERS.json],
+    headers: [],
   };
 }

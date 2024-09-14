@@ -1,6 +1,6 @@
-import RestfullClient from "@/app/(main)/GET/client";
 import { parseURLWithSearchParams } from "@/utils/urlState/parseURLWithSearchParams";
 import { HttpMethod } from "@/types/Method";
+import { Postman } from "@/components/Postman/Postman";
 
 export default function GetPageWithSlug({
   params: { slug },
@@ -11,5 +11,5 @@ export default function GetPageWithSlug({
 }) {
   const urlState = parseURLWithSearchParams(HttpMethod.GET, slug, searchParams);
 
-  return <RestfullClient urlState={urlState} />;
+  return <Postman urlState={urlState} />;
 }

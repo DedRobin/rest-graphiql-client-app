@@ -89,7 +89,7 @@ a:hover {
     }
 
     .custom-scroll::-webkit-scrollbar-track {
-      @apply bg-black; /* Цвет заднего плана скроллбара */
+      @apply bg-black;
     }
 
     .custom-scroll::-webkit-scrollbar-thumb {
@@ -97,7 +97,7 @@ a:hover {
     }
 
     .custom-scroll::-webkit-scrollbar-thumb:hover {
-      @apply bg-mediumGray; /* Цвет ползунка при наведении */
+      @apply bg-mediumGray;
     }
   }
 

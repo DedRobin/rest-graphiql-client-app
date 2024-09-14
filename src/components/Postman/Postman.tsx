@@ -8,9 +8,12 @@ import { ExecuteIcon } from "../UI/buttons/ExecuteIcon";
 // import { PrettifyIcon } from "../UI/buttons/PrettifyIcon";
 import { TextInput } from "../UI/Inputs/TextInput/TextInput";
 import Image from "next/image";
+import { ListInput } from "../UI/Inputs/ListInput/ListInput";
+import { PostBodyEditor } from "./PostBodyEditor";
 
 export function Postman() {
   const {
+    method,
     endpoint,
     headers,
     searchParams,
@@ -29,6 +32,13 @@ export function Postman() {
       <div className="flex-container max-w-none w-full col-span-8 md:col-span-3 lg:col-span-2 flex flex-col gap-4 py-8">
         <h2>Restfull Client</h2>
         <div className="flex flex-col gap-4">
+          <ListInput
+            label="Method"
+            value={method}
+            onChange={(event) => console.log(event.target)}
+            options={["GET", "POST"]}
+            name="method"
+          />
           {/* Поле для Endpoint */}
           <div className="flex items-center gap-4">
             <TextInput
@@ -82,6 +92,8 @@ export function Postman() {
                 setParams={(params) => setParamsByField(params, "variables")}
                 title="Variables"
               />
+
+              <PostBodyEditor />
             </div>
           </div>
 

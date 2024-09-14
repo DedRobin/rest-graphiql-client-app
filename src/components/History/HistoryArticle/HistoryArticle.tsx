@@ -2,8 +2,8 @@ import { Tag } from "../../UI/tags/Tag";
 import { HistoryLine } from "@/components/History/types";
 import { parsePlaygroundURL } from "@/utils/urlState/parsePlaygroundURL";
 import { PlaygroundArticle } from "@/components/History/HistoryArticle/PlaygroundArticle";
-import { GetArticle } from "@/components/History/HistoryArticle/GetArticle";
-import { PostArticle } from "@/components/History/HistoryArticle/PostArticle";
+import { ArticleWithSearchParams } from "@/components/History/HistoryArticle/ArticleWithSearchParams";
+import { ArticleWithBody } from "@/components/History/HistoryArticle/ArticleWithBody";
 import { parseURLWithBody } from "@/utils/urlState/parseURLWithBody";
 import { parseURLWithSearchParams } from "@/utils/urlState/parseURLWithSearchParams";
 import { convertURLToNextSearchParams } from "@/utils/urlState/convertURLToNextSearchParams";
@@ -39,7 +39,7 @@ export function HistoryArticle({ historyLine }: { historyLine: HistoryLine }) {
       break;
     case "WithSearch":
       articleContent = (
-        <GetArticle
+        <ArticleWithSearchParams
           state={parseURLWithSearchParams(
             page as HttpMethod,
             slug,
@@ -51,7 +51,7 @@ export function HistoryArticle({ historyLine }: { historyLine: HistoryLine }) {
       break;
     case "WithBody":
       articleContent = (
-        <PostArticle
+        <ArticleWithBody
           state={parseURLWithBody(page as HttpMethod, slug, nextSearchParams)}
           historyLine={historyLine}
         />

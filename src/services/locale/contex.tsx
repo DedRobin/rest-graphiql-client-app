@@ -1,7 +1,7 @@
 "use client";
 
 import { LSKey } from "@/constants/localStorageKeys";
-import { useLocalStorage } from "@/hooks/localStorageHook";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { createContext, PropsWithChildren, useContext, useEffect } from "react";
 import { isTLanguage } from "./utils";
 
@@ -18,7 +18,7 @@ const LocaleContext = createContext<LocaleContextProps>({
 });
 
 export function LocaleProvider({ children }: PropsWithChildren) {
-  const { value, setNewValue } = useLocalStorage(LSKey.Language);
+  const [value, setNewValue] = useLocalStorage(LSKey.Language);
 
   const changeLanguage = (updatedValue: TLanguage) => {
     setNewValue(updatedValue);

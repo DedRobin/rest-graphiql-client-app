@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import {
   createRecordFromParams,
@@ -18,12 +18,15 @@ import { PostBody, PostmanURLState } from "@/components/Postman/types";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { initialPostmanState } from "@/constants/postmanEmptyState";
 import { postmanReducer } from "@/components/Postman/postmanReducer";
+import { useHistoryStorage } from "@/hooks/useHistoryStorage";
 
 export function usePostman(urlState: PostmanURLState) {
+  const { addNewHistoryLineToLS } = useHistoryStorage();
   const [state, dispatch] = useReducer(postmanReducer, {
     ...initialPostmanState,
     ...urlState,
   });
+  const [currURL, setCurrURL] = useState<string>("");
 
   const { method, endpoint, postBody, variables, searchParams, headers } =
     state;
@@ -66,7 +69,9 @@ export function usePostman(urlState: PostmanURLState) {
       method,
       postBody,
     };
-    updateURLInBrowser(createRestfullURL(urlState, variables));
+    const url = createRestfullURL(urlState, variables);
+    updateURLInBrowser(url);
+    setCurrURL(url);
   }, [endpoint, searchParams, headers, method, variables, postBody]);
 
   function createRequestProps(): RequestProps {
@@ -119,6 +124,7 @@ export function usePostman(urlState: PostmanURLState) {
         status: res.status,
         error: "",
       });
+      addNewHistoryLineToLS(currURL);
     } catch {
     } finally {
       setIsLoading(false);

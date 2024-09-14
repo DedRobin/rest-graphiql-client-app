@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useCallback, useEffect, useReducer, useState } from "react";
 import {
   buildClientSchema,
   getIntrospectionQuery,
@@ -19,12 +19,17 @@ import { GraphQLSchema } from "graphql/type";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { initialPlaygroundState } from "@/constants/playgroundEmptyState";
 import { playgroundReducer } from "@/components/Playground/playgroundReducer";
+import { useHistoryStorage } from "@/hooks/useHistoryStorage";
 
 export function usePlayground(urlState: PlaygroundURLState) {
+  const { addNewHistoryLineToLS } = useHistoryStorage();
+
   const [state, dispatch] = useReducer(playgroundReducer, {
     ...initialPlaygroundState,
     ...urlState,
   });
+
+  const [currURL, setCurrURL] = useState<string>("");
 
   const setEndpoint = (endpoint: string) =>
     dispatch({ type: "SET_ENDPOINT", payload: endpoint });
@@ -111,6 +116,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
           status: response.status,
           error: "",
         });
+        addNewHistoryLineToLS(currURL);
       }
     } catch (error) {
       handleError("HTTP Error", error);
@@ -130,7 +136,9 @@ export function usePlayground(urlState: PlaygroundURLState) {
       query,
       headers,
     };
-    updateURLInBrowser(createPlaygroundURL(urlState));
+    const url = createPlaygroundURL(urlState);
+    updateURLInBrowser(url);
+    setCurrURL(url);
   }, [endpoint, variables, query, headers]);
 
   function prettify() {

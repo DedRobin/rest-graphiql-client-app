@@ -3,7 +3,7 @@ export function KeyValueBlock({
   value,
 }: {
   keyName: string;
-  value: unknown;
+  value: string | object;
 }) {
   return (
     <div className="flex flex-row gap-1">
@@ -13,7 +13,9 @@ export function KeyValueBlock({
           <pre>{JSON.stringify(value, null, 2)}</pre>
         </h5>
       ) : (
-        <h5>{String(value)}</h5>
+        <h5>
+          <pre>{value}</pre>
+        </h5>
       )}
     </div>
   );

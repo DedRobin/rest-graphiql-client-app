@@ -7,7 +7,7 @@ import { parse, print } from "graphql";
 import { createEndpointSdl } from "@/components/Playground/utils";
 
 export const emptyPlaygroundUrlState: PlaygroundURLState = {
-  endpoint: "",
+  endpoint: "https://rickandmortyapi.com/graphql",
   query: print(
     parse(
       "query ($filter: FilterCharacter) {characters(filter: $filter) { results { name } }}",
@@ -15,7 +15,7 @@ export const emptyPlaygroundUrlState: PlaygroundURLState = {
   ),
   variables: JSON.stringify({ filter: { name: "black" } }, null, 2),
   headers: [READ_ONLY_HEADERS.json],
-  endpointSdl: createEndpointSdl(""),
+  endpointSdl: createEndpointSdl("https://rickandmortyapi.com/graphql"),
 };
 
 // export const emptyPlaygroundUrlState: PlaygroundURLState = {

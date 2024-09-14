@@ -7,7 +7,7 @@ import {
 } from "@/utils/paramsUtils";
 import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
 import { HttpMethod } from "@/types/Method";
-import { createEmptyPostmanUrlStateWithSearchParams } from "@/utils/urlState/asdf";
+import { createEmptyPostmanUrlStateWithSearchParams } from "@/utils/urlState/createEmptyPostmanUrlStateWithBody";
 
 export function parseURLWithSearchParams(
   method: HttpMethod,

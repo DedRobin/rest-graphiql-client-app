@@ -75,7 +75,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
           params={headers}
           setParams={setHeaders}
           title="Headers"
-          readOnlyItems={method === "POST" ? 1 : 0}
+          readOnlyItems={isMethodWithBody(method) ? 1 : 0}
         />
         {isMethodWithSearchParams(method) && (
           <ParamsEditor

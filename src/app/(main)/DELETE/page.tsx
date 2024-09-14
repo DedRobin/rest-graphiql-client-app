@@ -2,10 +2,10 @@ import RestfullClient from "@/app/(main)/GET/client";
 import { HttpMethod } from "@/types/Method";
 import { createEmptyPostmanUrlStateWithSearchParams } from "@/utils/urlState/createEmptyPostmanUrlStateWithBody";
 
-export default function GetPage() {
+export default function DeletePage() {
   return (
     <RestfullClient
-      urlState={createEmptyPostmanUrlStateWithSearchParams(HttpMethod.GET)}
+      urlState={createEmptyPostmanUrlStateWithSearchParams(HttpMethod.DELETE)}
     />
   );
 }

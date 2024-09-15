@@ -59,17 +59,17 @@ export function ParamsEditor({
 
       {isVisible && (
         <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto mt-3">
-          {params.map((param, index) => {
-            return (
-              <ParamKeyValue
-                param={param}
-                key={param.id}
-                removeParam={removeParam}
-                changeParamOnBlur={changeParamOnBlur}
-                isReadOnly={index + 1 <= readOnlyItems}
-              />
-            );
-          })}
+
+          {params.map((param, index) => (
+            <ParamKeyValue
+              param={param}
+              key={param.id}
+              removeParam={removeParam}
+              changeParamOnBlur={changeParamOnBlur}
+              isReadOnly={index + 1 <= readOnlyItems}
+            />
+          ))}
+
           <ParamBuilder addNewParam={addNewParam} />
         </div>
       )}

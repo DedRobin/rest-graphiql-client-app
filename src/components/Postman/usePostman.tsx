@@ -24,7 +24,6 @@ import { errorMessageList } from "@/services/error-boundary/constants";
 import { useLocale } from "@/services/locale/contex";
 
 export function usePostman(urlState: PostmanURLState) {
-  console.log(urlState);
   const { language } = useLocale();
   const { addNewHistoryLineToLS } = useHistoryStorage();
   const [state, dispatch] = useReducer(postmanReducer, {

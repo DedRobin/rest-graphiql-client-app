@@ -14,10 +14,12 @@ export default defineConfig({
     coverage: {
       include: ["src/**"],
     },
+    watch: false
   },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
+
 });

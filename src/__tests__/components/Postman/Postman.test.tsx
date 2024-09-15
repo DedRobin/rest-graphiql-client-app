@@ -5,19 +5,19 @@ import { createEmptyPostmanUrlStateWithBody } from "@/utils/urlState/createEmpty
 import { HttpMethod } from "@/types/Method";
 
 describe("<Posman />", () => {
-  test("renders Logo component", () => {
+  test("renders Posman GET component", () => {
     render(
       <Postman urlState={createEmptyPostmanUrlStateWithBody(HttpMethod.GET)} />,
     );
-    expect(screen.getByText(/Restfull Client/i)).toBeInTheDocument();
+    expect(screen.getByText(/Restful Client/i)).toBeInTheDocument();
   });
 
-  test("renders Logo component", () => {
+  test("renders Posman POST component", () => {
     render(
       <Postman
         urlState={createEmptyPostmanUrlStateWithBody(HttpMethod.POST)}
       />,
     );
-    expect(screen.getByText(/Restfull Client/i)).toBeInTheDocument();
+    expect(screen.getByText(/Restful Client/i)).toBeInTheDocument();
   });
 });

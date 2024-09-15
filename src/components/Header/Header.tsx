@@ -21,7 +21,6 @@ export function Header() {
 
   const handleToggle = (checked: boolean) => {
     changeLanguage(checked ? "ru" : "en");
-    console.log("Toggle is now:", checked);
   };
 
   return (

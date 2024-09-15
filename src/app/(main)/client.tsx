@@ -3,18 +3,34 @@
 import { Pixelify_Sans } from "next/font/google";
 import AuthenticatedSidebarNavigation from "@/components/UI/Navigation/AuthenticatedSidebarNavigation";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { useAuth } from "@/services/next-firebase-auth-edge/contex";
+import { User } from "@/services/next-firebase-auth-edge/contex";
 import localeData from "@/services/locale/lang.json";
 import { useLocale } from "@/services/locale/contex";
+import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
+import { Route } from "../routes";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const pixelifySans = Pixelify_Sans({
   subsets: ["latin"],
   weight: ["600"],
 });
 
-export function Home() {
-  const { user } = useAuth();
+export function Home({ user }: { user: User | null }) {
   const { language } = useLocale();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const isTokenExpired = useRef(false);
+
+  useEffect(() => {
+    const isRedirected = searchParams.get("redirect");
+    if (user) router.push(Route.Main);
+    if (isRedirected && !isTokenExpired.current) {
+      toast.error(localeData.login.toast.sessionExpired[language]);
+      isTokenExpired.current = true;
+      router.refresh();
+    }
+  }, [language, router, searchParams, user]);
 
   return (
     <div className="home grid grid-cols-8 grid-rows-[1fr,auto] gap-6 col-span-8 bg-[url('/main-img.webp')] bg-cover bg-no-repeat bg-center h-full w-full">

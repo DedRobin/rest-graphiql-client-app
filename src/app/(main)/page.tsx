@@ -1,5 +1,8 @@
+import { getUser } from "@/services/next-firebase-auth-edge/utils";
 import { Home } from "./client";
 
 export default async function HomePage() {
-  return <Home />;
+  const user = await getUser();
+
+  return <Home user={user} />;
 }

@@ -13,6 +13,8 @@ import { PrettifyIcon } from "@/components/UI/buttons/PrettifyIcon";
 import { cn } from "@/utils/cn";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { ErrorComponent } from "./ErrorComponent";
+import { PlusIcon } from "../UI/buttons/BurgerButton/PlusIcon";
+import { TrashIcon } from "../UI/buttons/TrashIcon";
 
 export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
   const {
@@ -31,6 +33,8 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
     setQuery,
     setVariables,
     prettify,
+    showVariables, // Получаем состояние видимости переменных
+    setShowVariables, // Получаем функцию для управления видимостью переменных
   } = usePlayground(urlState);
 
   const responseValue =
@@ -75,6 +79,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
           {schema && <SchemaViewer schema={schema} setViewer={setViewer} />}
         </div>
       </div>
+
       <div className="relative lg:col-start-3 lg:col-span-6 md:col-start-4 md:col-span-5 pb-8 flex flex-col h-[calc(100vh-64px)] col-span-8">
         <div className="flex justify-between w-full mb-4 pt-8">
           <div className="flex gap-4 w-[calc(100%-96px)] items-center">
@@ -84,7 +89,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
           <div className="flex gap-4 items-center">
             <Button
               title="Execute"
-              onClick={executeQuery}
+              onClick={executeQuery} // Обновленная функция
               IconComponent={ExecuteIcon}
             />
             <Button
@@ -97,25 +102,45 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
 
         <div className="flex flex-1 lg:flex-row gap-6 overflow-hidden flex-col">
           {/* Request Column */}
-          <div className="flex flex-col gap-2 overflow-hidden w-full">
+          <div className="flex flex-col gap-3 overflow-hidden w-full">
             <div className="sticky top-0 z-10">
               <h5 className="text-green">Request</h5>
             </div>
-            <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-2">
-              <h6 className="mt-1">Variables</h6>
-              <EditableEditor value={variables} setValueOnBlur={setVariables} />
-              <h6 className="mt-1">Query</h6>
-              <EditableEditor
-                value={query}
-                setValueOnBlur={setQuery}
-                extensions={schema ? graphql(schema) : undefined}
-              />
+            <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-3">
               <ParamsEditor
                 params={headers}
                 setParams={setHeaders}
                 title="Headers"
                 readOnlyItems={1}
               />
+
+              <h6 className="mt-1">Query</h6>
+              <EditableEditor
+                value={query}
+                setValueOnBlur={setQuery}
+                extensions={schema ? graphql(schema) : undefined}
+              />
+
+              <div className="flex flex-col">
+                <div className="flex justify-between items-center pr-3">
+                  <h6 className="mt-1">Variables</h6>
+                  {/* Кнопка для показа/скрытия секции переменных */}
+                  <Button
+                    title={showVariables ? "Hide Variables" : "Show Variables"}
+                    onClick={() => setShowVariables(!showVariables)}
+                    IconComponent={showVariables ? TrashIcon : PlusIcon}
+                  />
+                </div>
+                {/* Секция переменных, показывается по клику на кнопку */}
+                {showVariables && (
+                  <div className="mt-2">
+                    <EditableEditor
+                      value={variables}
+                      setValueOnBlur={setVariables}
+                    />
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -148,7 +173,6 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
             <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-2">
               <h6 className="mt-1">Body</h6>
               <ReadOnlyEditor value={responseValue} />
-              {/* Блок для отображения ошибки */}
               {error && <ErrorComponent errorCode={errorCode} />}
             </div>
           </div>

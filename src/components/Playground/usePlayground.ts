@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer } from "react";
+import { useState, useCallback, useEffect, useReducer } from "react";
 import {
   buildClientSchema,
   getIntrospectionQuery,
@@ -45,6 +45,8 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   const { endpoint, variables, query, headers, endpointSdl } = state;
 
+  const [showVariables, setShowVariables] = useState(true);
+
   const handleError = useCallback(
     (title: string, error: unknown, status?: number) => {
       const errorMessage = hasMessageField(error)
@@ -67,11 +69,8 @@ export function usePlayground(urlState: PlaygroundURLState) {
     const introspectionQuery = getIntrospectionQuery();
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
-    // логика с endpointSdl
-
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
-
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
       method: "POST",
@@ -91,16 +90,28 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   async function executeQuery() {
     setIsLoading(true);
+
+    const parsedVariables = safelyParseVariables(variables);
+
+    const variablesString = showVariables
+      ? JSON.stringify(parsedVariables)
+      : "{}";
+
+    const requestBody = {
+      query,
+      variables: variablesString,
+      headers: createRecordFromParams(headers),
+    };
+
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
-
       headers: createRecordFromParams(headers),
-      body: createGraphqlBodyOfRequest(query, variables),
+      body: createGraphqlBodyOfRequest(query, requestBody.variables),
       method: "POST",
     };
+
     try {
       const response = await makeRequest(requestProps);
-
       const responseData = await response.json();
 
       if (responseData.errors) {
@@ -116,6 +127,15 @@ export function usePlayground(urlState: PlaygroundURLState) {
       handleError("HTTP Error", error);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  function safelyParseVariables(variables: string): object {
+    try {
+      return JSON.parse(variables);
+    } catch (error) {
+      console.error("Failed to parse variables as JSON:", error);
+      return {};
     }
   }
 
@@ -139,15 +159,16 @@ export function usePlayground(urlState: PlaygroundURLState) {
       if (prettifiedQuery !== query) {
         setQuery(prettifiedQuery);
       }
-      const prettifiedVariables = JSON.stringify(
-        JSON.parse(variables),
-        null,
-        2,
-      );
+
+      // Преобразуем переменные для форматирования
+      const parsedVariables = JSON.parse(variables || "{}");
+      const prettifiedVariables = JSON.stringify(parsedVariables, null, 2);
       if (prettifiedVariables !== variables) {
         setVariables(prettifiedVariables);
       }
-    } catch {}
+    } catch (error) {
+      console.error("Failed to prettify variables:", error);
+    }
   }
 
   return {
@@ -159,5 +180,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
     setQuery,
     setVariables,
     prettify,
+    showVariables, // Возвращаем состояние видимости переменных
+    setShowVariables, // Возвращаем функцию для управления видимостью переменных
   };
 }

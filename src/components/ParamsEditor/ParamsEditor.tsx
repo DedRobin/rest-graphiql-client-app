@@ -43,7 +43,6 @@ export function ParamsEditor({
 
   return (
     <div className="mt-1">
-
       <div className="flex justify-between items-center pr-3">
         <h6 className="mt-1">{title}</h6>
         {/* Кнопка для показа/скрытия секции переменных */}
@@ -56,22 +55,19 @@ export function ParamsEditor({
             IconComponent={isVisible ? CloseIcon : PlusIcon}
           />
         )}
-
       </div>
 
       {isVisible && (
-        <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto"  mt-3">
-          {params.map((param, index) => {
-            return (
-              <ParamKeyValue
-                param={param}
-                key={param.id}
-                removeParam={removeParam}
-                changeParamOnBlur={changeParamOnBlur}
-                isReadOnly={index + 1 <= readOnlyItems}
-              />
-            );
-          })}
+        <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto mt-3">
+          {params.map((param, index) => (
+            <ParamKeyValue
+              param={param}
+              key={param.id}
+              removeParam={removeParam}
+              changeParamOnBlur={changeParamOnBlur}
+              isReadOnly={index + 1 <= readOnlyItems}
+            />
+          ))}
           <ParamBuilder addNewParam={addNewParam} />
         </div>
       )}

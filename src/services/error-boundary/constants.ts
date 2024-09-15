@@ -12,7 +12,7 @@ export const errorMessageList: { [key: string]: { en: string; ru: string } } = {
     ru: "Неверный запрос GraphQL",
   },
   SyntaxError: {
-    en: "Invalid GraphQL variables",
-    ru: "Недопустимые переменные GraphQL",
+    en: "Invalid JSON data",
+    ru: "Недопустимые JSON данные",
   },
 };

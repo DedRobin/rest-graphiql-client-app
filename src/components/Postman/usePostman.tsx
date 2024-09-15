@@ -132,7 +132,14 @@ export function usePostman(urlState: PostmanURLState) {
         error: "",
       });
       addNewHistoryLineToLS(currURL);
-    } catch {
+    } catch (error) {
+      const { message, stack } = error as Error;
+      const errorType = stack?.split(":").at(0);
+      const userMessage =
+        errorType && errorMessageList[errorType]
+          ? errorMessageList[errorType.concat("Body")][language]
+          : message;
+      toast.error(userMessage);
     } finally {
       setIsLoading(false);
     }
@@ -145,12 +152,14 @@ export function usePostman(urlState: PostmanURLState) {
       const prettifiedData = JSON.stringify(parsedData, null, 2);
       setPostBody({ data: prettifiedData, type });
     } catch (error) {
-      const { message } = error as Error;
-      toast.error(
-        errorMessageList[message]
-          ? errorMessageList[message][language]
-          : message,
-      );
+      const { message, stack } = error as Error;
+      const errorType = stack?.split(":").at(0);
+
+      const userMessage =
+        errorType && errorMessageList[errorType]
+          ? errorMessageList[errorType][language]
+          : message;
+      toast.error(userMessage);
     }
   }
 

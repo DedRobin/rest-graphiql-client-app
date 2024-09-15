@@ -3,8 +3,8 @@ import { ParamBuilder } from "@/components/ParamsEditor/ParamBuilder";
 import { Param } from "@/types/Param";
 import React from "react";
 import { Button } from "@/components/UI/buttons/Button";
-import { TrashIcon } from "@/components/UI/buttons/TrashIcon";
 import { PlusIcon } from "@/components/UI/buttons/PlusIcon";
+import { CloseIcon } from "@/components/UI/buttons/CloseIcon";
 
 export function ParamsEditor({
   params,
@@ -52,7 +52,7 @@ export function ParamsEditor({
             onClick={() => {
               setIsVisible(!isVisible);
             }}
-            IconComponent={isVisible ? TrashIcon : PlusIcon}
+            IconComponent={isVisible ? CloseIcon : PlusIcon}
           />
         )}
       </div>

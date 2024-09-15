@@ -14,7 +14,7 @@ import { cn } from "@/utils/cn";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { ErrorComponent } from "./ErrorComponent";
 import { PlusIcon } from "../UI/buttons/PlusIcon";
-import { TrashIcon } from "../UI/buttons/TrashIcon";
+import { CloseIcon } from "@/components/UI/buttons/CloseIcon";
 
 export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
   const {
@@ -130,7 +130,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
                       console.log(!isVisibleVars);
                       setIsVisibleVars(!isVisibleVars);
                     }}
-                    IconComponent={isVisibleVars ? TrashIcon : PlusIcon}
+                    IconComponent={isVisibleVars ? CloseIcon : PlusIcon}
                   />
                 </div>
                 {/* Секция переменных, показывается по клику на кнопку */}

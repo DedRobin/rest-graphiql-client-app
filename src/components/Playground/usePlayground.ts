@@ -71,11 +71,12 @@ export function usePlayground(urlState: PlaygroundURLState) {
       const errorMessage = hasMessageField(error)
         ? error.message
         : JSON.stringify(error, null, 2);
+      const errorTemplate = `${title}: ${status ? `Status: ${status}` : ""}  \n\n ${errorMessage}`;
 
       setResponse({
         body: "",
         status,
-        error: `${title}: ${status ? `Status: ${status}` : ""}  \n\n ${errorMessage}`,
+        error: errorTemplate,
       });
     },
     [],
@@ -133,6 +134,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
       }
     } catch (error) {
       handleError("HTTP Error", error);
+      toast.error(errorMessageList[(error as Error).message][language]);
     } finally {
       setIsLoading(false);
     }

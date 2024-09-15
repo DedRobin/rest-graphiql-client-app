@@ -15,4 +15,8 @@ export const errorMessageList: { [key: string]: { en: string; ru: string } } = {
     en: "Invalid JSON data",
     ru: "Недопустимые JSON данные",
   },
+  "Failed to fetch": {
+    en: "The data could not be retrieved. Check that the URL is correct",
+    ru: "Не удалось получить данные. Проверьте правильность URL-адреса",
+  },
 };

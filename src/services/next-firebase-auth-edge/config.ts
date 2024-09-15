@@ -13,7 +13,8 @@ export const serverConfig = {
     httpOnly: true,
     secure: process.env.USE_SECURE_COOKIES === "true",
     sameSite: "lax" as const,
-    maxAge: 12 * 60 * 60 * 24,
+    // maxAge: 12 * 60 * 60 * 24,
+    maxAge: 5,
   },
   serviceAccount: {
     projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,

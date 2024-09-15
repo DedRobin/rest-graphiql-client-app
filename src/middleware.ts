@@ -33,8 +33,8 @@ export async function middleware(request: NextRequest) {
       });
     },
     handleInvalidToken: async (reason) => {
-      console.info("Missing or malformed credentials", { reason });
-
+      if (process.env.NODE_ENV)
+        console.info("Missing or malformed credentials", { reason });
       return redirectToLogin(request, {
         path: Route.Login,
         publicPaths: PUBLIC_PATHS.concat(Route.Main),

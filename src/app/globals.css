@@ -96,7 +96,7 @@ a:hover {
     }
 
     .custom-scroll::-webkit-scrollbar-thumb:hover {
-      @apply bg-mediumGray; /* Цвет ползунка при наведении */
+      @apply bg-mediumGray;
     }
   }
 

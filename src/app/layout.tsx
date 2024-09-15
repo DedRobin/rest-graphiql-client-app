@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Space_Mono } from "next/font/google";
+import { IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { cookies } from "next/headers";
 import { getTokens } from "next-firebase-auth-edge";
@@ -13,7 +13,7 @@ import { toUser } from "@/services/next-firebase-auth-edge/utils";
 import { ExpectedErrorBoundary } from "@/services/error-boundary/ErrorBoundary";
 import { LocaleProvider } from "@/services/locale/contex";
 
-const spaceMono = Space_Mono({
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "700"],
   style: ["normal", "italic"],
@@ -40,7 +40,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={spaceMono.className}>
+      <body className={ibmPlexMono.className}>
         <ToastProvider>
           <ExpectedErrorBoundary>
             <LocaleProvider>

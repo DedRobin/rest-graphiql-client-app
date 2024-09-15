@@ -33,9 +33,13 @@
   },
   "home": {
     "welcome": {
+      "h1": {
+        "en": "GraphiQL Client",
+        "ru": "GraphiQL Клиент"
+      },
       "label": {
         "en": "Welcome",
-        "ru": "Добро пожаловать"
+        "ru": "Привет"
       },
       "text": {
         "forAuthUser": {
@@ -88,7 +92,7 @@
   "login": {
     "heading": {
       "en": "Please Login",
-      "ru": "Пожалуйста, войдите в систему"
+      "ru": "Войдите в систему"
     },
     "text": {
       "en": "Login in to your account to continue working with APIs and graphs. Experience the simplicity and power of our unified tool in one interface.",
@@ -122,11 +126,11 @@
       "register": {
         "text": {
           "en": "Don't have an account? ",
-          "ru": "У вас нет учетной записи?"
+          "ru": "У вас нет учетной записи? "
         },
         "link": {
           "en": "Register now",
-          "ru": "Зарегистрируйтесь сейчас"
+          "ru": "Зарегистрируйтесь"
         }
       }
     },
@@ -146,7 +150,7 @@
   "register": {
     "heading": {
       "en": "Please Register",
-      "ru": "Пожалуйста, зарегистрируйтесь"
+      "ru": "Зарегистрируйтесь"
     },
     "text": {
       "en": "Create a new account to start working with APIs faster and easier than  ever. Unlock the full potential of our tool, combining the best of Postman and Graphql.",
@@ -200,7 +204,7 @@
       "followLogin": {
         "text": {
           "en": "Already have an account? ",
-          "ru": "У вас уже есть учетная запись?"
+          "ru": "У вас уже есть учетная запись? "
         },
         "link": {
           "en": "Login now",
@@ -218,16 +222,54 @@
   "toogleSwitch": {
     "textEng": {
       "en": "Eng",
-      "ru": "Анг."
+      "ru": "Анг"
     },
     "textRu": {
       "en": "Ru",
-      "ru": "Рус."
+      "ru": "Рус"
     }
   },
   "unauthenticatedSidebarNavigation": {
     "main": { "en": "Main", "ru": "Главная" },
     "login": { "en": "Login", "ru": "Войти" },
     "register": { "en": "Register", "ru": "Регистрация" }
+  },
+  "errors": {
+    "400": {
+      "en": "The request contains invalid data. Please check your input and try again.",
+      "ru": "Запрос содержит неверные данные. Проверьте введенные данные и попробуйте снова."
+    },
+    "401": {
+      "en": "Authorization error. Please log in and try again.",
+      "ru": "Ошибка авторизации. Пожалуйста, войдите в систему и попробуйте снова."
+    },
+    "403": {
+      "en": "Access to the resource is forbidden. Check your permissions.",
+      "ru": "Доступ к ресурсу запрещен. Проверьте ваши права доступа."
+    },
+    "404": {
+      "en": "Resource not found. Please check the URL and try again.",
+      "ru": "Ресурс не найден. Проверьте правильность URL и попробуйте снова."
+    },
+    "500": {
+      "en": "Internal server error. Please try again later.",
+      "ru": "Внутренняя ошибка сервера. Пожалуйста, попробуйте позже."
+    },
+    "502": {
+      "en": "Bad gateway error. Please try again later.",
+      "ru": "Ошибка шлюза. Попробуйте повторить запрос позже."
+    },
+    "503": {
+      "en": "Service unavailable. Please try again later.",
+      "ru": "Сервис временно недоступен. Пожалуйста, попробуйте позже."
+    },
+    "504": {
+      "en": "Gateway timeout. Please try again later.",
+      "ru": "Время ожидания ответа от сервера истекло. Попробуйте снова позднее."
+    },
+    "default": {
+      "en": "An unknown error occurred. Please try again.",
+      "ru": "Произошла неизвестная ошибка. Попробуйте еще раз."
+    }
   }
 }

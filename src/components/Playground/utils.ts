@@ -12,7 +12,7 @@ function encodePlaygroundState(state: PlaygroundURLState): string {
   const { endpoint, variables, query } = state;
   const encodedEndpoint = encodeBase64(endpoint || EMPTY_ENDPOINT_TAG);
 
-  const body = createGraphqlBodyOfRequest(query, variables);
+  const body = JSON.stringify({ query, variables });
 
   const encodedBody = encodeBase64(body);
   return `${encodedEndpoint}/${encodedBody}`;
@@ -28,8 +28,8 @@ export function createGraphqlBodyOfRequest(query: string, variables?: string) {
   if (!variables) {
     return JSON.stringify({ query });
   }
-  // const parsedVariables = JSON.parse(variables);
-  return JSON.stringify({ query, variables });
+  const parsedVariables = JSON.parse(variables);
+  return JSON.stringify({ query, variables: parsedVariables });
 }
 
 export function createPlaygroundHeaders(searchParams?: {

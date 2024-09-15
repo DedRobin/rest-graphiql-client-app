@@ -39,9 +39,9 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
 
   return (
     <>
-      <div className="col-span-8 md:col-span-3 lg:col-span-2 flex flex-col gap-4 py-8">
+      <div className="flex-container max-w-none w-full col-span-8 md:col-span-3 lg:col-span-2 flex flex-col gap-4 py-8 h-auto">
         <h2>GraphiQL Editor</h2>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 h-fit">
           {/* Поле для Endpoint */}
           <div className="flex items-center gap-4">
             <TextInput
@@ -64,7 +64,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
           {schema && <SchemaViewer schema={schema} setViewer={setViewer} />}
         </div>
       </div>
-      <div className="relativ lg:col-start-3 lg:col-span-6 md:col-start-4 md:col-span-5 pb-8 flex flex-col h-[calc(100vh-64px)] sm:col-span-8">
+      <div className="relativ lg:col-start-3 lg:col-span-6 md:col-start-4 md:col-span-5 pb-8 flex flex-col h-[calc(100vh-64px)] col-span-8">
         <div className="flex justify-between w-full mb-4 pt-8">
           <div className="flex gap-4 w-[calc(100%-96px)] items-center">
             <Image src="/icons/link.svg" alt="Link" width={24} height={24} />
@@ -84,7 +84,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
           </div>
         </div>
 
-        <div className="flex flex-1 lg:flex-row gap-6 overflow-hidden sm:flex-col">
+        <div className="flex flex-1 lg:flex-row gap-6 overflow-hidden flex-col">
           {/* Request Column */}
           <div className="flex flex-col gap-2 overflow-hidden w-full">
             <div className="sticky top-0 z-10">

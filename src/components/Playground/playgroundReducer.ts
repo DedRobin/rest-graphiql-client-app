@@ -10,7 +10,8 @@ type Action =
   | { type: "SET_QUERY"; payload: string }
   | { type: "SET_HEADERS"; payload: Param[] }
   | { type: "SET_RESPONSE"; payload: ResponseData }
-  | { type: "SET_LOADING"; payload: boolean }
+  | { type: "SET_IS_LOADING"; payload: boolean }
+  | { type: "SET_IS_VISIBLE_VARS"; payload: boolean }
   | { type: "SET_SCHEMA"; payload: GraphQLSchema | undefined };
 
 export function playgroundReducer(
@@ -30,10 +31,12 @@ export function playgroundReducer(
       return { ...state, headers: action.payload };
     case "SET_RESPONSE":
       return { ...state, response: action.payload };
-    case "SET_LOADING":
+    case "SET_IS_LOADING":
       return { ...state, isLoading: action.payload };
     case "SET_SCHEMA":
       return { ...state, schema: action.payload };
+    case "SET_IS_VISIBLE_VARS":
+      return { ...state, isVisibleVars: action.payload };
     default:
       return state;
   }

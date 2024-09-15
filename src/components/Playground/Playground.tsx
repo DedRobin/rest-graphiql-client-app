@@ -25,6 +25,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
     headers,
     response,
     isLoading,
+    isVisibleVars,
     schema,
     executeQuery,
     setHeaders,
@@ -33,8 +34,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
     setQuery,
     setVariables,
     prettify,
-    showVariables, // Получаем состояние видимости переменных
-    setShowVariables, // Получаем функцию для управления видимостью переменных
+    setIsVisibleVars,
   } = usePlayground(urlState);
 
   const responseValue =
@@ -125,13 +125,16 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
                   <h6 className="mt-1">Variables</h6>
                   {/* Кнопка для показа/скрытия секции переменных */}
                   <Button
-                    title={showVariables ? "Hide Variables" : "Show Variables"}
-                    onClick={() => setShowVariables(!showVariables)}
-                    IconComponent={showVariables ? TrashIcon : PlusIcon}
+                    title={isVisibleVars ? "Hide Variables" : "Show Variables"}
+                    onClick={() => {
+                      console.log(!isVisibleVars);
+                      setIsVisibleVars(!isVisibleVars);
+                    }}
+                    IconComponent={isVisibleVars ? TrashIcon : PlusIcon}
                   />
                 </div>
                 {/* Секция переменных, показывается по клику на кнопку */}
-                {showVariables && (
+                {isVisibleVars && (
                   <div className="mt-2">
                     <EditableEditor
                       value={variables}

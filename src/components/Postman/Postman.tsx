@@ -29,6 +29,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     variables,
     postBody,
     isLoading,
+    // isVisibleVars,
     response,
     setMethod,
     setEndpoint,
@@ -38,6 +39,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     setVariables,
     executeQuery,
     prettify,
+    // setIsVisibleVars
   } = usePostman(urlState);
 
   const responseValue =

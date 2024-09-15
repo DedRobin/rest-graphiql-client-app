@@ -29,6 +29,7 @@ export const initialPostmanState: PostmanState = {
   variables: [],
   response: { status: undefined, body: "", error: "" },
   isLoading: false,
+  isVisibleVars: false,
 };
 
 // export const emptyPostmanGetUrlState: PostmanURLState = {

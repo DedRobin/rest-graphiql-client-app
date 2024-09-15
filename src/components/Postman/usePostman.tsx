@@ -62,7 +62,9 @@ export function usePostman(urlState: PostmanURLState) {
     dispatch({ type: "SET_POST_BODY", payload: newPostBody });
   };
   const setIsLoading = (isLoading: boolean) =>
-    dispatch({ type: "SET_LOADING", payload: isLoading });
+    dispatch({ type: "SET_IS_LOADING", payload: isLoading });
+  const setIsVisibleVars = (isVisibleVars: boolean) =>
+    dispatch({ type: "SET_IS_VISIBLE_VARS", payload: isVisibleVars });
   const setResponse = (response: ResponseData) =>
     dispatch({ type: "SET_RESPONSE", payload: response });
 
@@ -160,6 +162,7 @@ export function usePostman(urlState: PostmanURLState) {
     setHeaders,
     setPostBody,
     setVariables,
+    setIsVisibleVars,
     executeQuery,
     prettify,
   };

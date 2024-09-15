@@ -58,13 +58,13 @@ export function usePlayground(urlState: PlaygroundURLState) {
   const setResponse = (response: ResponseData) =>
     dispatch({ type: "SET_RESPONSE", payload: response });
   const setIsLoading = (isLoading: boolean) =>
-    dispatch({ type: "SET_LOADING", payload: isLoading });
+    dispatch({ type: "SET_IS_LOADING", payload: isLoading });
+  const setIsVisibleVars = (isVisible: boolean) =>
+    dispatch({ type: "SET_IS_VISIBLE_VARS", payload: isVisible });
   const setSchema = (schema: GraphQLSchema | undefined) =>
     dispatch({ type: "SET_SCHEMA", payload: schema });
 
   const { endpoint, variables, query, headers, endpointSdl } = state;
-
-  const [showVariables, setShowVariables] = useState(true);
 
   const handleError = useCallback(
     (title: string, error: unknown, status?: number) => {
@@ -110,25 +110,21 @@ export function usePlayground(urlState: PlaygroundURLState) {
   async function executeQuery() {
     setIsLoading(true);
 
-    const parsedVariables = safelyParseVariables(variables);
+    // const parsedVariables = safelyParseVariables(variables);
+    //
+    // const variablesString = JSON.stringify(parsedVariables);
 
-    const variablesString = showVariables
-      ? JSON.stringify(parsedVariables)
-      : "{}";
-
-    const requestBody = {
-      query,
-      variables: variablesString,
-      headers: createRecordFromParams(headers),
-    };
+    // const requestBody = {
+    //   query,
+    //   variables: variablesString,
+    //   headers: createRecordFromParams(headers),
+    // };
 
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
       headers: createRecordFromParams(headers),
-      body: createGraphqlBodyOfRequest(query, requestBody.variables),
-      method: "POST",
-//       body: createGraphqlBodyOfRequest(query, variables),
-//       method: HttpMethod.POST,
+      body: createGraphqlBodyOfRequest(query, variables),
+      method: HttpMethod.POST,
     };
 
     try {
@@ -152,14 +148,14 @@ export function usePlayground(urlState: PlaygroundURLState) {
     }
   }
 
-  function safelyParseVariables(variables: string): object {
-    try {
-      return JSON.parse(variables);
-    } catch (error) {
-      console.error("Failed to parse variables as JSON:", error);
-      return {};
-    }
-  }
+  // function safelyParseVariables(variables: string): string {
+  //   try {
+  //     return JSON.stringify(JSON.parse(variables));
+  //   } catch (error) {
+  //     console.error("Failed to parse variables as JSON:", error);
+  //     return "{}";
+  //   }
+  // }
 
   useEffect(() => {
     getSchema();
@@ -210,7 +206,6 @@ export function usePlayground(urlState: PlaygroundURLState) {
     setQuery,
     setVariables,
     prettify,
-    showVariables, // Возвращаем состояние видимости переменных
-    setShowVariables, // Возвращаем функцию для управления видимостью переменных
+    setIsVisibleVars,
   };
 }

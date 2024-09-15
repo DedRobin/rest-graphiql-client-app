@@ -93,7 +93,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
             <div className="sticky top-0 z-10">
               <h5 className="text-green">Request</h5>
             </div>
-            <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-2">
+            <div className="custom-scroll flex-1 overflow-auto pr-2 flex flex-col gap-3">
               <ParamsEditor
                 params={headers}
                 setParams={setHeaders}
@@ -139,6 +139,8 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
               <ReadOnlyEditor value={responseValue} />
             </div>
           </div>
+          {/* Response Column */}
+          {/* <ResponseColumn response={response} isLoading={isLoading} /> */}
         </div>
       </div>
     </div>

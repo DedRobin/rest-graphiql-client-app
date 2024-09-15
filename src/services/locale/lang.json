@@ -279,5 +279,65 @@
       "en": "An unknown error occurred. Please try again.",
       "ru": "Произошла неизвестная ошибка. Попробуйте еще раз."
     }
+  },
+  "playground": {
+    "editor": {
+      "title": {
+        "en": "GraphiQL Editor",
+        "ru": "Редактор GraphiQL"
+      },
+      "endpointUrlLabel": {
+        "en": "Endpoint URL",
+        "ru": "URL"
+      },
+      "sdlUrlLabel": {
+        "en": "SDL URL",
+        "ru": "URL SDL"
+      },
+      "headers": {
+        "en": "Headers",
+        "ru": "Заголовки"
+      },
+      "query": {
+        "en": "Query",
+        "ru": "Запрос"
+      },
+      "variables": {
+        "en": "Variables",
+        "ru": "Переменные"
+      },
+      "executeButton": {
+        "en": "Execute",
+        "ru": "Выполнить"
+      },
+      "prettifyButton": {
+        "en": "Prettify",
+        "ru": "Форматировать"
+      },
+      "request": {
+        "en": "Request",
+        "ru": "Запрос"
+      },
+      "response": {
+        "en": "Response",
+        "ru": "Ответ"
+      },
+      "status": {
+        "en": "Status:",
+        "ru": "Статус:"
+      },
+      "loading": {
+        "en": "Loading...",
+        "ru": "Загрузка..."
+      },
+      "noData": {
+        "en": "No data",
+        "ru": "Нет данных"
+      },
+      "noStatus": {
+        "en": "No status",
+        "ru": "Нет статуса"
+      }
+    }
   }
 }

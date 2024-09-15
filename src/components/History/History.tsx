@@ -43,6 +43,14 @@ export function History() {
           <HistoryFallback />
         )}
       </div>
+      {/* Фоновый div */}
+      <div
+        className={cn(
+          "hidden lg:block lg:col-start-7 lg:col-span-2",
+          "bg-cover bg-center bg-[url('/history-img.webp')]",
+          "min-h-[calc(100vh-96px)]",
+        )}
+      ></div>
     </>
   );
 }

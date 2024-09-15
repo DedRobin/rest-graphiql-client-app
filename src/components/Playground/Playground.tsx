@@ -89,7 +89,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
           <div className="flex gap-4 items-center">
             <Button
               title="Execute"
-              onClick={executeQuery} // Обновленная функция
+              onClick={executeQuery}
               IconComponent={ExecuteIcon}
             />
             <Button
@@ -179,6 +179,8 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
               {error && <ErrorComponent errorCode={errorCode} />}
             </div>
           </div>
+          {/* Response Column */}
+          {/* <ResponseColumn response={response} isLoading={isLoading} /> */}
         </div>
         {viewer}
       </div>

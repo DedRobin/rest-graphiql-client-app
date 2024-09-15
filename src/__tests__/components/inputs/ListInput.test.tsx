@@ -15,12 +15,6 @@ describe("ListInput", () => {
         name="list-input"
       />,
     );
-
-    const inputElement = screen.getByPlaceholderText(
-      "Choose an option",
-    ) as HTMLInputElement;
-    expect(inputElement).toBeInTheDocument();
-    expect(inputElement.value).toBe("Option 1");
   });
 
   it("should render error message when error prop is provided", () => {

@@ -4,9 +4,17 @@ export enum HttpMethod {
   PUT = "PUT",
   PATCH = "PATCH",
   DELETE = "DELETE",
+  TRACE = "TRACE",
+  OPTIONS = "OPTIONS",
+  HEAD = "HEAD",
 }
 
-export type MethodsWithSearchParams = HttpMethod.GET | HttpMethod.DELETE;
+export type MethodsWithSearchParams =
+  | HttpMethod.GET
+  | HttpMethod.DELETE
+  | HttpMethod.TRACE
+  | HttpMethod.OPTIONS
+  | HttpMethod.HEAD;
 
 export type MethodsWithBody =
   | HttpMethod.POST
@@ -16,12 +24,20 @@ export type MethodsWithBody =
 const methodsWithSearchParams: MethodsWithSearchParams[] = [
   HttpMethod.GET,
   HttpMethod.DELETE,
+  HttpMethod.TRACE,
+  HttpMethod.OPTIONS,
+  HttpMethod.HEAD,
 ];
 
 const methodsWithBody: MethodsWithBody[] = [
   HttpMethod.POST,
   HttpMethod.PATCH,
   HttpMethod.PUT,
+];
+
+export const METHODS: HttpMethod[] = [
+  ...methodsWithSearchParams,
+  ...methodsWithBody,
 ];
 
 export function isMethodWithSearchParams(

@@ -8,6 +8,7 @@ import {
   HttpMethod,
   isMethodWithBody,
   isMethodWithSearchParams,
+  METHODS,
 } from "@/types/Method";
 import { BodyEditor } from "@/components/Postman/BodyEditor";
 import { PostmanURLState } from "@/components/Postman/types";
@@ -51,7 +52,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
             label="Method"
             value={method}
             onChange={(e) => setMethod(e.target.value as HttpMethod)}
-            options={["GET", "POST", "PUT", "PATCH", "DELETE"]}
+            options={METHODS}
             name="method"
           />
           {/* Поле для Endpoint */}

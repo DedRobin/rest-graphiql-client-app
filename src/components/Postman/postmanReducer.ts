@@ -36,7 +36,7 @@ export function postmanReducer(
     case "SET_IS_LOADING":
       return { ...state, isLoading: action.payload };
     case "SET_IS_VISIBLE_VARS":
-      return { ...state, isLoading: action.payload };
+      return { ...state, isVisibleVars: action.payload };
     default:
       return state;
   }

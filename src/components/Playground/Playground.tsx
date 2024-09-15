@@ -14,7 +14,8 @@ import { cn } from "@/utils/cn";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { ErrorComponent } from "./ErrorComponent";
 import { PlusIcon } from "../UI/buttons/PlusIcon";
-import { TrashIcon } from "../UI/buttons/TrashIcon";
+import { CloseIcon } from "@/components/UI/buttons/CloseIcon";
+import { json } from "@codemirror/lang-json";
 
 export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
   const {
@@ -127,10 +128,9 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
                   <Button
                     title={isVisibleVars ? "Hide Variables" : "Show Variables"}
                     onClick={() => {
-                      console.log(!isVisibleVars);
                       setIsVisibleVars(!isVisibleVars);
                     }}
-                    IconComponent={isVisibleVars ? TrashIcon : PlusIcon}
+                    IconComponent={isVisibleVars ? CloseIcon : PlusIcon}
                   />
                 </div>
                 {/* Секция переменных, показывается по клику на кнопку */}
@@ -139,6 +139,7 @@ export function Playground({ urlState }: { urlState: PlaygroundURLState }) {
                     <EditableEditor
                       value={variables}
                       setValueOnBlur={setVariables}
+                      extensions={[json()]}
                     />
                   </div>
                 )}

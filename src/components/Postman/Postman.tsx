@@ -29,7 +29,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     variables,
     postBody,
     isLoading,
-    // isVisibleVars,
+    isVisibleVars,
     response,
     setMethod,
     setEndpoint,
@@ -39,7 +39,7 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
     setVariables,
     executeQuery,
     prettify,
-    // setIsVisibleVars
+    setIsVisibleVars,
   } = usePostman(urlState);
 
   const responseValue =
@@ -111,6 +111,8 @@ export function Postman({ urlState }: { urlState: PostmanURLState }) {
                 params={variables}
                 setParams={setVariables}
                 title="Variables"
+                isVisible={isVisibleVars}
+                setIsVisible={setIsVisibleVars}
               />
               {isMethodWithBody(method) && (
                 <BodyEditor setPostBody={setPostBody} postBody={postBody} />

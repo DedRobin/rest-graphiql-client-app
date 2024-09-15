@@ -39,9 +39,7 @@ export function parsePlaygroundURL(
   try {
     const bodyObj = JSON.parse(body);
     query = bodyObj.query ? bodyObj.query : "";
-    variables = bodyObj.variables
-      ? JSON.stringify(bodyObj.variables, null, 2)
-      : "";
+    variables = bodyObj.variables; // ? customJsonPrettify(bodyObj.variables) : "";
   } catch {
     // redirect(createPlaygroundURL(stateWithoutBody));
     // Проброс может ошибки что в ссылке был плохой объект и мы его удалили

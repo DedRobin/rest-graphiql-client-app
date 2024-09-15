@@ -28,10 +28,9 @@ export function createGraphqlBodyOfRequest(query: string, variables?: string) {
   if (!variables) {
     return JSON.stringify({ query });
   }
-  try {
-    const parsedVariables = JSON.parse(variables);
-    return JSON.stringify({ query, variables: parsedVariables });
-  } catch {}
+
+  const parsedVariables = JSON.parse(variables);
+  return JSON.stringify({ query, variables: parsedVariables });
 }
 
 export function createPlaygroundHeaders(searchParams?: {

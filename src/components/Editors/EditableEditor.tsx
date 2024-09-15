@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useRef, useEffect } from "react";
 import { consoleDarkInit } from "@uiw/codemirror-theme-console";
 import { ReactCodeMirrorProps } from "@uiw/react-codemirror/src";
 import CodeMirror, {
@@ -30,6 +30,30 @@ export function EditableEditor({
   setValueOnBlur: (newValue: string) => void;
   extensions?: Extension[];
 }) {
+  const editorRef = useRef<EditorView | null>(null);
+  const prevValueRef = useRef<string>(value);
+
+  const handleChange = useCallback(
+    (newValue: string, viewUpdate: ViewUpdate) => {
+      if (!viewUpdate.view.hasFocus && newValue !== prevValueRef.current) {
+        setValueOnBlur(newValue);
+        prevValueRef.current = newValue;
+      }
+    },
+    [setValueOnBlur],
+  );
+
+  useEffect(() => {
+    if (editorRef.current && value !== prevValueRef.current) {
+      const doc = editorRef.current.state.doc;
+      const transaction = editorRef.current.state.update({
+        changes: { from: 0, to: doc.length, insert: value },
+      });
+      editorRef.current.dispatch(transaction);
+      prevValueRef.current = value;
+    }
+  }, [value]);
+
   const editorConfigs: ReactCodeMirrorProps = {
     value,
     basicSetup,
@@ -40,17 +64,16 @@ export function EditableEditor({
         lineHighlight: "transparent",
       },
     }),
-
     extensions: [
       EditorView.lineWrapping,
       EditorView.updateListener.of((v: ViewUpdate) => {
-        const curValue = v.state.doc.toString();
-        if (v.view.hasFocus && v.docChanged && value !== curValue) {
-          setValueOnBlur(curValue);
-        }
+        handleChange(v.state.doc.toString(), v);
       }),
-      extensions ?? [],
-    ].flat(),
+      ...(extensions ?? []),
+    ],
+    onCreateEditor: (view) => {
+      editorRef.current = view;
+    },
   };
 
   return <CodeMirror {...editorConfigs} />;

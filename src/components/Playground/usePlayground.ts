@@ -110,16 +110,6 @@ export function usePlayground(urlState: PlaygroundURLState) {
   async function executeQuery() {
     setIsLoading(true);
 
-    // const parsedVariables = safelyParseVariables(variables);
-    //
-    // const variablesString = JSON.stringify(parsedVariables);
-
-    // const requestBody = {
-    //   query,
-    //   variables: variablesString,
-    //   headers: createRecordFromParams(headers),
-    // };
-
     const requestProps: RequestProps = {
       endpoint: encodeURI(endpoint),
       headers: createRecordFromParams(headers),
@@ -147,15 +137,6 @@ export function usePlayground(urlState: PlaygroundURLState) {
       setIsLoading(false);
     }
   }
-
-  // function safelyParseVariables(variables: string): string {
-  //   try {
-  //     return JSON.stringify(JSON.parse(variables));
-  //   } catch (error) {
-  //     console.error("Failed to parse variables as JSON:", error);
-  //     return "{}";
-  //   }
-  // }
 
   useEffect(() => {
     getSchema();

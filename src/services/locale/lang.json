@@ -138,6 +138,10 @@
       "loginSuccess": {
         "en": "The login was completed successfully",
         "ru": "Вход в систему был успешно завершен"
+      },
+      "sessionExpired": {
+        "en": "The session has expired. Please log in again",
+        "ru": "Время сеанса истекло. Пожалуйста, войдите в систему еще раз"
       }
     }
   },

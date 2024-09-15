@@ -41,7 +41,9 @@ export function Home() {
           </>
         ) : (
           <>
-            <h3 className="text-lightGray">Welcome</h3>
+            <h3 className="text-lightGray">
+              {localeData.home.welcome.label[language]}
+            </h3>
             <h5 className="text-mediumGray">
               {localeData.home.welcome.text.forNotAuthUser[language]}
             </h5>

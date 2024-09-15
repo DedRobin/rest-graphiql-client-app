@@ -36,7 +36,7 @@ export async function middleware(request: NextRequest) {
       if (process.env.NODE_ENV)
         console.info("Missing or malformed credentials", { reason });
       return redirectToLogin(request, {
-        path: Route.Login,
+        path: Route.Main,
         publicPaths: PUBLIC_PATHS.concat(Route.Main),
       });
     },
@@ -47,6 +47,15 @@ export const config = {
   matcher: [
     "/api/login",
     "/api/logout",
-    "/((?!_next|favicon.ico|api|.*\\.).*)",
+    "/GRAPHQL/:path*",
+    "/GET/:path*",
+    "/POST/:path*",
+    "/PUT/:path*",
+    "/PATCH/:path*",
+    "/DELETE/:path*",
+    "/HEAD/:path*",
+    "/OPTIONS/:path*",
+    "/TRACE/:path*",
+    "/history",
   ],
 };

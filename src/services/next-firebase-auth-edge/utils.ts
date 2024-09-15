@@ -1,6 +1,8 @@
 import { filterStandardClaims } from "next-firebase-auth-edge/lib/auth/claims";
-import { Tokens } from "next-firebase-auth-edge";
+import { getTokens, Tokens } from "next-firebase-auth-edge";
 import { User } from "./contex";
+import { cookies } from "next/headers";
+import { clientConfig, serverConfig } from "./config";
 
 export const toUser = ({ decodedToken }: Tokens): User => {
   const {
@@ -26,3 +28,14 @@ export const toUser = ({ decodedToken }: Tokens): User => {
     customClaims,
   };
 };
+
+export async function getUser() {
+  const tokens = await getTokens(cookies(), {
+    apiKey: clientConfig.apiKey,
+    cookieName: serverConfig.cookieName,
+    cookieSignatureKeys: serverConfig.cookieSignatureKeys,
+    serviceAccount: serverConfig.serviceAccount,
+  });
+
+  return tokens ? toUser(tokens) : null;
+}

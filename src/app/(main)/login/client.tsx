@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { loginWithEmailAndPassword, TLoginForm } from "@/app/actions/auth";
@@ -10,23 +10,23 @@ import { PasswordInput } from "@/components/UI/Inputs/PasswordInput/PasswordInpu
 import { LargeButton } from "@/components/UI/buttons/LargeButton/LargeButton";
 import { Route } from "@/app/routes";
 import UnauthenticatedSidebarNavigation from "@/components/UI/Navigation/UnauthenticatedSidebarNavigation";
-import { User } from "@/services/next-firebase-auth-edge/contex";
 import { toast } from "react-toastify";
 import localeData from "@/services/locale/lang.json";
 import { useLocale } from "@/services/locale/contex";
 import { errorMessageList } from "@/services/error-boundary/constants";
+import { useAuth } from "@/services/next-firebase-auth-edge/contex";
 
-export default function Login({ user }: { user: User | null }) {
+export default function Login() {
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<TLoginForm>();
+  const { user } = useAuth();
   const router = useRouter();
   const { language } = useLocale();
   const searchParams = useSearchParams();
-  const expiredNotificationCounter = useRef(0);
 
   const [error, setError] = useState<string | null>(null);
   if (error) {
@@ -36,13 +36,7 @@ export default function Login({ user }: { user: User | null }) {
   }
 
   useEffect(() => {
-    const isRedirected = searchParams.get("redirect");
     if (user) router.push(Route.Main);
-    if (isRedirected && expiredNotificationCounter.current < 1) {
-      toast.error(localeData.login.toast.sessionExpired[language]);
-      expiredNotificationCounter.current += 1;
-      router.refresh();
-    }
   }, [user, router, searchParams, language]);
 
   const email = watch("email") || "";

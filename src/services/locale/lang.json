@@ -65,6 +65,12 @@
     "fallback": {
       "en": "You haven't executed any requests yet. It's empty here. Try those options:",
       "ru": "Вы еще не выполнили ни одного запроса. Поле здесь пустое. Попробуйте эти варианты:"
+    },
+    "error": {
+      "jsonParse": {
+        "en": "Preserved data is corrupted. The store has been cleared",
+        "ru": "Сохраненные данные повреждены. Хранилище было очищено"
+      }
     }
   },
   "graphql": {

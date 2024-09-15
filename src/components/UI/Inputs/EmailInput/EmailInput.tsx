@@ -20,18 +20,21 @@ export const EmailInput: React.FC<EmailInputProps> = ({
   disabled,
   register,
 }) => {
+  const id = register.name; // Используем имя для id
+
   return (
     <div className="relative">
       {label && (
         <label
-          htmlFor={register.name}
+          htmlFor={id}
           className="block text-h5 font-h5 leading-h5 tracking-h5 text-green mb-2"
         >
           {label}
         </label>
       )}
       <input
-        {...register}
+        {...register} // Регистрируем инпут
+        id={id} // Устанавливаем id для связывания с label
         type="email"
         placeholder={placeholder}
         value={value}

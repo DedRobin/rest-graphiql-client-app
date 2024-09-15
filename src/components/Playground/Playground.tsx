@@ -13,7 +13,7 @@ import { PrettifyIcon } from "@/components/UI/buttons/PrettifyIcon";
 import { cn } from "@/utils/cn";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { ErrorComponent } from "./ErrorComponent";
-import { PlusIcon } from "../UI/buttons/BurgerButton/PlusIcon";
+import { PlusIcon } from "../UI/buttons/PlusIcon";
 import { TrashIcon } from "../UI/buttons/TrashIcon";
 
 export function Playground({ urlState }: { urlState: PlaygroundURLState }) {

@@ -8,6 +8,7 @@ export const ExecuteIcon = (props: React.SVGProps<SVGSVGElement>) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
+    data-testid="cross-icon"
   >
     <g clipPath="url(#clip0_7537_2733)">
       <path

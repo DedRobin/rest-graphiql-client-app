@@ -8,6 +8,7 @@ export const CrossIcon = (props: React.SVGProps<SVGSVGElement>) => (
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
     {...props}
+    data-testid="cross-icon"
   >
     <path
       d="M25 7L8 24"

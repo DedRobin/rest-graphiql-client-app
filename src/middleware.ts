@@ -44,5 +44,12 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/login", "/api/logout", "/graphql", "/restfull", "/history"],
+  matcher: [
+    "/api/login",
+    "/api/logout",
+    "/GRAPHQL",
+    "/GET/:path*",
+    "/POST/:path*",
+    "/history",
+  ],
 };

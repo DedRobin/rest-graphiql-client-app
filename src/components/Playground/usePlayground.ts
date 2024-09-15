@@ -24,6 +24,7 @@ import { useHistoryStorage } from "@/hooks/useHistoryStorage";
 import { toast } from "react-toastify";
 import { errorMessageList } from "@/services/error-boundary/constants";
 import { useLocale } from "@/services/locale/contex";
+import { HttpMethod } from "@/types/Method";
 
 export function usePlayground(urlState: PlaygroundURLState) {
   const { language } = useLocale();
@@ -90,7 +91,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
-      method: "POST",
+      method: HttpMethod.POST,
     };
 
     try {
@@ -112,7 +113,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
       headers: createRecordFromParams(headers),
       body: createGraphqlBodyOfRequest(query, variables),
-      method: "POST",
+      method: HttpMethod.POST,
     };
     try {
       const response = await makeRequest(requestProps);

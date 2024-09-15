@@ -7,4 +7,12 @@ export const errorMessageList: { [key: string]: { en: string; ru: string } } = {
     en: "Editor is empty",
     ru: "Редактор пуст",
   },
+  GraphQLError: {
+    en: "Invalid GraphQL query",
+    ru: "Неверный запрос GraphQL",
+  },
+  SyntaxError: {
+    en: "Invalid GraphQL variables",
+    ru: "Недопустимые переменные GraphQL",
+  },
 };

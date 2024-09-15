@@ -28,7 +28,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.Get) ? "text-lightGray" : ""
         }`}
       >
-        {localeData.authenticatedSidebarNavigation.graphql[language]}
+        {localeData.authenticatedSidebarNavigation.restfull[language]}
       </Link>
       <Link
         href={Route.GraphQL}
@@ -36,7 +36,7 @@ export default function AuthenticatedSidebarNavigation() {
           isActive(Route.GraphQL) ? "text-lightGray" : ""
         }`}
       >
-        {localeData.authenticatedSidebarNavigation.restfull[language]}
+        {localeData.authenticatedSidebarNavigation.graphql[language]}
       </Link>
       <Link
         href={Route.History}

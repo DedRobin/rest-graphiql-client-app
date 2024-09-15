@@ -4,7 +4,7 @@ interface ListInputProps {
   label?: string;
   placeholder?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   error?: string;
   options: string[];
   disabled?: boolean;
@@ -31,20 +31,23 @@ export const ListInput: React.FC<ListInputProps> = ({
           {label}
         </label>
       )}
-      <input
-        type="text"
-        list={`${name}-list`}
-        placeholder={placeholder}
+      <select
+        id={name}
+        name={name}
         value={value}
         onChange={onChange}
         disabled={disabled}
         className="w-full px-4 py-2 placeholder-mediumGray bg-black border border-mediumGray rounded-none text-h6 font-h6 leading-h6 tracking-h6 text-lightGray focus:outline-none focus:border-lightGray focus:bg-darkGray transition-colors duration-300"
-      />
-      <datalist id={`${name}-list`}>
+      >
+        <option value="" disabled>
+          {placeholder || "Select an option"}
+        </option>
         {options.map((option, index) => (
-          <option key={index} value={option} />
+          <option key={index} value={option}>
+            {option}
+          </option>
         ))}
-      </datalist>
+      </select>
       {error && (
         <div className="text-red text-span font-span leading-span tracking-span mt-2 ml-4">
           {error}

@@ -17,13 +17,13 @@ export function HistoryFallback() {
           href={Route.Get}
           className={`text-h6 font-h6 leading-h6 tracking-h6`}
         >
-          {localeData.authenticatedSidebarNavigation.graphql[language]}
+          {localeData.authenticatedSidebarNavigation.restfull[language]}
         </Link>
         <Link
           href={Route.GraphQL}
           className={`text-h6 font-h6 leading-h6 tracking-h6`}
         >
-          {localeData.authenticatedSidebarNavigation.restfull[language]}
+          {localeData.authenticatedSidebarNavigation.graphql[language]}
         </Link>
       </div>
     </>

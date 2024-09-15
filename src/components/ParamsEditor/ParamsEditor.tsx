@@ -37,7 +37,7 @@ export function ParamsEditor({
   return (
     <div className="mt-1">
       <h6>{title}</h6>
-      <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto">
+      <div className="bg-darkGray px-3 py-2 flex flex-col gap-1.5 overflow-auto mt-3">
         {params.map((param, index) => {
           return (
             <ParamKeyValue

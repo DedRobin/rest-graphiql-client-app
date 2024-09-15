@@ -33,7 +33,7 @@ export function SchemaViewer({
   useEffect(() => {
     const viewer =
       openedTypes.length === 0 ? null : (
-        <div className="w-full h-full flex flex-row fixed z-50 bg-black top-0 left-0 md:top-auto md:left-auto">
+        <div className="w-full h-full flex flex-row fixed z-50 bg-black top-0 left-0 md:top-auto md:left-auto overflow-x-auto custom-scroll">
           <div className="fixed right-12 top-20 z-[20000]">
             <Button
               title="Close"

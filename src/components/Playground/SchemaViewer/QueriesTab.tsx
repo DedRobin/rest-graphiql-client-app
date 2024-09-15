@@ -16,7 +16,7 @@ export function QueriesTab({
   return (
     <>
       <h5 className="text-green pb-1">Schema queries</h5>
-      <div className="custom-scroll max-h-[calc(100vh-464px)] overflow-y-auto pr-2">
+      <div className="custom-scroll md:max-h-[calc(100vh-464px)] overflow-y-auto pr-2">
         <ul>
           {queries.map((field) => {
             const isActive = field === firstOpenedType;

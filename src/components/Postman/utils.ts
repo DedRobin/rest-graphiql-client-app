@@ -8,6 +8,7 @@ import { Param } from "@/types/Param";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { PostmanURLState, TypePostBody } from "@/components/Postman/types";
 import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
+import { isMethodWithBody } from "@/types/Method";
 
 export function createRestfullURL(
   state: PostmanURLState,
@@ -17,7 +18,7 @@ export function createRestfullURL(
 
   const endpointOrEmptyTag = endpoint || EMPTY_ENDPOINT_TAG;
 
-  if (method === "POST") {
+  if (isMethodWithBody(method)) {
     const encodedEndpoint = encodeBase64(
       replaceVariablesInStr(endpointOrEmptyTag, variables),
     );

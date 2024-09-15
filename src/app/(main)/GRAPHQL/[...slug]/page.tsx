@@ -1,6 +1,6 @@
 import GraphiQL from "@/app/(main)/GRAPHQL/client";
 import { Route } from "@/app/routes";
-import { parsePlaygroundURL } from "@/utils/url/parsePlaygroundURL";
+import { parsePlaygroundURL } from "@/utils/urlState/parsePlaygroundURL";
 import { redirect } from "next/navigation";
 
 export default function GraphiQLPage({

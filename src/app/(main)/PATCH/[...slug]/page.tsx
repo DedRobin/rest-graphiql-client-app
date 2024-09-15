@@ -1,15 +1,15 @@
-import { parseURLWithSearchParams } from "@/utils/urlState/parseURLWithSearchParams";
+import { parseURLWithBody } from "@/utils/urlState/parseURLWithBody";
 import { HttpMethod } from "@/types/Method";
 import { Postman } from "@/components/Postman/Postman";
 
-export default function GetPageWithSlug({
+export default function PutPageWithSlug({
   params: { slug },
   searchParams,
 }: {
   params: { slug: string[] };
   searchParams?: { [key: string]: string | undefined };
 }) {
-  const urlState = parseURLWithSearchParams(HttpMethod.GET, slug, searchParams);
+  const urlState = parseURLWithBody(HttpMethod.PATCH, slug, searchParams);
 
   return <Postman urlState={urlState} />;
 }

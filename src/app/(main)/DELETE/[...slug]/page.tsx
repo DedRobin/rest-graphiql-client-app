@@ -2,14 +2,18 @@ import { parseURLWithSearchParams } from "@/utils/urlState/parseURLWithSearchPar
 import { HttpMethod } from "@/types/Method";
 import { Postman } from "@/components/Postman/Postman";
 
-export default function GetPageWithSlug({
+export default function DeletePageWithSlug({
   params: { slug },
   searchParams,
 }: {
   params: { slug: string[] };
   searchParams?: { [key: string]: string | undefined };
 }) {
-  const urlState = parseURLWithSearchParams(HttpMethod.GET, slug, searchParams);
+  const urlState = parseURLWithSearchParams(
+    HttpMethod.DELETE,
+    slug,
+    searchParams,
+  );
 
   return <Postman urlState={urlState} />;
 }

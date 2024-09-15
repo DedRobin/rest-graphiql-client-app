@@ -47,9 +47,15 @@ export const config = {
   matcher: [
     "/api/login",
     "/api/logout",
-    "/GRAPHQL",
+    "/GRAPHQL/:path*",
     "/GET/:path*",
     "/POST/:path*",
+    "/PUT/:path*",
+    "/PATCH/:path*",
+    "/DELETE/:path*",
+    "/HEAD/:path*",
+    "/OPTIONS/:path*",
+    "/TRACE/:path*",
     "/history",
   ],
 };

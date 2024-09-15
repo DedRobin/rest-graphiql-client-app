@@ -132,7 +132,14 @@ export function usePostman(urlState: PostmanURLState) {
         error: "",
       });
       addNewHistoryLineToLS(currURL);
-    } catch {
+    } catch (error) {
+      const { message, stack } = error as Error;
+      const errorType = stack?.split(":").at(0);
+      const userMessage =
+        errorType && errorMessageList[errorType]
+          ? errorMessageList[errorType.concat("Body")][language]
+          : message;
+      toast.error(userMessage);
     } finally {
       setIsLoading(false);
     }

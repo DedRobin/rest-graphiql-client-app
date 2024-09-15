@@ -68,7 +68,6 @@ export function ParamsEditor({
               isReadOnly={index + 1 <= readOnlyItems}
             />
           ))}
-
           <ParamBuilder addNewParam={addNewParam} />
         </div>
       )}

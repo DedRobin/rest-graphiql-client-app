@@ -65,6 +65,12 @@
     "fallback": {
       "en": "You haven't executed any requests yet. It's empty here. Try those options:",
       "ru": "Вы еще не выполнили ни одного запроса. Поле здесь пустое. Попробуйте эти варианты:"
+    },
+    "error": {
+      "jsonParse": {
+        "en": "Preserved data is corrupted. The store has been cleared",
+        "ru": "Сохраненные данные повреждены. Хранилище было очищено"
+      }
     }
   },
   "graphql": {
@@ -292,7 +298,7 @@
       },
       "sdlUrlLabel": {
         "en": "SDL URL",
-        "ru": "URL SDL"
+        "ru": "SDL URL"
       },
       "headers": {
         "en": "Headers",
@@ -337,7 +343,82 @@
       "noStatus": {
         "en": "No status",
         "ru": "Нет статуса"
+      },
+      "body": {
+        "en": "Body",
+        "ru": "Тело"
       }
     }
-  }
-}
+  },
+    "postman": {
+      "title": {
+        "en": "Restful Client",
+        "ru": "Restful Клиент"
+      },
+      "method": {
+        "en": "Method",
+        "ru": "Метод"
+      },
+      "endpoint": {
+        "en": "Endpoint URL",
+        "ru": "URL"
+      },
+      "buttons": {
+        "execute": {
+          "en": "Execute",
+          "ru": "Выполнить"
+        },
+        "prettify": {
+          "en": "Prettify",
+          "ru": "Форматировать"
+        }
+      },
+      "request": {
+        "en": "Request",
+        "ru": "Запрос"
+      },
+      "response": {
+        "en": "Response",
+        "ru": "Ответ"
+      },
+      "status": {
+        "noStatus": {
+          "en": "No status",
+          "ru": "Статус отсутствует"
+        },
+        "success": {
+          "en": "Success",
+          "ru": "Успех"
+        },
+        "error": {
+          "en": "Error",
+          "ru": "Ошибка"
+        }
+      },
+      "body": {
+        "en": "Body",
+        "ru": "Тело"
+      },
+      "loading": {
+        "en": "Loading...",
+        "ru": "Загрузка..."
+      },
+      "noData": {
+        "en": "No data",
+        "ru": "Нет данных"
+      },
+      "headersTitle": {
+        "en": "Headers",
+        "ru": "Заголовки"
+      },
+      "searchParamsTitle": {
+        "en": "Search Parameters",
+        "ru": "Параметры поиска"
+      },
+      "variablesTitle": {
+        "en": "Variables",
+        "ru": "Переменные"
+      }
+    }
+  }  
+

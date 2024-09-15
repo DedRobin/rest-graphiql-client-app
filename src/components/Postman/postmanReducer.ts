@@ -11,7 +11,8 @@ type Action =
   | { type: "SET_SEARCH_PARAMS"; payload: Param[] }
   | { type: "SET_HEADERS"; payload: Param[] }
   | { type: "SET_RESPONSE"; payload: ResponseData }
-  | { type: "SET_LOADING"; payload: boolean };
+  | { type: "SET_IS_LOADING"; payload: boolean }
+  | { type: "SET_IS_VISIBLE_VARS"; payload: boolean };
 
 export function postmanReducer(
   state: PostmanState,
@@ -32,9 +33,10 @@ export function postmanReducer(
       return { ...state, headers: action.payload };
     case "SET_RESPONSE":
       return { ...state, response: action.payload };
-    case "SET_LOADING":
+    case "SET_IS_LOADING":
       return { ...state, isLoading: action.payload };
-
+    case "SET_IS_VISIBLE_VARS":
+      return { ...state, isLoading: action.payload };
     default:
       return state;
   }

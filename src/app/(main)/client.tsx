@@ -23,7 +23,7 @@ export function Home() {
       <div className="col-span-8 sm:col-start-2 sm:col-span-6 2xl:col-start-3 2xl:col-span-4 flex flex-col justify-end items-end h-full">
         <h1 className="text-left w-full">Rest/</h1>
         <h1 className={`${pixelifySans.className} text-right w-full`}>
-          GraphiQL Client
+          {localeData.home.welcome.h1[language]}
         </h1>
       </div>
 

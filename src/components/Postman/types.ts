@@ -21,4 +21,5 @@ export interface PostmanState extends PostmanURLState {
   variables: Param[];
   response: ResponseData;
   isLoading: boolean;
+  isVisibleVars: boolean;
 }

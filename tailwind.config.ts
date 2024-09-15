@@ -15,9 +15,10 @@ const config: Config = {
         lightGray: "#F3F3F3",
         red: "#FF6464",
         green: "#E3FD16",
+        darkGreen: "#07A657",
       },
       fontFamily: {
-        spaceMono: ["Space Mono", "monospace"],
+        spaceMono: [" IBM Plex Mono", "monospace"],
       },
       fontStyle: {
         normal: "normal",

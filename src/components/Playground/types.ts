@@ -14,4 +14,5 @@ export interface PlaygroundState extends PlaygroundURLState {
   response: ResponseData;
   isLoading: boolean;
   schema?: GraphQLSchema;
+  isVisibleVars: boolean;
 }

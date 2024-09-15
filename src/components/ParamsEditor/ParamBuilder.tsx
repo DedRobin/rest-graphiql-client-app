@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Param } from "@/types/Param";
 import { TextInput } from "@/components/UI/Inputs/TextInput/TextInput";
 import { Button } from "@/components/UI/buttons/Button";
-import { PlusIcon } from "@/components/UI/buttons/BurgerButton/PlusIcon";
+import { PlusIcon } from "@/components/UI/buttons/PlusIcon";
 
 export function ParamBuilder({
   addNewParam,

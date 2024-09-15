@@ -31,4 +31,5 @@ export const initialPlaygroundState: PlaygroundState = {
   response: { status: undefined, body: "", error: "" },
   isLoading: false,
   schema: undefined,
+  isVisibleVars: false,
 };

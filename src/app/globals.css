@@ -79,7 +79,7 @@ a:hover {
 
 @layer components {
   .flex-container {
-    @apply flex flex-col gap-4 px-8 py-6 mx-auto;
+    @apply flex flex-col gap-4 px-8 py-6 mx-auto max-w-[440px];
   }
 
   @layer utilities {
@@ -88,7 +88,7 @@ a:hover {
     }
 
     .custom-scroll::-webkit-scrollbar-track {
-      @apply bg-black; /* Цвет заднего плана скроллбара */
+      @apply bg-black;
     }
 
     .custom-scroll::-webkit-scrollbar-thumb {

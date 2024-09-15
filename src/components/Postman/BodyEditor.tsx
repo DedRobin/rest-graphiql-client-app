@@ -1,8 +1,9 @@
 import React from "react";
 import { EditableEditor } from "@/components/Editors/EditableEditor";
 import { PostBody, TypePostBody } from "@/components/Postman/types";
+import { RadioButton } from "@/components/UI/Inputs/RadioButton/RadioButton";
 
-export function PostBodyEditor({
+export function BodyEditor({
   postBody,
   setPostBody,
 }: {
@@ -21,27 +22,22 @@ export function PostBodyEditor({
 
   return (
     <div>
-      <label>
-        <input
-          type="radio"
-          name="radio"
+      <h6 className="mt-1 mb-2">Body</h6>
+      <EditableEditor value={data} setValueOnBlur={setNewData} />
+      <div className="flex flex-row gap-2 mt-1.5">
+        <RadioButton
           value="json"
           checked={type === "json"}
           onChange={(event) => event.target.checked && setNewType("json")}
+          label="JSON"
         />
-        json
-      </label>
-      <label>
-        <input
-          type="radio"
-          name="radio"
-          value="plane text"
+        <RadioButton
+          value="plain text"
           checked={type === "plane text"}
           onChange={(event) => event.target.checked && setNewType("plane text")}
+          label="Text"
         />
-        text
-      </label>
-      <EditableEditor value={data} setValueOnBlur={setNewData} />
+      </div>
     </div>
   );
 }

@@ -8,6 +8,7 @@ import {
 import { makeRequest, RequestProps } from "@/services/requests/makeRequest";
 import { hasMessageField } from "@/utils/hasMessageField";
 import {
+  createEndpointSdl,
   createGraphqlBodyOfRequest,
   createPlaygroundURL,
 } from "@/components/Playground/utils";
@@ -19,15 +20,33 @@ import { GraphQLSchema } from "graphql/type";
 import { PlaygroundURLState } from "@/components/Playground/types";
 import { initialPlaygroundState } from "@/constants/playgroundEmptyState";
 import { playgroundReducer } from "@/components/Playground/playgroundReducer";
+import { useHistoryStorage } from "@/hooks/useHistoryStorage";
+import { toast } from "react-toastify";
+import { errorMessageList } from "@/services/error-boundary/constants";
+import { useLocale } from "@/services/locale/contex";
+import { HttpMethod } from "@/types/Method";
 
 export function usePlayground(urlState: PlaygroundURLState) {
+  const { language } = useLocale();
+  const { addNewHistoryLineToLS } = useHistoryStorage();
+
   const [state, dispatch] = useReducer(playgroundReducer, {
     ...initialPlaygroundState,
     ...urlState,
   });
 
-  const setEndpoint = (endpoint: string) =>
-    dispatch({ type: "SET_ENDPOINT", payload: endpoint });
+  const [currURL, setCurrURL] = useState<string>("");
+
+  const setEndpoint = (newEndpoint: string) => {
+    if (endpointSdl === createEndpointSdl(endpoint)) {
+      dispatch({
+        type: "SET_ENDPOINT_SDL",
+        payload: createEndpointSdl(newEndpoint),
+      });
+    }
+    dispatch({ type: "SET_ENDPOINT", payload: newEndpoint });
+  };
+
   const setEndpointSdl = (endpointSdl: string) =>
     dispatch({ type: "SET_ENDPOINT_SDL", payload: endpointSdl });
   const setVariables = (variables: string) =>
@@ -70,10 +89,10 @@ export function usePlayground(urlState: PlaygroundURLState) {
     const bodyOfRequest = createGraphqlBodyOfRequest(introspectionQuery);
 
     const requestProps: RequestProps = {
-      endpoint: encodeURI(endpoint),
+      endpoint: encodeURI(endpointSdl),
       headers: createRecordFromParams(headers),
       body: bodyOfRequest,
-      method: "POST",
+      method: HttpMethod.POST,
     };
 
     try {
@@ -86,7 +105,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
     } finally {
       setIsLoading(false);
     }
-  }, [endpoint, headers, handleError]);
+  }, [endpointSdl, headers, handleError]);
 
   async function executeQuery() {
     setIsLoading(true);
@@ -108,6 +127,8 @@ export function usePlayground(urlState: PlaygroundURLState) {
       headers: createRecordFromParams(headers),
       body: createGraphqlBodyOfRequest(query, requestBody.variables),
       method: "POST",
+//       body: createGraphqlBodyOfRequest(query, variables),
+//       method: HttpMethod.POST,
     };
 
     try {
@@ -122,6 +143,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
           status: response.status,
           error: "",
         });
+        addNewHistoryLineToLS(currURL);
       }
     } catch (error) {
       handleError("HTTP Error", error);
@@ -141,7 +163,7 @@ export function usePlayground(urlState: PlaygroundURLState) {
 
   useEffect(() => {
     getSchema();
-  }, [endpoint, endpointSdl, getSchema]);
+  }, [endpointSdl, getSchema]);
 
   useEffect(() => {
     const urlState: PlaygroundURLState = {
@@ -149,8 +171,11 @@ export function usePlayground(urlState: PlaygroundURLState) {
       variables,
       query,
       headers,
+      endpointSdl: "",
     };
-    updateURLInBrowser(createPlaygroundURL(urlState));
+    const url = createPlaygroundURL(urlState);
+    updateURLInBrowser(url);
+    setCurrURL(url);
   }, [endpoint, variables, query, headers]);
 
   function prettify() {
@@ -167,7 +192,12 @@ export function usePlayground(urlState: PlaygroundURLState) {
         setVariables(prettifiedVariables);
       }
     } catch (error) {
-      console.error("Failed to prettify variables:", error);
+      const { message } = error as Error;
+      toast.error(
+        errorMessageList[message]
+          ? errorMessageList[message][language]
+          : message,
+      );
     }
   }
 

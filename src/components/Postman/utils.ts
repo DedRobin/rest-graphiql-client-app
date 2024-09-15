@@ -7,6 +7,8 @@ import { encodeBase64 } from "@/utils/base64";
 import { Param } from "@/types/Param";
 import { READ_ONLY_HEADERS } from "@/constants/readOnlyHeaders";
 import { PostmanURLState, TypePostBody } from "@/components/Postman/types";
+import { EMPTY_ENDPOINT_TAG } from "@/constants/emptyEndpointTag";
+import { isMethodWithBody } from "@/types/Method";
 
 export function createRestfullURL(
   state: PostmanURLState,
@@ -14,9 +16,11 @@ export function createRestfullURL(
 ): string {
   const { endpoint, searchParams, method, headers, postBody } = state;
 
-  if (method === "POST") {
+  const endpointOrEmptyTag = endpoint || EMPTY_ENDPOINT_TAG;
+
+  if (isMethodWithBody(method)) {
     const encodedEndpoint = encodeBase64(
-      replaceVariablesInStr(endpoint, variables),
+      replaceVariablesInStr(endpointOrEmptyTag, variables),
     );
     const postBodyWithoutVariables = {
       ...postBody,
@@ -30,13 +34,12 @@ export function createRestfullURL(
     );
   }
 
-  const fullEndpoint = `${endpoint}${createSearchParamsURLFromParams(searchParams)}`;
+  const fullEndpoint = `${endpointOrEmptyTag}${createSearchParamsURLFromParams(searchParams)}`;
 
   const fullEndpointWithVarValues = replaceVariablesInStr(
     fullEndpoint,
     variables,
   );
-
   const encodedEndpoint = encodeBase64(fullEndpointWithVarValues);
   const searchParamsOfGetPageUrl = createSearchParamsURLFromParams(
     replaceVariablesInParams(headers, variables),

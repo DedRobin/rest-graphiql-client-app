@@ -1,10 +1,10 @@
-import { Method } from "@/types/Method";
+import { HttpMethod } from "@/types/Method";
 
 export interface RequestProps {
   endpoint: string;
   headers: Record<string, string>;
   body: string | undefined;
-  method: Method;
+  method: HttpMethod;
 }
 
 export async function makeRequest(props: RequestProps) {

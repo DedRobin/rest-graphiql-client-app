@@ -1,6 +1,11 @@
-import RestfullClient from "@/app/(main)/GET/client";
-import { emptyPostmanGetUrlState } from "@/constants/postmanEmptyState";
+import { HttpMethod } from "@/types/Method";
+import { createEmptyPostmanUrlStateWithSearchParams } from "@/utils/urlState/createEmptyPostmanUrlStateWithBody";
+import { Postman } from "@/components/Postman/Postman";
 
 export default function GetPage() {
-  return <RestfullClient urlState={emptyPostmanGetUrlState} />;
+  return (
+    <Postman
+      urlState={createEmptyPostmanUrlStateWithSearchParams(HttpMethod.GET)}
+    />
+  );
 }

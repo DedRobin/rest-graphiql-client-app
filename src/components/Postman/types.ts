@@ -1,5 +1,5 @@
 import { Param } from "@/types/Param";
-import { Method } from "@/types/Method";
+import { HttpMethod } from "@/types/Method";
 import { ResponseData } from "@/types/ResponseData";
 
 export type TypePostBody = "json" | "plane text";
@@ -13,7 +13,7 @@ export interface PostmanURLState {
   endpoint: string;
   searchParams: Param[];
   postBody: PostBody;
-  method: Method;
+  method: HttpMethod;
   headers: Param[];
 }
 

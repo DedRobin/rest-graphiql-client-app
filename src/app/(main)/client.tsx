@@ -42,7 +42,6 @@ export function Home() {
         ) : (
           <>
             <h3 className="text-lightGray">
-              {" "}
               {localeData.home.welcome.label[language]}
             </h3>
             <h5 className="text-mediumGray">

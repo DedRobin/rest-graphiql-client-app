@@ -9,7 +9,7 @@ export default function GraphiQL({
   urlState: PlaygroundURLState;
 }) {
   return (
-    <div className="col-span-8 grid grid-cols-8 gap-6 h-full">
+    <div className="col-span-8 grid grid-cols-8 gap-6 h-full w-full">
       <Playground urlState={urlState} />
     </div>
   );

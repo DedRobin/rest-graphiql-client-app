@@ -1,10 +1,10 @@
-import { Method } from "@/types/Method";
+import { HttpMethod } from "@/types/Method";
 import { PostBody, PostmanState } from "@/components/Postman/types";
 import { Param } from "@/types/Param";
 import { ResponseData } from "@/types/ResponseData";
 
 type Action =
-  | { type: "SET_METHOD"; payload: Method }
+  | { type: "SET_METHOD"; payload: HttpMethod }
   | { type: "SET_ENDPOINT"; payload: string }
   | { type: "SET_POST_BODY"; payload: PostBody }
   | { type: "SET_VARIABLES"; payload: Param[] }
